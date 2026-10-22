@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>三上國語期中複習</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="國語複習">
+<meta name="theme-color" content="#2f7d5b">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%232f7d5b'/%3E%3Ctext x='90' y='122' font-size='100' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E8%AA%9E%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f4ee;--card:#ffffff;--ink:#22302a;--muted:#66736c;--line:#e2ddd2;
+  --brand:#2f7d5b;--brand-soft:#e3f1e9;--ok:#2f8f4e;--ok-soft:#e2f4e6;--bad:#c2463d;--bad-soft:#fbe6e3;
+  --star:#e3a20b;--chip:#efece4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151a17;--card:#1f2622;--ink:#eef2ee;--muted:#a5b1aa;--line:#2f3833;
+    --brand:#5cc196;--brand-soft:#21362c;--ok:#5fcf84;--ok-soft:#1d3426;--bad:#f0827a;--bad-soft:#3a2321;
+    --star:#f4c04a;--chip:#29312c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151a17;--card:#1f2622;--ink:#eef2ee;--muted:#a5b1aa;--line:#2f3833;
+  --brand:#5cc196;--brand-soft:#21362c;--ok:#5fcf84;--ok-soft:#1d3426;--bad:#f0827a;--bad-soft:#3a2321;
+  --star:#f4c04a;--chip:#29312c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;font-size:18px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;padding:12px 16px 90px}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px}
+header h1{font-size:22px;margin:0}
+.stars{font-weight:700;color:var(--star);white-space:nowrap}
+nav.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs button{border:0;background:none;color:var(--muted);font-size:15px;padding:6px 0;border-radius:10px;font-family:inherit}
+nav.tabs button .i{display:block;font-size:22px;line-height:1.2}
+nav.tabs button.on{color:var(--brand);background:var(--brand-soft);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.card h2{font-size:19px;margin:0 0 8px}
+.muted{color:var(--muted);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:16px;font-family:inherit;cursor:pointer}
+.chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:700}
+.btn{display:inline-block;border:0;border-radius:14px;padding:12px 18px;font-size:18px;font-weight:700;font-family:inherit;cursor:pointer;background:var(--brand);color:#fff}
+.btn.ghost{background:var(--chip);color:var(--ink)}
+.btn.wide{width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lessons{display:grid;grid-template-columns:1fr;gap:8px}
+.lesson{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--chip)}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:4px}
+.bar>i{display:block;height:100%;background:var(--brand)}
+.qmeta{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:13px;padding:1px 8px;border-radius:999px;background:var(--chip);color:var(--muted);margin-right:4px}
+.qtext{font-size:23px;font-weight:700;margin:10px 0 14px;line-height:1.5}
+.qtext .hl{color:var(--brand);text-decoration:underline;text-underline-offset:5px}
+.big{font-size:44px;letter-spacing:4px}
+.opts{display:grid;grid-template-columns:1fr;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;font-size:21px;font-family:inherit;cursor:pointer;min-height:56px}
+.opt .k{flex:0 0 30px;height:30px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--muted)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt.pick{border-color:var(--brand);background:var(--brand-soft)}
+.opt[disabled]{cursor:default}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:17px}
+.fb.ok{background:var(--ok-soft)}
+.fb.bad{background:var(--bad-soft)}
+.nav2{display:flex;gap:8px;margin-top:14px}
+.nav2 .btn{flex:1;font-size:16px;padding:12px 6px;white-space:nowrap}
+.pop{animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+table{width:100%;border-collapse:collapse;font-size:16px}
+td,th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}
+textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px;font-family:monospace}
+.hide{display:none}
+.result{text-align:center}
+.result .score{font-size:56px;font-weight:800;color:var(--brand)}
+.kbd{font-size:13px;color:var(--muted);margin-top:10px}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:16px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📗 三上國語複習</h1>
+    <div class="row"><span class="stars" id="starCount">⭐ 0</span><button class="chip" id="themeBtn" aria-label="切換深淺色">🌓</button></div>
+  </header>
+
+  <!-- 首頁 -->
+  <section id="v-home">
+    <div class="card">
+      <h2>加油！期中考第 1～6 課</h2>
+      <div class="muted">答對一題得 1 顆星，答錯的題目會放進「不熟」，再答對就會移出。</div>
+    </div>
+    <div class="card">
+      <h2>各課進度</h2>
+      <div class="lessons" id="lessonList"></div>
+    </div>
+    <div class="card">
+      <h2>題型進度</h2>
+      <div class="lessons" id="typeList"></div>
+    </div>
+    <div class="card">
+      <h2>給家長</h2>
+      <div class="muted" id="parentNote"></div>
+      <div id="weakLessons" style="margin-top:8px"></div>
+      <div class="muted" style="margin-top:10px">題目都是依課文整理後由 AI 出的模擬題（標「AI 模擬」），各課生字以網路上公開的課文資料整理，可能和課本的生字表有出入，請以課本和習作為準。</div>
+    </div>
+    <div class="card">
+      <h2>備份紀錄（換手機用）</h2>
+      <div class="row">
+        <button class="btn ghost" id="exportBtn">複製備份碼</button>
+        <button class="btn ghost" id="copyWrongBtn">複製錯題清單</button>
+      </div>
+      <textarea id="importBox" placeholder="把備份碼貼在這裡，再按「匯入」" style="margin-top:10px"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost" id="importBtn">匯入</button>
+        <button class="btn ghost" id="resetBtn">清除全部紀錄</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 練習 -->
+  <section id="v-practice" class="hide">
+    <div id="pSetup">
+      <div class="card">
+        <h2>選課</h2>
+        <div class="chips" id="pLessons"></div>
+      </div>
+      <div class="card">
+        <h2>選題型</h2>
+        <div class="chips" id="pTypes"></div>
+      </div>
+      <div class="card">
+        <h2>出題順序</h2>
+        <div class="chips" id="pOrder"></div>
+        <div style="margin-top:14px"><button class="btn wide" id="pStart">開始練習 ▶</button></div>
+        <div class="muted" id="pCount" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div id="pRun" class="hide"></div>
+  </section>
+
+  <!-- 不熟 -->
+  <section id="v-weak" class="hide"><div id="wRun"></div></section>
+
+  <!-- 模擬考 -->
+  <section id="v-exam" class="hide">
+    <div id="eSetup">
+      <div class="card">
+        <h2>模擬考範圍</h2>
+        <div class="chips" id="eLessons"></div>
+      </div>
+      <div class="card">
+        <h2>題數</h2>
+        <div class="chips" id="eNum"></div>
+        <div style="margin-top:14px"><button class="btn wide" id="eStart">開始考試 📝</button></div>
+        <div class="muted" style="margin-top:6px">全部寫完再交卷，交卷後一起對答案，錯的題目會放進「不熟」。</div>
+      </div>
+    </div>
+    <div id="eRun" class="hide"></div>
+  </section>
+</div>
+
+<nav class="tabs">
+  <button data-v="home" class="on"><span class="i">🏠</span>首頁</button>
+  <button data-v="practice"><span class="i">✏️</span>練習</button>
+  <button data-v="weak"><span class="i">🔁</span>不熟<span id="weakBadge"></span></button>
+  <button data-v="exam"><span class="i">📝</span>模擬考</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== 資料 ===================== */
+const LESSONS = [
+  {n:1, t:"字的小旅行"},
+  {n:2, t:"妙故事點點名"},
+  {n:3, t:"繞口令村"},
+  {n:4, t:"小丑魚和海葵"},
+  {n:5, t:"飛舞的絲帶"},
+  {n:6, t:"小女生"}
+];
+const TYPES = {zy:"注音", gz:"國字", bs:"部首", bh:"筆畫", cz:"改錯字", zc:"造詞", kw:"課文理解"};
+
+/* 生字：字, 注音, 部首, 筆畫, 例詞 */
+const CHARS = {
+1:[["舟","ㄓㄡ","舟",6,"輕舟"],["灑","ㄙㄚˇ","水",22,"潑灑"],["愁","ㄔㄡˊ","心",13,"發愁"],["讓","ㄖㄤˋ","言",24,"禮讓"],["嘆","ㄊㄢˋ","口",14,"嘆氣"],["忌","ㄐㄧˋ","心",7,"忌妒"],["妒","ㄉㄨˋ","女",7,"忌妒"],["語","ㄩˇ","言",14,"標語"],["訣","ㄐㄩㄝˊ","言",11,"口訣"]],
+2:[["歪","ㄨㄞ","止",9,"歪打正著"],["窗","ㄔㄨㄤ","穴",12,"窗戶"],["戶","ㄏㄨˋ","戶",4,"窗戶"],["案","ㄢˋ","木",10,"答案"],["專","ㄓㄨㄢ","寸",11,"專心"],["穫","ㄏㄨㄛˋ","禾",19,"收穫"],["搭","ㄉㄚ","手",13,"搭車"],["已","ㄧˇ","己",3,"已經"],["慌","ㄏㄨㄤ","心",13,"慌張"],["傘","ㄙㄢˇ","人",12,"雨傘"],["喊","ㄏㄢˇ","口",12,"喊叫"],["霧","ㄨˋ","雨",19,"霧氣"],["亂","ㄌㄨㄢˋ","乙",13,"手忙腳亂"],["晃","ㄏㄨㄤˋ","日",10,"晃動"]],
+3:[["繞","ㄖㄠˋ","糸",18,"繞口令"],["由","ㄧㄡˊ","田",5,"理由"],["迷","ㄇㄧˊ","辵",10,"迷路"],["失","ㄕ","大",5,"迷失"],["向","ㄒㄧㄤˋ","口",6,"方向"],["岸","ㄢˋ","山",8,"上岸"],["撞","ㄓㄨㄤˋ","手",15,"碰撞"],["扶","ㄈㄨˊ","手",7,"扶起"],["急","ㄐㄧˊ","心",9,"著急"],["店","ㄉㄧㄢˋ","广",8,"商店"],["抱","ㄅㄠˋ","手",8,"擁抱"],["料","ㄌㄧㄠˋ","斗",10,"材料"],["實","ㄕˊ","宀",14,"實在"],["闆","ㄅㄢˇ","門",17,"老闆"]],
+4:[["捉","ㄓㄨㄛ","手",10,"捉迷藏"],["居","ㄐㄩ","尸",8,"鄰居"],["準","ㄓㄨㄣˇ","水",13,"準備"],["射","ㄕㄜˋ","寸",10,"發射"],["痛","ㄊㄨㄥˋ","疒",12,"疼痛"],["毒","ㄉㄨˊ","毋",8,"有毒"],["欺","ㄑㄧ","欠",12,"欺負"],["負","ㄈㄨˋ","貝",9,"欺負"],["遇","ㄩˋ","辵",13,"遇到"],["危","ㄨㄟˊ","卩",6,"危險"],["擺","ㄅㄞˇ","手",18,"擺動"],["懷","ㄏㄨㄞˊ","心",19,"不懷好意"],["觸","ㄔㄨˋ","角",20,"觸手"]],
+5:[["掛","ㄍㄨㄚˋ","手",11,"高掛"],["練","ㄌㄧㄢˋ","糸",15,"練習"],["習","ㄒㄧˊ","羽",11,"練習"],["條","ㄊㄧㄠˊ","木",11,"字條"],["臺","ㄊㄞˊ","至",14,"司令臺"],["蝶","ㄉㄧㄝˊ","虫",15,"彩蝶"],["絲","ㄙ","糸",12,"絲帶"],["舞","ㄨˇ","舛",14,"飛舞"]],
+6:[["洗","ㄒㄧˇ","水",9,"洗手"],["澡","ㄗㄠˇ","水",16,"洗澡"],["怕","ㄆㄚˋ","心",8,"哪怕"],["柔","ㄖㄡˊ","木",9,"柔細"],["膠","ㄐㄧㄠ","肉",15,"膠水"],["黏","ㄋㄧㄢˊ","黍",17,"黏人"],["副","ㄈㄨˋ","刀",11,"一副"],["整","ㄓㄥˇ","攴",16,"整天"],["腳","ㄐㄧㄠˇ","肉",13,"四腳朝天"]]
+};
+const RAD_SHOW = {水:"水（氵）",手:"手（扌）",心:"心（忄）",辵:"辵（辶）",艸:"艸（艹）",阜:"阜（阝）",肉:"肉（月）",刀:"刀（刂）",人:"人（亻）",言:"言",糸:"糸",玉:"玉（王）",犬:"犬（犭）",示:"示（礻）"};
+const RAD_POOL = ["水","心","言","口","手","木","人","女","車","日","雨","糸","肉","刀","竹","禾","山","宀","門","見","艸","辵","寸","貝","尸","疒","欠","角","羽","至","虫","巾","火","土","金","目","田","大","广","斗","止","穴","己","乙","卩","毋","攴","黍","舛","舟","戶"];
+
+/* 手出的題目：課, 題型, 題目, [正確答案, 錯誤1, 錯誤2, 錯誤3], 說明 */
+const HAND = [
+// 第一課
+[1,"kw","「心」字中間那一筆（臥鉤），課文說它像什麼？",["一葉小舟","一條小魚","一個月亮","一根釣竿"],"「心是一葉舟」，中間的臥鉤像小船。"],
+[1,"kw","「一點落舟前，一點落舟中，一點落舟後」，這三個點像什麼？",["細雨","星星","花瓣","小石頭"],"「細雨灑輕舟」，三個點是落在船上的雨滴。"],
+[1,"kw","爺爺說的那段話，是以前的人教孩子寫哪個字的口訣？",["心","舟","雨","愛"],"作家小語：這是過去人們教孩子寫「心」字的口訣。"],
+[1,"kw","心的小船只載「自己」，「心」會變成哪兩個字？",["息和忌","您和念","思和想","忘和忍"],"「自」＋「心」＝息，「己」＋「心」＝忌。"],
+[1,"kw","心的小船載著「你」，會變成哪個字？",["您","念","怎","想"],"「你」＋「心」＝您。"],
+[1,"kw","課文說「愛忌妒」會讓什麼消失？",["快樂","小船","細雨","力氣"],"「一下變成忌，愛忌妒。快樂消失太可惜。」"],
+[1,"gz","細雨（ㄙㄚˇ）輕舟",["灑","沙","殺","傻"],"「灑」是水部，表示把水散落出去。"],
+[1,"gz","他沒考好，（ㄊㄢˋ）了一口氣。",["嘆","探","炭","談"],"「嘆氣」和嘴巴有關，所以是口部。"],
+[1,"zc","下面哪個語詞寫對了？",["口訣","口決","口缺","口絕"],"「口訣」是方便記憶的句子，訣是言部。"],
+[1,"cz","「他總是很愛記妒別人。」哪個字寫錯了？",["記","愛","妒","別"],"應該是「忌妒」，「忌」是心部。"],
+[1,"zc","「搭載」的「載」是什麼意思？",["用車船裝運","寫下來","年","一次"],"搭載：用交通工具裝人或東西。"],
+// 第二課
+[2,"kw","〈忙中有錯〉裡，王叔叔因為太慌張，拿錯了什麼？",["雨傘","書包","帽子","鑰匙"],"王叔叔匆忙中拿走了別人的雨傘。"],
+[2,"kw","「我……我……看不清楚。」句子裡的「……」叫做什麼？",["刪節號","破折號","引號","冒號"],"「……」是刪節號。"],
+[2,"kw","「我……我……看不清楚。」用刪節號表示什麼？",["說話停頓、吞吞吐吐","說話很大聲","在問問題","在列舉東西"],"刪節號可以表示說話斷斷續續、停頓。"],
+[2,"zc","「歪打正著」是什麼意思？",["方法不對，卻剛好得到好結果","打球打得很準","做事很認真","故意做錯事"],"本來不是照正確方法做，結果卻剛好成功。"],
+[2,"zc","「手忙腳亂」是形容什麼樣子？",["做事慌張、沒有條理","手腳很靈活","很會跳舞","慢吞吞的"],"手和腳都亂了，形容很慌張。"],
+[2,"zc","「飛也似的」跑出去，是什麼意思？",["跑得很快","真的飛起來","跑得很慢","像鳥一樣唱歌"],"「似」是好像，跑得好像在飛。"],
+[2,"gz","打開窗（ㄏㄨˋ）",["戶","護","互","虎"],"「窗戶」的「戶」。"],
+[2,"gz","秋天的收（ㄏㄨㄛˋ）",["穫","貨","或","火"],"收成的「穫」和稻子有關，是禾部。"],
+[2,"gz","上課要（ㄓㄨㄢ）心",["專","磚","轉","傳"],"「專心」的「專」。"],
+[2,"cz","「他慌慌章章地跑出門。」哪個字寫錯了？",["章","慌","跑","門"],"應該是「慌慌張張」。"],
+[2,"cz","「下大雨了，快把雨散打開。」哪個字寫錯了？",["散","雨","快","開"],"應該是「雨傘」。"],
+// 第三課
+[3,"kw","小金是做什麼的人？",["旅行家","老闆","老師","農夫"],"課文中的小金是一位旅行家。"],
+[3,"kw","繞口令村的人說話有什麼特別？",["都用繞口令說話","都用唱的","都不說話","都說英語"],"村裡的小孩、老闆說話都像繞口令。"],
+[3,"kw","「繞口令」是一種什麼？",["語言遊戲","球類運動","樂器","食物"],"繞口令是用相近的音練習說話的語言遊戲。"],
+[3,"kw","「是柿子不是獅子」，「柿」和「獅」的讀音哪裡不一樣？",["聲調","聲母","韻母","完全一樣"],"柿ㄕˋ、獅ㄕ，只有聲調不同。"],
+[3,"kw","小金遇到奇怪的繞口令村，心情怎麼樣？",["保持平常心","很生氣","嚇得哭了","馬上逃走"],"小金很冷靜，用平常心面對。"],
+[3,"gz","（ㄖㄠˋ）口令",["繞","擾","饒","燒"],"「繞」是糸部，像線一樣繞來繞去。"],
+[3,"gz","兩輛車碰（ㄓㄨㄤˋ）",["撞","壯","狀","裝"],"「撞」是手部。"],
+[3,"gz","你遲到的理（ㄧㄡˊ）是什麼？",["由","油","遊","郵"],"「理由」的「由」。"],
+[3,"cz","「我們一起去參關博物館。」哪個字寫錯了？",["關","參","博","館"],"應該是「參觀」，觀是見部，和看有關。"],
+[3,"cz","「他在森林裡迷路，找不到方像。」哪個字寫錯了？",["像","迷","森","找"],"應該是「方向」。"],
+[3,"zc","「腳踏實地」是什麼意思？",["做事踏實、認真","光著腳走路","在地上跳","很會跑步"],"形容做事實在、一步一步來。"],
+// 第四課
+[4,"kw","小丑魚和朋友們在玩什麼遊戲？",["捉迷藏","跳繩","踢球","賽跑"],"故事一開始，小丑魚和朋友玩捉迷藏。"],
+[4,"kw","黃色的大魚假裝友善，其實是怎樣的？",["不懷好意","很害羞","很善良","很愛哭"],"大魚假裝友善，其實想攻擊小丑魚。"],
+[4,"kw","最後是誰保護了小丑魚？",["海葵","大鯊魚","螃蟹","海龜"],"海葵用觸手保護小丑魚。"],
+[4,"kw","海葵說：「我的觸手雖然美麗，卻是＿＿的。」",["有毒","很軟","很長","會發光"],"海葵的觸手有毒，可以嚇走敵人。"],
+[4,"kw","「小丑魚是我的好朋友，誰都不能欺負他。」可以看出海葵是怎樣的朋友？",["勇敢又講義氣","膽小","愛生氣","很自私"],"海葵挺身保護朋友。"],
+[4,"gz","海葵的（ㄔㄨˋ）手",["觸","處","出","除"],"「觸手」的「觸」是角部。"],
+[4,"gz","不可以欺（ㄈㄨˋ）別人",["負","付","父","婦"],"「欺負」的「負」是貝部。"],
+[4,"gz","小魚（ㄩˋ）到危險",["遇","雨","魚","玉"],"「遇到」的「遇」是辵部（辶）。"],
+[4,"cz","「過馬路要小心，才不會發生危驗。」哪個字寫錯了？",["驗","危","過","心"],"應該是「危險」。"],
+[4,"zc","「不懷好意」是什麼意思？",["心裡打著壞主意","心情很好","懷裡抱著東西","很有禮貌"],"懷：心裡想的；不懷好意就是心存壞念頭。"],
+[4,"zc","「捉迷藏」的「藏」是什麼意思？",["躲起來","寶藏","西藏","收藏品"],"捉迷藏要躲起來讓別人找。"],
+// 第五課
+[5,"kw","李文貴在練習時遇到什麼困難？",["左右分不清楚","跑不快","忘記帶東西","聲音太小"],"李文貴左右不分，跟大家方向不一樣。"],
+[5,"kw","大家在練習什麼活動時出了問題？",["大會操","合唱","跳遠","打掃"],"在練習大會操時，李文貴常常轉錯方向。"],
+[5,"kw","班上想出什麼辦法幫助李文貴？",["在右手綁上絲帶","請他不要參加","站在最後面","用筆寫在手上"],"右手綁絲帶，就分得出左右了。"],
+[5,"kw","喊「絲帶」的時候，要往哪一邊？",["右邊","左邊","前面","後面"],"絲帶綁在右手，「絲帶」就是右邊，「沒絲帶」是左邊。"],
+[5,"kw","寫閱讀心得時常用「六何法」，下面哪一組是六何法？",["何人、何時、何地、何事、為何、如何","誰、哪裡、好吃、好玩、多少、顏色","開始、經過、結果、心得、感想、題目","上、下、左、右、前、後"],"六何法：人、時、地、事、原因、方法。"],
+[5,"gz","司令（ㄊㄞˊ）",["臺","抬","颱","苔"],"「司令臺」的「臺」是至部。"],
+[5,"gz","花園裡有美麗的彩（ㄉㄧㄝˊ）",["蝶","碟","疊","跌"],"「蝴蝶」是昆蟲，所以是虫部。"],
+[5,"cz","「大家一起連習大會操。」哪個字寫錯了？",["連","習","操","家"],"應該是「練習」，練是糸部。"],
+[5,"cz","「老師在桌上留了一張字修。」哪個字寫錯了？",["修","老","留","桌"],"應該是「字條」。"],
+// 第六課
+[6,"kw","「小女生」是什麼動物？",["貓","狗","兔子","小鳥"],"小女生是作者家的貓。"],
+[6,"kw","作者為什麼叫小女生「膠水貓」？",["她像膠水一樣黏人","她喜歡吃膠水","她身上黏黏的","她是白色的"],"小女生很黏人，像膠水一樣。"],
+[6,"kw","作者洗澡的時候，小女生會怎麼做？",["在門外喵喵叫","跑去睡覺","在外面玩","去吃飯"],"她會在門外喵喵叫，等作者出來。"],
+[6,"kw","小女生心情好和心情不好的時候，哪個地方一樣？",["都會走到作者身邊","都會躲起來","都會大叫","都會咬人"],"不管心情好不好，她都會走過來，只是樣子不同。"],
+[6,"kw","為什麼作者說「我們的故事，說也說不完」？",["一起生活了好多年","故事書太厚","作者忘記了","貓不愛聽"],"他們相處很多年，有說不完的小故事。"],
+[6,"zc","「四腳朝天」是什麼樣子？",["仰躺著、肚子朝上","四隻腳站著","跳得很高","趴在地上"],"四隻腳朝向天空，就是躺著露出肚子。"],
+[6,"gz","小貓很（ㄋㄧㄢˊ）人",["黏","年","念","連"],"「黏人」的「黏」是黍部。"],
+[6,"gz","睡前要洗（ㄗㄠˇ）",["澡","早","操","燥"],"洗澡要用水，所以是水部（氵）。"],
+[6,"gz","小貓的毛很（ㄖㄡˊ）細",["柔","肉","揉","柚"],"「柔細」的「柔」是木部。"],
+[6,"cz","「小貓的肚子毛茸茸的，摸起來很揉細。」哪個字寫錯了？",["揉","肚","茸","摸"],"應該是「柔細」。"],
+[6,"cz","「他用交水把紙黏起來。」哪個字寫錯了？",["交","用","紙","黏"],"應該是「膠水」，膠是肉部（月）。"]
+];
+
+/* ===================== 建題 ===================== */
+const TONES=["","ˊ","ˇ","ˋ"];
+function toneVariants(zy){const base=zy.replace(/[ˊˇˋ˙]/g,"");return TONES.map(t=>base+t);}
+const radShow=r=>RAD_SHOW[r]||r;
+function seeded(str){let h=0;for(const c of str)h=(h*31+c.codePointAt(0))>>>0;return ()=>{h=(h*1103515245+12345)>>>0;return h/4294967296;};}
+function pickN(arr,n,rnd,exclude){const pool=arr.filter(x=>!exclude.includes(x));const out=[];while(out.length<n&&pool.length){out.push(pool.splice(Math.floor(rnd()*pool.length),1)[0]);}return out;}
+function hlWord(word,ch){return word.replace(ch,'<span class="hl">'+ch+'</span>');}
+
+const Q=[];
+for(const L of LESSONS){
+  for(const [ch,zy,rad,st,word] of CHARS[L.n]){
+    const rnd=seeded(ch);
+    Q.push({id:`L${L.n}-zy-${ch}`,l:L.n,ty:"zy",q:`「${hlWord(word,ch)}」的「${ch}」怎麼念？`,a:zy,o:toneVariants(zy).filter(x=>x!==zy),e:`${ch}：${zy}（${word}）`});
+    Q.push({id:`L${L.n}-bs-${ch}`,l:L.n,ty:"bs",q:`<span class="big">${ch}</span><br>部首是什麼？`,a:radShow(rad),o:pickN(RAD_POOL,3,rnd,[rad]).map(radShow),e:`「${ch}」是${radShow(rad)}部。`});
+    const d=pickN([-2,-1,1,2],3,rnd,[]).map(x=>st+x).filter(x=>x>0);
+    Q.push({id:`L${L.n}-bh-${ch}`,l:L.n,ty:"bh",q:`<span class="big">${ch}</span><br>一共有幾畫？`,a:st+" 畫",o:d.map(x=>x+" 畫"),e:`「${ch}」共 ${st} 畫。`});
+  }
+}
+HAND.forEach((h,i)=>{const [l,ty,q,opts,e]=h;Q.push({id:`L${l}-${ty}-h${i}`,l,ty,q,a:opts[0],o:opts.slice(1),e});});
+const QMAP=Object.fromEntries(Q.map(q=>[q.id,q]));
+
+/* ===================== 紀錄 ===================== */
+const KEY="son-guoyu-3a-v1";
+let S={rec:{},stars:0,weak:[]};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);S=Object.assign(S,p);}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}renderTop();}
+load();
+function rec(id){return S.rec[id]||(S.rec[id]={r:0,w:0});}
+function markResult(id,ok){
+  const r=rec(id);
+  if(ok){r.r++;S.stars++;S.weak=S.weak.filter(x=>x!==id);}
+  else{r.w++;if(!S.weak.includes(id))S.weak.push(id);}
+  save();
+}
+function toggleWeak(id){if(S.weak.includes(id)){S.weak=S.weak.filter(x=>x!==id);toast("已移出不熟");}else{S.weak.push(id);toast("已加入不熟");}save();}
+
+/* ===================== 共用 ===================== */
+const $=s=>document.querySelector(s);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),1400);}
+function chips(el,items,selected,multi,onChange){
+  el.innerHTML="";
+  items.forEach(([v,label])=>{
+    const b=document.createElement("button");b.className="chip"+(selected.has(v)?" on":"");b.textContent=label;
+    b.onclick=()=>{if(multi){selected.has(v)?selected.delete(v):selected.add(v);if(!selected.size)selected.add(v);}else{selected.clear();selected.add(v);}
+      [...el.children].forEach((c,i)=>c.classList.toggle("on",selected.has(items[i][0])));onChange&&onChange();};
+    el.appendChild(b);
+  });
+}
+const CHEER_OK=["答對了！好棒 🎉","太厲害了！⭐","完全正確！👍","你真用功！🌟","答對！繼續加油 💪"];
+const CHEER_BAD=["沒關係，記起來就好 😊","差一點點！看看說明 👀","再想想看，下次一定會 💪"];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ===================== 刷題器 ===================== */
+let active=null; // 目前接收鍵盤的刷題器
+function Runner(host,list,opts){
+  this.host=host;this.list=list;this.i=0;this.ans={};this.opts=opts||{};this.cache={};
+  active=this;this.render();
+}
+Runner.prototype.optsFor=function(q){
+  if(!this.cache[q.id])this.cache[q.id]=shuffle([q.a,...q.o]);
+  return this.cache[q.id];
+};
+Runner.prototype.render=function(){
+  const h=this.host;
+  if(!this.list.length){h.innerHTML=`<div class="card result"><div style="font-size:48px">🌈</div><h2>${this.opts.empty||"沒有題目"}</h2></div>`;return;}
+  if(this.i>=this.list.length){
+    const n=this.list.length,ok=this.list.filter(q=>this.ans[q.id]&&this.ans[q.id].ok).length;
+    h.innerHTML=`<div class="card result"><div style="font-size:48px">🏆</div><h2>這一輪完成了！</h2><div class="score">${ok} / ${n}</div><div class="muted">答錯的題目已放進「不熟」</div><div class="nav2"><button class="btn" id="again">再練一次</button><button class="btn ghost" id="back">回設定</button></div></div>`;
+    h.querySelector("#again").onclick=()=>{this.i=0;this.ans={};this.cache={};this.list=shuffle(this.list);this.render();};
+    h.querySelector("#back").onclick=()=>this.opts.onBack&&this.opts.onBack();
+    return;
+  }
+  const q=this.list[this.i],given=this.ans[q.id],L=LESSONS.find(x=>x.n===q.l);
+  const os=this.optsFor(q),isWeak=S.weak.includes(q.id);
+  h.innerHTML=`<div class="card">
+    <div class="qmeta"><span><span class="tag">第${q.l}課 ${L.t}</span><span class="tag">${TYPES[q.ty]}</span><span class="tag">AI 模擬</span></span><span>${this.i+1} / ${this.list.length}</span></div>
+    <div class="qtext">${q.q}</div>
+    <div class="opts">${os.map((o,k)=>{let c="opt";if(given){if(o===q.a)c+=" ok";else if(o===given.pick)c+=" bad";}
+      return `<button class="${c}" data-k="${k}" ${given?"disabled":""}><span class="k">${k+1}</span><span>${o}</span></button>`;}).join("")}</div>
+    ${given?`<div class="fb ${given.ok?"ok":"bad"} pop"><b>${given.ok?pick(CHEER_OK):pick(CHEER_BAD)}</b><br>${given.ok?"":"正確答案："+q.a+"<br>"}${q.e}</div>`:""}
+    <div class="nav2">
+      <button class="btn ghost" id="prev" ${this.i===0?"disabled":""}>← 上一題</button>
+      <button class="btn ghost" id="flag">${isWeak?"移出不熟":"標不熟"}</button>
+      <button class="btn" id="next">${given?"下一題 →":"跳過 →"}</button>
+    </div>
+    <div class="kbd">鍵盤：1–4 作答、Enter 下一題、← 上一題、F 標不熟</div>
+  </div>`;
+  h.querySelectorAll(".opt").forEach(b=>b.onclick=()=>this.answer(+b.dataset.k));
+  h.querySelector("#prev").onclick=()=>this.prev();
+  h.querySelector("#next").onclick=()=>this.next();
+  h.querySelector("#flag").onclick=()=>{toggleWeak(q.id);this.render();};
+};
+Runner.prototype.answer=function(k){
+  const q=this.list[this.i];if(!q||this.ans[q.id])return;
+  const os=this.optsFor(q);if(k>=os.length)return;
+  const ok=os[k]===q.a;this.ans[q.id]={pick:os[k],ok};markResult(q.id,ok);this.render();
+};
+Runner.prototype.next=function(){if(this.i<this.list.length){this.i++;this.render();window.scrollTo(0,0);}};
+Runner.prototype.prev=function(){if(this.i>0){this.i--;this.render();}};
+Runner.prototype.flag=function(){const q=this.list[this.i];if(q){toggleWeak(q.id);this.render();}};
+
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA")return;
+  if(examState&&examState.on){if(/^[1-4]$/.test(e.key))examAnswer(+e.key-1);return;}
+  if(!active)return;
+  if(/^[1-4]$/.test(e.key))active.answer(+e.key-1);
+  else if(e.key==="Enter")active.next();
+  else if(e.key==="ArrowLeft")active.prev();
+  else if(e.key==="f"||e.key==="F")active.flag();
+});
+
+/* ===================== 首頁 ===================== */
+function stat(list){let done=0,ok=0;list.forEach(q=>{const r=S.rec[q.id];if(r&&(r.r+r.w)){done++;if(r.r>0&&!S.weak.includes(q.id))ok++;}});return {n:list.length,done,ok};}
+function renderTop(){
+  $("#starCount").textContent="⭐ "+S.stars;
+  $("#weakBadge").textContent=S.weak.length?`（${S.weak.length}）`:"";
+}
+function renderHome(){
+  $("#lessonList").innerHTML=LESSONS.map(L=>{const s=stat(Q.filter(q=>q.l===L.n));const p=Math.round(s.ok/s.n*100);
+    return `<div class="lesson"><div style="flex:1"><b>第${L.n}課 ${L.t}</b><div class="bar"><i style="width:${p}%"></i></div><div class="muted">已會 ${s.ok} / ${s.n} 題</div></div><button class="btn" style="padding:8px 12px;font-size:16px" data-l="${L.n}">練習</button></div>`;}).join("");
+  $("#lessonList").querySelectorAll("button").forEach(b=>b.onclick=()=>{pL.clear();pL.add(+b.dataset.l);pT.clear();Object.keys(TYPES).forEach(t=>pT.add(t));show("practice");startPractice();});
+  $("#typeList").innerHTML=Object.entries(TYPES).map(([t,name])=>{const s=stat(Q.filter(q=>q.ty===t));const p=Math.round(s.ok/s.n*100);
+    return `<div class="lesson"><div style="flex:1"><b>${name}</b><div class="bar"><i style="width:${p}%"></i></div><div class="muted">已會 ${s.ok} / ${s.n} 題</div></div></div>`;}).join("");
+  // 家長區
+  const rows=LESSONS.map(L=>{let r=0,w=0;Q.filter(q=>q.l===L.n).forEach(q=>{const x=S.rec[q.id];if(x){r+=x.r;w+=x.w;}});const weak=S.weak.filter(id=>QMAP[id]&&QMAP[id].l===L.n).length;return {L,r,w,weak,acc:r+w?Math.round(r/(r+w)*100):null};});
+  const total=rows.reduce((a,b)=>a+b.r+b.w,0);
+  $("#parentNote").textContent=total?`目前共作答 ${total} 次。下表是各課答對率與不熟題數：`:"孩子還沒開始作答，作答後這裡會顯示哪幾課比較弱。";
+  $("#weakLessons").innerHTML=total?`<table><tr><th>課別</th><th>答對率</th><th>不熟</th></tr>${rows.map(x=>`<tr><td>第${x.L.n}課 ${x.L.t}</td><td>${x.acc===null?"—":x.acc+"%"}</td><td>${x.weak}</td></tr>`).join("")}</table>`:"";
+}
+
+/* ===================== 練習 ===================== */
+const pL=new Set(LESSONS.map(l=>l.n)),pT=new Set(Object.keys(TYPES)),pO=new Set(["new"]);
+function pPool(){return Q.filter(q=>pL.has(q.l)&&pT.has(q.ty));}
+function renderPracticeSetup(){
+  const upd=()=>{$("#pCount").textContent=`共 ${pPool().length} 題`;};
+  chips($("#pLessons"),LESSONS.map(L=>[L.n,`第${L.n}課`]),pL,true,upd);
+  chips($("#pTypes"),Object.entries(TYPES),pT,true,upd);
+  chips($("#pOrder"),[["new","先做沒做過的"],["rand","隨機"],["wrong","常錯的優先"]],pO,false);
+  upd();
+}
+function startPractice(){
+  let list=shuffle(pPool());
+  const o=[...pO][0];
+  if(o==="new")list.sort((a,b)=>(S.rec[a.id]?1:0)-(S.rec[b.id]?1:0));
+  if(o==="wrong")list.sort((a,b)=>((S.rec[b.id]||{}).w||0)-((S.rec[a.id]||{}).w||0));
+  $("#pSetup").classList.add("hide");$("#pRun").classList.remove("hide");
+  new Runner($("#pRun"),list,{onBack:()=>{$("#pRun").classList.add("hide");$("#pSetup").classList.remove("hide");renderPracticeSetup();active=null;}});
+}
+$("#pStart").onclick=startPractice;
+
+/* ===================== 不熟 ===================== */
+function renderWeak(){
+  const list=shuffle(S.weak.map(id=>QMAP[id]).filter(Boolean));
+  new Runner($("#wRun"),list,{empty:"目前沒有不熟的題目，太棒了！",onBack:()=>{show("home");}});
+}
+
+/* ===================== 模擬考 ===================== */
+const eL=new Set(LESSONS.map(l=>l.n)),eN=new Set([20]);
+let examState=null;
+function renderExamSetup(){
+  chips($("#eLessons"),LESSONS.map(L=>[L.n,`第${L.n}課`]),eL,true);
+  chips($("#eNum"),[[10,"10 題"],[20,"20 題"],[30,"30 題"]],eN,false);
+}
+$("#eStart").onclick=()=>{
+  const pool=Q.filter(q=>eL.has(q.l));
+  // 每種題型都抽到一些
+  const byType={};shuffle(pool).forEach(q=>(byType[q.ty]=byType[q.ty]||[]).push(q));
+  const n=Math.min([...eN][0],pool.length),list=[];const keys=Object.keys(byType);
+  while(list.length<n){let added=false;for(const k of shuffle(keys)){if(list.length>=n)break;if(byType[k].length){list.push(byType[k].shift());added=true;}}if(!added)break;}
+  examState={on:true,list:shuffle(list),i:0,pick:{},opts:{}};
+  examState.list.forEach(q=>examState.opts[q.id]=shuffle([q.a,...q.o]));
+  active=null;$("#eSetup").classList.add("hide");$("#eRun").classList.remove("hide");renderExam();
+};
+function examAnswer(k){const st=examState,q=st.list[st.i];const os=st.opts[q.id];if(k<os.length){st.pick[q.id]=os[k];renderExam();}}
+function renderExam(){
+  const st=examState,h=$("#eRun");
+  if(!st.on){return;}
+  const q=st.list[st.i],L=LESSONS.find(x=>x.n===q.l),os=st.opts[q.id];
+  const doneN=Object.keys(st.pick).length;
+  h.innerHTML=`<div class="card">
+    <div class="qmeta"><span><span class="tag">第${q.l}課 ${L.t}</span><span class="tag">${TYPES[q.ty]}</span></span><span>第 ${st.i+1} / ${st.list.length} 題・已作答 ${doneN}</span></div>
+    <div class="qtext">${q.q}</div>
+    <div class="opts">${os.map((o,k)=>`<button class="opt${st.pick[q.id]===o?" pick":""}" data-k="${k}"><span class="k">${k+1}</span><span>${o}</span></button>`).join("")}</div>
+    <div class="nav2"><button class="btn ghost" id="ep" ${st.i===0?"disabled":""}>← 上一題</button>
+    ${st.i<st.list.length-1?`<button class="btn" id="en">下一題 →</button>`:`<button class="btn" id="es">交卷 ✅</button>`}</div>
+    ${st.i<st.list.length-1?`<div style="margin-top:8px"><button class="btn ghost wide" id="es2">提前交卷</button></div>`:""}
+  </div>`;
+  h.querySelectorAll(".opt").forEach(b=>b.onclick=()=>examAnswer(+b.dataset.k));
+  h.querySelector("#ep").onclick=()=>{st.i--;renderExam();};
+  const en=h.querySelector("#en");if(en)en.onclick=()=>{st.i++;renderExam();window.scrollTo(0,0);};
+  const sub=()=>{const left=st.list.length-Object.keys(st.pick).length;if(left&&!confirmSoft(left))return;submitExam();};
+  const es=h.querySelector("#es");if(es)es.onclick=sub;
+  const es2=h.querySelector("#es2");if(es2)es2.onclick=sub;
+}
+let pendingSubmit=false;
+function confirmSoft(left){if(pendingSubmit){pendingSubmit=false;return true;}pendingSubmit=true;toast(`還有 ${left} 題沒寫，再按一次交卷`);setTimeout(()=>pendingSubmit=false,3000);return false;}
+function submitExam(){
+  const st=examState;st.on=false;
+  let ok=0;
+  st.list.forEach(q=>{const good=st.pick[q.id]===q.a;if(good)ok++;markResult(q.id,good);});
+  const score=Math.round(ok/st.list.length*100);
+  const wrong=st.list.filter(q=>st.pick[q.id]!==q.a);
+  $("#eRun").innerHTML=`<div class="card result pop"><div style="font-size:48px">${score>=90?"🏆":score>=70?"🎉":"💪"}</div><h2>模擬考成績</h2><div class="score">${score} 分</div><div class="muted">答對 ${ok} / ${st.list.length} 題${wrong.length?"，錯題已放進「不熟」":""}</div></div>
+  ${wrong.map(q=>`<div class="card"><div class="qmeta"><span><span class="tag">第${q.l}課</span><span class="tag">${TYPES[q.ty]}</span></span></div><div style="font-size:19px;margin:6px 0">${q.q}</div><div class="fb bad">你的答案：${st.pick[q.id]||"（沒寫）"}<br>正確答案：<b>${q.a}</b><br>${q.e}</div></div>`).join("")}
+  <div class="nav2"><button class="btn" id="eAgain">再考一次</button><button class="btn ghost" id="eWeak">去練不熟</button></div>`;
+  $("#eAgain").onclick=()=>{$("#eRun").classList.add("hide");$("#eSetup").classList.remove("hide");renderExamSetup();};
+  $("#eWeak").onclick=()=>show("weak");
+  window.scrollTo(0,0);
+}
+
+/* ===================== 切換頁面 ===================== */
+function show(v){
+  ["home","practice","weak","exam"].forEach(x=>$("#v-"+x).classList.toggle("hide",x!==v));
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  active=null;
+  if(v==="home")renderHome();
+  if(v==="practice"){$("#pRun").classList.add("hide");$("#pSetup").classList.remove("hide");renderPracticeSetup();}
+  if(v==="weak")renderWeak();
+  if(v==="exam"){if(!examState||!examState.on){$("#eRun").classList.add("hide");$("#eSetup").classList.remove("hide");renderExamSetup();}}
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+
+/* ===================== 備份 ===================== */
+function copyText(t,msg){
+  const done=()=>toast(msg);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>fallback());}else fallback();
+  function fallback(){const box=$("#importBox");box.value=t;box.select();try{document.execCommand("copy");done();}catch(e){toast("已放進下方框框，請手動複製");}}
+}
+$("#exportBtn").onclick=()=>copyText(btoa(unescape(encodeURIComponent(JSON.stringify(S)))),"備份碼已複製");
+$("#copyWrongBtn").onclick=()=>{
+  if(!S.weak.length){toast("目前沒有錯題");return;}
+  const t=S.weak.map(id=>QMAP[id]).filter(Boolean).map((q,i)=>`${i+1}. 第${q.l}課【${TYPES[q.ty]}】${q.q.replace(/<br>/g," ").replace(/<[^>]+>/g,"")}　答案：${q.a}`).join("\n");
+  copyText(t,"錯題清單已複製");
+};
+$("#importBtn").onclick=()=>{
+  try{const p=JSON.parse(decodeURIComponent(escape(atob($("#importBox").value.trim()))));if(!p||typeof p.rec!=="object")throw 0;S={rec:p.rec,stars:p.stars||0,weak:p.weak||[]};save();renderHome();$("#importBox").value="";toast("匯入成功！");}
+  catch(e){toast("備份碼不正確");}
+};
+let resetArm=false;
+$("#resetBtn").onclick=()=>{if(!resetArm){resetArm=true;toast("再按一次才會清除");setTimeout(()=>resetArm=false,3000);return;}S={rec:{},stars:0,weak:[]};save();renderHome();toast("已清除");};
+
+/* ===================== 深淺色 ===================== */
+(function(){
+  let t=null;try{t=localStorage.getItem(KEY+"-theme");}catch(e){}
+  if(t)document.documentElement.dataset.theme=t;
+  $("#themeBtn").onclick=()=>{
+    const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+    const nx=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nx;try{localStorage.setItem(KEY+"-theme",nx);}catch(e){}
+  };
+})();
+
+renderTop();renderHome();
+</script>
+</body>
+</html>
