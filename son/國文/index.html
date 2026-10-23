@@ -99,7 +99,11 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
 .wallet{display:flex;justify-content:space-around;text-align:center;gap:8px}
 .wallet b{display:block;font-size:26px;color:var(--star)}
 .petPick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.petPick button{font-size:46px;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:8px 0;cursor:pointer;color:var(--ink);font-family:inherit}
+.petPick button{border:2px solid var(--line);background:var(--card);border-radius:16px;padding:4px 0 6px;cursor:pointer;color:var(--ink);font-family:inherit}
+.petPick button svg{width:100%;max-width:96px;height:auto;display:block;margin:0 auto}
+.pickKind{font-weight:700;margin:12px 0 6px}
+.petEmoji svg{display:block;width:100%;height:auto}
+#petTabIcon svg{width:26px;height:26px;display:block;margin:0 auto}
 .petPick button small{display:block;font-size:15px}
 .petPick button.on{border-color:var(--brand);background:var(--brand-soft)}
 input.txt{width:100%;font-size:18px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit}
@@ -678,7 +682,7 @@ document.addEventListener("keydown",e=>{
 function stat(list){let done=0,ok=0;list.forEach(q=>{const r=S.rec[q.id];if(r&&(r.r+r.w)){done++;if(r.r>0&&!S.weak.includes(q.id))ok++;}});return {n:list.length,done,ok};}
 function renderTop(){
   $("#starCount").textContent="⭐ "+balance();
-  const pi=$("#petTabIcon");if(pi)pi.textContent=S.pet?(petLevel().lv>1?PETS.find(p=>p.k===S.pet.k).e:"🥚"):"🥚";
+  const pi=$("#petTabIcon");if(pi){if(S.pet&&KINDS[S.pet.k])pi.innerHTML=petLevel().lv>1?petSVG(S.pet.k,curV(),{size:26}):eggSVG(S.pet.k,curV(),26);else pi.textContent="🥚";}
   const wb=$("#weakBadge");wb.textContent=S.weak.length?(S.weak.length>99?"99+":S.weak.length):"";wb.className=S.weak.length?"badge":"";
 }
 function renderHome(){
@@ -833,7 +837,207 @@ let resetArm=false;
 $("#resetBtn").onclick=()=>{if(!resetArm){resetArm=true;toast("再按一次才會清除");setTimeout(()=>resetArm=false,3000);return;}const keep=S.rewards;S=freshState();S.rewards=keep;save();renderHome();toast("已清除（家長獎勵設定保留）");};
 
 /* ===================== 寵物養成 ===================== */
-const PETS=[{k:"cat",e:"🐱",n:"小貓"},{k:"dog",e:"🐶",n:"小狗"},{k:"rabbit",e:"🐰",n:"小兔"},{k:"dragon",e:"🐲",n:"小龍"},{k:"panda",e:"🐼",n:"熊貓"},{k:"chick",e:"🐥",n:"小雞"},{k:"beaver",e:"🦫",n:"河狸"},{k:"bear",e:"🐻",n:"小熊"}];
+/* ---- 原創寵物插畫（8 種 × 3 款） ---- */
+/* 原創 Q 版寵物插畫產生器：petSVG(kind, variant, opts) 回傳 SVG 字串 */
+const OL="#3b2a20"; // 外框色
+const SW=3.2;
+function E(cx,cy,rx,ry,fill,extra=""){return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" stroke="${OL}" stroke-width="${SW}" ${extra}/>`;}
+function En(cx,cy,rx,ry,fill,extra=""){return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" ${extra}/>`;}
+function P(d,fill,extra=""){return `<path d="${d}" fill="${fill}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round" stroke-linecap="round" ${extra}/>`;}
+function L(d,w=2.6,c=OL){return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;}
+
+function eyes(o={}){
+  const y=o.y||90,dx=o.dx||20,c=o.c||"#2a1d16";
+  if(o.happy) return L(`M${100-dx-7} ${y+2} Q${100-dx} ${y-7} ${100-dx+7} ${y+2}`,3.4)+L(`M${100+dx-7} ${y+2} Q${100+dx} ${y-7} ${100+dx+7} ${y+2}`,3.4);
+  return [100-dx,100+dx].map(x=>En(x,y,6.5,8.5,c)+En(x+2.2,y-3,2.6,2.8,"#fff")+En(x-2,y+3.5,1.2,1.2,"#fff")).join("");
+}
+function cheeks(c="#ff9aa8",y=104,dx=33){return En(100-dx,y,8.5,5.2,c,'opacity=".55"')+En(100+dx,y,8.5,5.2,c,'opacity=".55"');}
+function smile(y=106,w=6){return L(`M${100-w} ${y} Q${100-w/2} ${y+5} 100 ${y} Q${100+w/2} ${y+5} ${100+w} ${y}`,2.6);}
+function body(c,belly,o={}){
+  const y=o.y||152;
+  let s=E(100,y,40,33,c);
+  if(belly)s+=En(100,y+4,25,21,belly);
+  return s;
+}
+function feet(c,pad){return E(80,181,13,8,c)+E(120,181,13,8,c)+(pad?En(80,182,5,3.2,pad)+En(120,182,5,3.2,pad):"");}
+function arms(c,o={}){
+  if(o.up)return E(62,140,9,13,c,'transform="rotate(35 62 140)"')+E(138,140,9,13,c,'transform="rotate(-35 138 140)"');
+  return E(64,152,9,13,c,'transform="rotate(25 64 152)"')+E(136,152,9,13,c,'transform="rotate(-25 136 152)"');
+}
+function head(c,o={}){return E(100,88,o.rx||56,o.ry||50,c);}
+
+/* ===== 各種動物 ===== */
+const KINDS={
+cat:{name:"小貓",variants:[
+  {name:"橘子貓",c:"#f4a957",inner:"#ffd9b0",stripe:"#d9802f",belly:"#fff1df"},
+  {name:"灰虎斑",c:"#a9b0ba",inner:"#e7d6dc",stripe:"#6f7782",belly:"#eef0f3"},
+  {name:"黑白襪子貓",c:"#3d3a40",inner:"#f2b8c4",belly:"#ffffff",tux:true}
+],draw(v){
+  let s="";
+  // 尾巴
+  s+=P("M134 165 C170 160 172 120 160 108 C154 102 148 108 152 116 C160 132 152 150 130 152 Z",v.c);
+  if(v.stripe)s+=L("M158 118 L150 122 M163 132 L154 133",3,v.stripe);
+  s+=body(v.c,v.belly)+arms(v.c)+feet(v.tux?"#ffffff":v.c,"#f7b6c2");
+  // 耳朵
+  s+=P("M56 66 L52 22 L88 46 Z",v.c)+P("M144 66 L148 22 L112 46 Z",v.c);
+  s+=`<path d="M60 58 L58 32 L80 47 Z" fill="${v.inner}"/><path d="M140 58 L142 32 L120 47 Z" fill="${v.inner}"/>`;
+  s+=head(v.c);
+  if(v.tux)s+=`<path d="M100 74 C88 92 70 96 64 112 C72 132 128 132 136 112 C130 96 112 92 100 74 Z" fill="#fff"/>`;
+  if(v.stripe)s+=L("M100 42 L100 54 M88 44 L90 55 M112 44 L110 55",3.2,v.stripe)+L("M46 86 L58 88 M46 96 L58 96 M154 86 L142 88 M154 96 L142 96",3,v.stripe);
+  s+=eyes()+cheeks();
+  s+=P("M95 100 L105 100 L100 106 Z","#f28aa0");
+  s+=L("M100 106 Q96 112 91 110 M100 106 Q104 112 109 110",2.4);
+  s+=L("M60 102 L40 98 M60 108 L41 110 M140 102 L160 98 M140 108 L159 110",2,v.tux?"#bbb":"#8a6a55");
+  return s;}},
+
+dog:{name:"小狗",variants:[
+  {name:"柴柴",c:"#e9a15a",muzzle:"#fff6ea",ear:"up",tail:"curl"},
+  {name:"垂耳小白",c:"#fbf7f1",ear:"flop",earC:"#c98d5a",tail:"wag"},
+  {name:"斑點狗",c:"#ffffff",ear:"flop",earC:"#3d3a40",spots:true,tail:"wag"}
+],draw(v){
+  let s="";
+  if(v.tail==="curl")s+=P("M132 150 C160 150 166 124 150 120 C138 117 134 132 146 134",v.c)+En(148,126,6,5,v.muzzle||"#fff");
+  else s+=P("M134 156 C152 150 160 132 156 124 C152 120 146 126 146 132 C144 142 138 148 132 148 Z",v.c);
+  s+=body(v.c,v.muzzle||"#fff7ee")+arms(v.c)+feet(v.c,"#f2b8a0");
+  if(v.spots)s+=En(78,148,6,5,"#3d3a40")+En(118,162,7,5,"#3d3a40")+En(134,140,4,4,"#3d3a40");
+  if(v.ear==="up")s+=P("M54 62 L58 26 L86 48 Z",v.c)+P("M146 62 L142 26 L114 48 Z",v.c)+`<path d="M62 54 L63 36 L78 48 Z" fill="#ffd1b0"/><path d="M138 54 L137 36 L122 48 Z" fill="#ffd1b0"/>`;
+  s+=head(v.c);
+  if(v.muzzle)s+=`<path d="M100 84 C84 84 62 96 62 110 C70 130 130 130 138 110 C138 96 116 84 100 84 Z" fill="${v.muzzle}"/>`+`<path d="M78 66 Q84 60 90 66 M110 66 Q116 60 122 66" fill="none" stroke="${v.muzzle}" stroke-width="5" stroke-linecap="round"/>`;
+  if(v.spots)s+=En(124,62,9,7,"#3d3a40")+En(74,112,5,4,"#3d3a40");
+  if(v.ear==="flop")s+=P("M52 58 C34 62 30 100 44 108 C54 112 60 96 62 76 Z",v.earC)+P("M148 58 C166 62 170 100 156 108 C146 112 140 96 138 76 Z",v.earC);
+  s+=eyes({y:88})+cheeks("#ff9aa8",106,34);
+  s+=E(100,101,8,6,"#2a1d16")+En(97,99,2.5,1.6,"#fff");
+  s+=L("M100 107 L100 111 M92 112 Q100 120 108 112",2.4);
+  s+=`<path d="M96 114 Q100 124 104 114 Z" fill="#ff7f90"/>`;
+  return s;}},
+
+rabbit:{name:"小兔",variants:[
+  {name:"雪白兔",c:"#ffffff",inner:"#ffc4d0",ear:"up"},
+  {name:"垂耳兔",c:"#e8d3b9",inner:"#ffcfd6",ear:"lop",patch:"#c4a07a"},
+  {name:"灰灰兔",c:"#b9b4bd",inner:"#f6c6d2",ear:"up",belly:"#f4f2f5"}
+],draw(v){
+  let s="";
+  s+=E(138,166,11,10,"#fff");
+  s+=body(v.c,v.belly||null)+arms(v.c)+feet(v.c,v.inner);
+  if(v.ear==="up")s+=E(78,32,12,34,v.c,'transform="rotate(-10 78 32)"')+En(78,34,6,24,v.inner,'transform="rotate(-10 78 34)"')+E(122,32,12,34,v.c,'transform="rotate(10 122 32)"')+En(122,34,6,24,v.inner,'transform="rotate(10 122 34)"');
+  s+=head(v.c);
+  if(v.patch)s+=`<path d="M120 50 C140 52 152 70 150 86 C138 86 124 74 120 50 Z" fill="${v.patch}"/>`;
+  if(v.ear==="lop")s+=E(50,82,13,32,v.c,'transform="rotate(18 50 82)"')+En(51,84,6,22,v.inner,'transform="rotate(18 51 84)"')+E(150,82,13,32,v.c,'transform="rotate(-18 150 82)"')+En(149,84,6,22,v.inner,'transform="rotate(-18 149 84)"');
+  s+=eyes()+cheeks();
+  s+=P("M96 100 Q100 97 104 100 Q100 106 96 100 Z","#f28aa0");
+  s+=L("M100 104 L100 108 M94 110 Q100 114 106 110",2.4);
+  s+=`<rect x="96" y="109" width="8" height="6" rx="1.5" fill="#fff" stroke="${OL}" stroke-width="2"/>`;
+  return s;}},
+
+dragon:{name:"小龍",variants:[
+  {name:"綠葉龍",c:"#7cc96b",belly:"#f4f0b8",horn:"#fff3c4",spike:"#4f9e4a",wing:"#a7e08f"},
+  {name:"紫晶龍",c:"#a98be0",belly:"#f8e7ff",horn:"#fff3c4",spike:"#7a5cc0",wing:"#cdb8f3"},
+  {name:"火焰龍",c:"#f27d5c",belly:"#ffe6a8",horn:"#fff3c4",spike:"#c9503a",wing:"#ffb38f",fire:true}
+],draw(v){
+  let s="";
+  // 翅膀
+  s+=P("M66 132 C40 112 30 124 36 140 C44 136 46 146 54 142 C56 150 64 146 66 142 Z",v.wing)+P("M134 132 C160 112 170 124 164 140 C156 136 154 146 146 142 C144 150 136 146 134 142 Z",v.wing);
+  // 尾巴
+  s+=P("M130 168 C156 172 172 160 176 146 L186 150 L180 138 L170 142 C164 152 150 158 132 156 Z",v.c);
+  s+=body(v.c,null)+`<path d="M86 132 C80 150 84 172 100 176 C116 172 120 150 114 132 Z" fill="${v.belly}"/>`+L("M88 146 L112 146 M86 158 L114 158",2,"#d8cf8a");
+  s+=arms(v.c)+feet(v.c,v.belly);
+  // 角與背刺
+  s+=P("M70 48 L62 18 L84 40 Z",v.horn)+P("M130 48 L138 18 L116 40 Z",v.horn);
+  s+=P("M88 40 L94 26 L100 38 L106 26 L112 40 Z",v.spike);
+  s+=head(v.c);
+  s+=E(100,104,22,14,v.belly);
+  s+=eyes({y:84})+cheeks("#ff8f9e",98,36);
+  s+=En(93,101,2.4,2,"#3b2a20")+En(107,101,2.4,2,"#3b2a20");
+  s+=L("M90 110 Q100 118 110 110",2.6);
+  if(v.fire)s+=`<path d="M100 120 C94 128 98 134 100 132 C102 134 106 128 100 120 Z" fill="#ffcf5a" stroke="#f08a3a" stroke-width="1.6"/>`;
+  return s;}},
+
+panda:{name:"熊貓",variants:[
+  {name:"圓滾滾熊貓",acc:""},
+  {name:"抱竹子熊貓",acc:"bamboo"},
+  {name:"小葉子熊貓",acc:"leaf"}
+],draw(v){
+  const W="#ffffff",B="#2f2b30";
+  let s="";
+  s+=body(W,null)+feet(B,"#6a6070");
+  if(v.acc==="bamboo")s+=`<rect x="104" y="112" width="9" height="66" rx="3" fill="#8fcf6a" stroke="${OL}" stroke-width="2.6" transform="rotate(14 108 145)"/>`+L("M106 130 L116 132 M103 150 L113 152",2.2,"#4f9e4a")+P("M117 120 C130 110 140 114 142 118 C134 122 124 124 117 120 Z","#8fcf6a");
+  s+=v.acc==="bamboo"?(E(80,146,9,13,B,'transform="rotate(-40 80 146)"')+E(120,144,9,13,B,'transform="rotate(40 120 144)"')):arms(B);
+  s+=E(56,46,15,14,B)+E(144,46,15,14,B);
+  s+=head(W);
+  s+=En(78,90,13,16,B,'transform="rotate(25 78 90)"')+En(122,90,13,16,B,'transform="rotate(-25 122 90)"');
+  s+=[78,122].map(x=>En(x+1,90,5,6.5,"#fff")+En(x+1.5,90.5,3.4,4.6,"#1c1a1d")+En(x+2.6,88.6,1.3,1.4,"#fff")).join("");
+  s+=cheeks("#ff9aa8",108,36);
+  s+=E(100,104,7,5,B);
+  s+=L("M100 109 L100 112 M93 113 Q100 119 107 113",2.4);
+  if(v.acc==="leaf")s+=P("M100 40 C88 24 104 14 118 22 C116 34 108 40 100 40 Z","#7cc96b")+L("M100 40 Q108 30 116 24",2,"#3f8a3a");
+  return s;}},
+
+chick:{name:"小雞",variants:[
+  {name:"黃色小雞",shell:""},
+  {name:"剛破殼小雞",shell:"bottom"},
+  {name:"蛋殼帽小雞",shell:"hat"}
+],draw(v){
+  const C="#ffd84a";
+  let s="";
+  s+=L("M84 172 L80 186 L72 188 M80 186 L82 192 M80 186 L88 190",3.4,"#f08a2a")+L("M116 172 L120 186 L128 188 M120 186 L118 192 M120 186 L112 190",3.4,"#f08a2a");
+  if(v.shell!=="hat")s+=P("M98 36 C94 22 104 18 104 30 C110 20 118 28 108 38 Z",C);
+  s+=E(100,112,58,64,C);
+  s+=E(46,124,10,18,C,'transform="rotate(25 46 124)"')+E(154,124,10,18,C,'transform="rotate(-25 154 124)"');
+  s+=eyes({y:100,dx:21})+cheeks("#ff9aa8",116,36);
+  s+=P("M90 108 L110 108 L100 120 Z","#ff9f3a")+L("M91 109 L109 109",1.6,"#d9741e");
+  if(v.shell==="bottom")s+=P("M38 140 L52 128 L64 142 L78 128 L92 142 L106 128 L120 142 L134 128 L148 142 L162 130 C166 168 140 190 100 190 C60 190 34 168 38 140 Z","#fffaf0")+En(70,170,5,3,"#f0e4cc")+En(130,160,4,3,"#f0e4cc");
+  if(v.shell==="hat")s+=P("M56 66 C56 28 144 28 144 66 L132 56 L120 68 L108 56 L96 68 L84 56 L72 68 Z","#fffaf0")+En(86,42,5,3,"#f0e4cc")+En(116,38,4,3,"#f0e4cc");
+  return s;}},
+
+beaver:{name:"河狸",variants:[
+  {name:"木頭河狸",c:"#a8724a",muzzle:"#e9cfae",log:false},
+  {name:"抱木頭河狸",c:"#9a6440",muzzle:"#e9cfae",log:true},
+  {name:"奶茶河狸",c:"#c99b6d",muzzle:"#f6e6cf",leaf:true}
+],draw(v){
+  let s="";
+  // 扁扁的尾巴
+  s+=`<g transform="rotate(-20 150 160)">${E(152,160,16,28,"#6b4a36")}${L("M142 146 L162 150 M140 158 L164 162 M142 170 L162 174",1.8,"#4a3326")}</g>`;
+  s+=body(v.c,v.muzzle)+feet("#6b4a36","#8d6650");
+  if(v.log)s+=`<g transform="rotate(-6 100 150)">${P("M66 140 L134 140 L134 160 L66 160 Z","#c98b5a")}${E(134,150,7,10,"#e9c08f")}${L("M131 147 Q134 150 137 147",1.6,"#a06a40")}${L("M76 146 L96 146 M104 154 L122 154",1.8,"#9a6440")}</g>`+E(72,148,9,10,v.c)+E(128,146,9,10,v.c);
+  else s+=arms(v.c);
+  s+=E(60,52,11,10,v.c)+En(60,53,5,4.5,"#e2b48f")+E(140,52,11,10,v.c)+En(140,53,5,4.5,"#e2b48f");
+  s+=head(v.c);
+  s+=E(100,104,26,17,v.muzzle);
+  s+=eyes({y:84,dx:22})+cheeks("#ff9aa8",100,38);
+  s+=E(100,96,9,6,"#3b2a20")+En(97,94.5,2.6,1.6,"#fff");
+  s+=L("M100 102 L100 106 M92 104 Q96 108 100 106 Q104 108 108 104",2.4);
+  s+=`<rect x="93" y="106" width="14" height="13" rx="2.5" fill="#fff" stroke="${OL}" stroke-width="2.4"/>`+L("M100 107 L100 118",1.8);
+  if(v.leaf)s+=P("M118 40 C114 24 130 18 140 26 C138 38 128 42 118 40 Z","#7cc96b")+L("M118 40 Q128 32 138 27",2,"#3f8a3a");
+  return s;}},
+
+bear:{name:"小熊",variants:[
+  {name:"森林棕熊",c:"#9b6a45",muzzle:"#e8cfae",inner:"#e2b48f"},
+  {name:"北極熊",c:"#f7f8fb",muzzle:"#ffffff",inner:"#d9e4ef",shade:true},
+  {name:"圍巾小熊",c:"#c48d5f",muzzle:"#f4e2c8",inner:"#f0c9a0",scarf:"#5aa3d8"}
+],draw(v){
+  let s="";
+  s+=E(136,168,9,8,v.c);
+  s+=body(v.c,v.muzzle)+arms(v.c)+feet(v.c,v.inner);
+  s+=E(56,46,15,14,v.c)+En(56,47,8,7,v.inner)+E(144,46,15,14,v.c)+En(144,47,8,7,v.inner);
+  s+=head(v.c);
+  if(v.shade)s+=`<path d="M56 100 C60 124 84 136 100 136 C80 132 64 120 56 100 Z" fill="#dfe8f2"/>`;
+  s+=E(100,106,22,16,v.muzzle);
+  s+=eyes({y:86})+cheeks("#ff9aa8",104,36);
+  s+=E(100,100,8,6,"#3b2a20")+En(97,98,2.4,1.5,"#fff");
+  s+=L("M100 106 L100 110 M92 111 Q100 118 108 111",2.4);
+  if(v.scarf)s+=P("M58 124 C80 134 120 134 142 124 L144 136 C120 146 80 146 56 136 Z",v.scarf)+P("M118 136 L124 162 L136 158 L130 134 Z",v.scarf)+L("M64 130 L66 138 M78 134 L79 142 M122 134 L121 142 M136 130 L134 138",2,"#ffffff");
+  return s;}}
+};
+
+function petSVG(kind,vi,o={}){
+  const k=KINDS[kind],v=k.variants[vi];
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${o.size||160}" height="${o.size||160}" role="img" aria-label="${v.name}">${k.draw(v)}</svg>`;
+}
+
+function eggSVG(kind,vi,size){const v=KINDS[kind].variants[vi];const c=v.c||(kind==="chick"?"#ffd84a":kind==="panda"?"#2f2b30":"#ccc");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${size}" height="${size}"><path d="M100 22 C140 22 168 92 166 128 C164 166 136 186 100 186 C64 186 36 166 34 128 C32 92 60 22 100 22 Z" fill="#fffaf0" stroke="${OL}" stroke-width="3.2"/><ellipse cx="78" cy="96" rx="12" ry="9" fill="${c}" opacity=".8"/><ellipse cx="124" cy="128" rx="15" ry="11" fill="${c}" opacity=".8"/><ellipse cx="90" cy="152" rx="8" ry="6" fill="${c}" opacity=".8"/><ellipse cx="122" cy="74" rx="7" ry="5" fill="${c}" opacity=".8"/><path d="M70 60 Q76 46 88 40" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".9"/></svg>`;}
+function petPickerHTML(selK,selV){return Object.keys(KINDS).map(k=>`<div class="pickKind">${KINDS[k].name}</div><div class="petPick">${KINDS[k].variants.map((v,i)=>`<button data-k="${k}" data-v="${i}" class="${k===selK&&i===selV?"on":""}">${petSVG(k,i,{size:96})}<small>${v.name}</small></button>`).join("")}</div>`).join("");}
+const curV=()=>S.pet&&KINDS[S.pet.k]?(S.pet.v||0):0;
 const LV_XP=[0,20,60,120,200,300,430,600,800,1050];
 const LV_TITLE=["神秘的蛋","剛出生的寶寶","小不點","活潑寶寶","國語小幫手","生字小達人","注音高手","部首博士","課文大師","國語之王"];
 const LV_DECO=["","","🌱","🌱🌼","🌼🎀🌼","🌈🎀🌈","🌟🎀🌟","🏅🎀🏅","🎓🌟🎓","👑✨👑"];
@@ -842,23 +1046,24 @@ const GAME_COST=5;
 const TALK=["今天也要一起練國語喔！","摸摸我～好舒服 😊","你答對的時候我最開心了！","我想吃蛋糕 🍰","多練幾題，我就會長大喔！","不熟的題目，我們一起打敗它！","你是我最好的朋友 💛"];
 function petLevel(){const xp=S.pet?S.pet.xp:0;let lv=1;LV_XP.forEach((t,i)=>{if(xp>=t)lv=i+1;});const next=LV_XP[lv]||null;return {lv,xp,cur:LV_XP[lv-1],next};}
 function daysSince(d){if(!d)return 99;const [y,m,dd]=d.split("-").map(Number);return Math.floor((new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())-new Date(y,m-1,dd))/864e5);}
-let petPickTmp="cat";
+let petPickTmp={k:"cat",v:0};
 function renderPet(){
   const h=$("#petHost");
   if(!S.pet){
-    h.innerHTML=`<div class="card"><h2>🥚 領養一隻寵物</h2><div class="muted">答對題目拿到的星星，可以餵寵物、讓牠長大！先選一隻吧：</div>
-      <div class="petPick" style="margin-top:10px">${PETS.map(p=>`<button data-k="${p.k}" class="${p.k===petPickTmp?"on":""}">${p.e}<small>${p.n}</small></button>`).join("")}</div>
+    h.innerHTML=`<div class="card"><h2>🥚 領養一隻寵物</h2><div class="muted">答對題目拿到的星星，可以餵寵物、讓牠長大！先選一隻吧（共 24 款）：</div>
+      <div style="margin-top:4px">${petPickerHTML(petPickTmp.k,petPickTmp.v)}</div>
       <div style="margin-top:12px"><input class="txt" id="petName" maxlength="8" placeholder="幫牠取名字（例如：小黃）"></div>
       <div style="margin-top:12px"><button class="btn wide" id="adopt">領養 💛</button></div></div>`;
-    h.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{petPickTmp=b.dataset.k;h.querySelectorAll(".petPick button").forEach(x=>x.classList.toggle("on",x===b));});
-    h.querySelector("#adopt").onclick=()=>{const nm=(h.querySelector("#petName").value||"").trim()||PETS.find(p=>p.k===petPickTmp).n;
-      S.pet={k:petPickTmp,name:nm,xp:0,fed:null};save();renderPet();toast("領養成功！快餵牠讓蛋孵化 🥚");};
+    h.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{petPickTmp={k:b.dataset.k,v:+b.dataset.v};h.querySelectorAll(".petPick button").forEach(x=>x.classList.toggle("on",x===b));});
+    h.querySelector("#adopt").onclick=()=>{const nm=(h.querySelector("#petName").value||"").trim()||KINDS[petPickTmp.k].variants[petPickTmp.v].name;
+      S.pet={k:petPickTmp.k,v:petPickTmp.v,name:nm,xp:0,fed:null};save();renderPet();toast("領養成功！快餵牠讓蛋孵化 🥚");};
     renderRewardsInto(h,true);
     return;
   }
-  const P=PETS.find(p=>p.k===S.pet.k),L=petLevel();
-  const emoji=L.lv===1?"🥚":P.e;
-  const size=L.lv===1?90:80+L.lv*9;
+  if(!KINDS[S.pet.k]){S.pet.k="cat";S.pet.v=0;}
+  const L=petLevel();
+  const size=L.lv===1?120:110+L.lv*11;
+  const art=L.lv===1?eggSVG(S.pet.k,curV(),size):petSVG(S.pet.k,curV(),{size});
   const pct=L.next?Math.round((L.xp-L.cur)/(L.next-L.cur)*100):100;
   const ds=daysSince(S.pet.fed);
   const say=L.lv===1?"蛋裡好像有東西在動……餵我就會孵化！":ds>=3?`${S.pet.name}好想你 🥺 快來練習、餵我吃東西！`:pick(TALK);
@@ -866,7 +1071,7 @@ function renderPet(){
   h.innerHTML=`<div class="card">
     <div class="petStage" id="stage">
       <div class="petDeco">${LV_DECO[L.lv-1]}</div>
-      <div class="petEmoji" id="petE" style="font-size:${size}px">${emoji}</div>
+      <div class="petEmoji" id="petE" style="width:${size}px">${art}</div>
       <div><b style="font-size:20px">${S.pet.name}</b>　<span class="tag">Lv.${L.lv} ${LV_TITLE[L.lv-1]}</span></div>
       <div class="bubble" id="say">${say}</div>
     </div>
@@ -884,16 +1089,16 @@ function renderPet(){
     <div class="row" style="margin-top:10px"><button class="btn" id="gZy" ${bal<GAME_COST?"disabled":""}>注音配對</button><button class="btn" id="gBs" ${bal<GAME_COST?"disabled":""}>部首配對</button></div>
     <div id="gameHost"></div>
   </div>
-  <div class="card"><div class="row"><button class="btn ghost" id="rename">改名字</button><button class="btn ghost" id="repick">換寵物</button></div>
-    <div class="muted" style="margin-top:6px">換寵物會保留等級。</div></div>`;
+  <div class="card"><div class="row"><button class="btn ghost" id="rename">改名字</button><button class="btn ghost" id="repick">換寵物／換造型</button></div>
+    <div class="muted" style="margin-top:6px">換寵物或換造型都會保留等級。</div></div>`;
   h.querySelector("#petE").onclick=()=>{bounce();hearts(3);h.querySelector("#say").textContent=pick(TALK);};
   h.querySelectorAll(".food").forEach(b=>b.onclick=()=>feed(FOODS[+b.dataset.i]));
   h.querySelector("#gZy").onclick=()=>startGame("zy");
   h.querySelector("#gBs").onclick=()=>startGame("bs");
   h.querySelector("#rename").onclick=()=>{const box=h.querySelector("#rename").parentNode;box.innerHTML=`<input class="txt" id="nn" maxlength="8" value="${S.pet.name}"><button class="btn" id="nok">確定</button>`;
     box.querySelector("#nok").onclick=()=>{const v=box.querySelector("#nn").value.trim();if(v){S.pet.name=v;save();}renderPet();};};
-  h.querySelector("#repick").onclick=()=>{const box=h.querySelector("#repick").parentNode;box.innerHTML=`<div class="petPick" style="width:100%">${PETS.map(p=>`<button data-k="${p.k}" class="${p.k===S.pet.k?"on":""}">${p.e}<small>${p.n}</small></button>`).join("")}</div>`;
-    box.querySelectorAll("button").forEach(b=>b.onclick=()=>{S.pet.k=b.dataset.k;save();renderPet();});};
+  h.querySelector("#repick").onclick=()=>{const box=h.querySelector("#repick").parentNode;box.innerHTML=`<div style="width:100%">${petPickerHTML(S.pet.k,curV())}</div>`;
+    box.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{S.pet.k=b.dataset.k;S.pet.v=+b.dataset.v;save();renderPet();toast("換好了！");});};
   renderRewardsInto(h,false);
 }
 function bounce(){const e=$("#petE");if(!e)return;e.classList.remove("bounce");void e.offsetWidth;e.classList.add("bounce");}
