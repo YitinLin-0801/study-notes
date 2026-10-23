@@ -346,6 +346,34 @@ body[data-skin="space"] .window{background:#1F2752}
 .toggle.on .sw{background:var(--good)}
 .toggle.on .sw::after{left:31px;background:#fff}
 @media (max-width:620px){.choices{grid-template-columns:1fr}.tcanvas{width:calc(100vw - 150px)}}
+
+/* ---------- pet family ---------- */
+.family{display:flex;gap:12px;overflow-x:auto;padding:10px 4px 12px;-webkit-overflow-scrolling:touch}
+.fam{flex:none;width:118px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px 8px;border-radius:20px;position:relative;box-shadow:0 4px 0 var(--ink)}
+.fam .ch{width:66px}
+.fam b{font-size:18px}
+.fam span{font-size:14px;text-align:center}
+.fam.on{background:var(--mint);box-shadow:0 0 0 3px var(--berry),0 4px 0 var(--ink)}
+.ptag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-style:normal;font-size:13px;background:var(--berry);color:#fff;border-radius:999px;padding:1px 10px;border:2px solid var(--ink);white-space:nowrap}
+.fam.add{justify-content:center;background:var(--butter)}
+.fam.add.locked{background:#EFE8EC}
+.fam .plus{font-size:40px;line-height:1.1}
+.room{height:clamp(360px,calc(100vh - 270px),620px) !important;background:linear-gradient(var(--roomsky,var(--sky)) 0 60%,var(--floor,var(--peach)) 60%) !important}
+.petwrap.gold .petbody,.lvfig.gold .petbody{filter:drop-shadow(0 0 8px #FFD54A) drop-shadow(0 0 3px #FFB300)}
+.lvfig{width:170px;position:relative;margin-top:10px}
+.lvfig .ch{width:100% !important}
+.halo{position:absolute;left:50%;top:-17%;width:40%;height:8%;transform:translateX(-50%);border:5px solid #FFD54A;border-radius:50%;box-shadow:0 0 10px #FFE58F;z-index:2;pointer-events:none}
+.halo.rb{border-color:#FF7AB6;box-shadow:0 0 0 3px #FFD54A,0 0 0 6px #7FD3B8,0 0 0 9px #7CC2F0}
+.spk{position:absolute;font-size:clamp(20px,3.4vw,32px);animation:twk 2s ease-in-out infinite;pointer-events:none;line-height:1}
+.spk.k1{left:-8%;top:22%}
+.spk.k2{right:-8%;top:6%;animation-delay:.6s}
+.spk.k3{right:0;bottom:14%;animation-delay:1.2s}
+@keyframes twk{50%{transform:scale(1.35) rotate(15deg);opacity:.55}}
+.expnote{margin:0;font-size:14px;opacity:.85;line-height:1.5}
+.act.lock{opacity:.55}
+.adopt{justify-content:flex-start !important}
+.athead{margin:6px 0 0;font-size:22px;width:100%;max-width:880px}
+.acard.owned{opacity:.5;box-shadow:none}
 </style>
 
 </head>
@@ -479,10 +507,28 @@ const FOODS = [
 const ACCS = [
   {id:'flower',e:'🌸',n:'小花',p:3,slot:'head'},{id:'bow',e:'🎀',n:'蝴蝶結',p:3,slot:'head'},
   {id:'crown',e:'👑',n:'皇冠',p:6,slot:'head'},{id:'cap',e:'🧢',n:'棒球帽',p:4,slot:'head'},
-  {id:'glasses',e:'👓',n:'眼鏡',p:4,slot:'face'},{id:'scarf',e:'🧣',n:'圍巾',p:4,slot:'neck'}
+  {id:'glasses',e:'👓',n:'眼鏡',p:4,slot:'face'},{id:'scarf',e:'🧣',n:'圍巾',p:4,slot:'neck'},
+  {id:'magic',e:'🎩',n:'魔術帽',lvl:7,slot:'head'},{id:'starpin',e:'🌟',n:'星星',lvl:11,slot:'head'},
+  {id:'bag',e:'🎒',n:'小背包',lvl:13,slot:'neck'},{id:'shades',e:'🕶️',n:'墨鏡',lvl:16,slot:'face'},
+  {id:'gem',e:'💎',n:'寶石',lvl:18,slot:'neck'}
 ];
-const LV = [0,6,16,32,56];
-const STAGE = ['寶寶','小可愛','好朋友','大明星','超級寶貝'];
+// 寵物等級：累積經驗值門檻（Lv.1～20）。每天玩 15 分鐘約 2～3 個月到 Lv.10
+const LV = [0,6,16,32,56,110,210,370,620,1000,1220,1460,1720,2000,2300,2620,2960,3320,3700,4100];
+const MAXLV = 20, ADOPT_LV = 3;
+const STAGE = ['寶寶','小可愛','好朋友','大明星','超級寶貝','閃亮之星','勇敢隊長','魔法大師','傳說英雄','彩虹冠軍',
+  '星光騎士','雲端旅人','寶石守護者','天空之王','銀河探險家','太陽勇士','月光魔法師','夢想國王','傳奇大英雄','宇宙無敵'];
+const REWARD = {6:'身邊會出現亮晶晶 ✨',7:'得到新配件：魔術帽 🎩',8:'頭上出現光環',9:'打開新房間：星空房間 🌙',
+  10:'全身發出金光，得到獎章 🏅',11:'得到新配件：星星 🌟',12:'打開新房間：海底世界 🐠',13:'得到新配件：小背包 🎒',
+  14:'光環變成彩虹色 🌈',15:'得到獎章 🏆，打開新房間：城堡 🏰',16:'得到新配件：墨鏡 🕶️',17:'打開新房間：彩虹雲 🌈',
+  18:'得到新配件：寶石 💎',19:'亮晶晶變成金色星星 🌟',20:'得到獎章 👑，打開新房間：宇宙 🪐'};
+const ROOMS = [
+  {id:'home',n:'溫暖小屋',icon:'🏠',lv:0},
+  {id:'night',n:'星空房間',icon:'🌙',lv:9,sky:'#2B2F5C',floor:'#6E6A9E',win:'🌙',shelf:'⭐✨'},
+  {id:'sea',n:'海底世界',icon:'🐠',lv:12,sky:'#7FD3E6',floor:'#F3DFA8',win:'🐠',shelf:'🐚🦀'},
+  {id:'castle',n:'城堡',icon:'🏰',lv:15,sky:'#FBE3EC',floor:'#D9C2A8',win:'🏰',shelf:'👑🕯️'},
+  {id:'cloud',n:'彩虹雲',icon:'🌈',lv:17,sky:'#FFE9F3',floor:'#FFFFFF',win:'🌈',shelf:'☁️⭐'},
+  {id:'space',n:'宇宙',icon:'🪐',lv:20,sky:'#141B3C',floor:'#3C4573',win:'🪐',shelf:'🚀🌟'}
+];
 const PRAISE = ['答對了！好棒喔！','哇～你好厲害！','對了對了！太棒了！','好聰明喔！','沒錯！就是這個！'];
 const RETRY = '嗯～再想想看喔';
 
@@ -500,7 +546,7 @@ const todayStr = () => { const d=new Date(); return d.getFullYear()+'-'+(d.getMo
 const KEY = 'yunduo-learning-v1';
 let S = load();
 function load(){
-  const d = {stars:5, stk:{sweet:[],dino:[],space:[]}, pet:null, today:0, day:'', sound:true, voice:'', rate:.95,
+  const d = {stars:5, stk:{sweet:[],dino:[],space:[]}, pets:[], partner:'', closet:[], room:'home', lvq:null, today:0, day:'', sound:true, voice:'', rate:.95,
              theme:'sweet', level:1, autoLv:true, hist:[], sug:''};
   try {
     const r = localStorage.getItem(KEY);
@@ -508,6 +554,8 @@ function load(){
       const o = JSON.parse(r);
       if(Array.isArray(o.stickers) && !o.stk){ o.stk = {sweet:o.stickers, dino:[], space:[]}; }
       delete o.stickers;
+      if(o.pet && !o.pets){ o.pets=[{kind:o.pet.kind, exp:o.pet.exp||0, full:o.pet.full??70, happy:o.pet.happy??70, t:o.pet.t||Date.now(), wear:o.pet.wear||{}}]; o.partner=o.pet.kind; o.closet=o.pet.owned||[]; }
+      delete o.pet;
       const m = Object.assign(d, o);
       m.stk = Object.assign({sweet:[],dino:[],space:[]}, m.stk||{});
       if(!THEMES[m.theme]) m.theme='sweet';
@@ -785,15 +833,15 @@ function closeModal(){ const m=$('#modal'); if(m) m.remove(); }
 /* ===================== 首頁 ===================== */
 function home(){
   checkDay(); applySkin();
-  const p=S.pet, T=TH(), stk=myStk();
+  const p=P(), T=TH(), stk=myStk();
   const stkPrev = stk.slice(-3).map(i=>T.stickers[i]).join('');
   const [c1,c2,c3]=T.chars;
   render(`${topBar('雲朵學習樂園', false)}
   <main class="home">
     <button class="stk petcard" data-act="go" data-to="pet">
       ${p ? `<div class="pc-pet">${charSVG(p.kind,'happy')}</div>
-             <div class="pc-name">${CH[p.kind].name}<span>Lv.${level()} ${STAGE[level()-1]}</span></div>
-             <div class="pc-hint">去照顧${CH[p.kind].name} →</div>`
+             <div class="pc-name">${CH[p.kind].name}<span>Lv.${lvOf(p)} ${STAGE[lvOf(p)-1]} ${badges(p)}</span></div>
+             <div class="pc-hint">${S.pets.length>1?`寵物家族 ${S.pets.length} 隻 →`:`去照顧${CH[p.kind].name} →`}</div>`
           : `<div class="pc-trio">${charSVG(c1)}${charSVG(c2)}${charSVG(c3)}</div>
              <div class="pc-name">領養一隻寵物</div>
              <div class="pc-hint">用星星照顧牠長大 →</div>`}
@@ -819,7 +867,7 @@ function home(){
     </div>
   </main>
   <button class="helplink" data-act="go" data-to="help">📖 使用說明（給大人看）</button>`);
-  if(S.sug) showSuggest();
+  if(S.lvq) showLvUp(); else if(S.sug) showSuggest();
 }
 
 /* ===================== 難度自動建議 ===================== */
@@ -1100,7 +1148,7 @@ function gameView(){
 function correct(btn, q, sayFn){
   G.lock=true; sfx.ok();
   $('#gm').innerHTML=charSVG(G.m,'happy');
-  G.earned+=starPer(); addStars(starPer(),btn);
+  G.earned+=starPer(); addStars(starPer(),btn); gainExp(1);
   const recP=PRAISE.map((_,i)=>'praise-'+i).filter(hasClip);
   if(recP.length) playClip(pick(recP)); else sayFn(pick(PRAISE));
   setTimeout(()=>{ G.i++; if(G.i<G.qs.length) gameView(); else G.onDone(G.earned); },1600);
@@ -1173,7 +1221,7 @@ function questDone(){
   const T=TH(), stk=myStk();
   const left=range(0,STICKERS_LEN-1).filter(i=>!stk.includes(i));
   let got=null; if(left.length){ got=pick(left); stk.push(got); }
-  save(); addStars(2);
+  save(); addStars(2); gainExp(2);
   sfx.win(); confetti();
   if(got!==null){
     say('哇！你得到一張新貼紙！還有兩顆星星！');
@@ -1201,36 +1249,94 @@ function stickers(){
   <button class="bigbtn" data-act="go" data-to="quest" style="align-self:center">去拿更多貼紙 ▶</button>`);
 }
 
-/* ===================== 寵物 ===================== */
-function level(){ const x=S.pet?S.pet.exp:0; let l=0; LV.forEach(t=>{ if(x>=t) l++; }); return l; }
+/* ===================== 寵物家族 ===================== */
+const P = () => (S.pets||[]).find(p=>p.kind===S.partner) || null;
+function lvOf(p){ const x=p?p.exp:0; let l=0; LV.forEach(t=>{ if(x>=t) l++; }); return Math.max(1,l); }
+function level(){ return lvOf(P()); }
+function maxLv(){ return S.pets.length ? Math.max(...S.pets.map(lvOf)) : 0; }
+function badges(p){ const l=lvOf(p); return (l>=10?'🏅':'')+(l>=15?'🏆':'')+(l>=20?'👑':''); }
+function accOpen(a){ return a.lvl ? maxLv()>=a.lvl : S.closet.includes(a.id); }
+function roomOpen(r){ return maxLv()>=r.lv; }
+function newest(){ return S.pets[S.pets.length-1]; }
+function canAdopt(){
+  if(!S.pets.length) return true;
+  if(S.pets.length>=Object.keys(CH).length) return false;
+  return lvOf(newest())>=ADOPT_LV;
+}
 function decay(){
-  const p=S.pet, now=Date.now(), h=(now-(p.t||now))/3.6e6;
+  const p=P(); if(!p) return;
+  const now=Date.now(), h=(now-(p.t||now))/3.6e6;
   if(h>0){ p.full=Math.max(20,p.full-h*4); p.happy=Math.max(20,p.happy-h*3); }
   p.t=now; save();
 }
+function gainExp(n){
+  const p=P(); if(!p || n<=0) return;
+  const b=lvOf(p); p.exp+=n; const a=lvOf(p);
+  if(a>b) S.lvq={kind:p.kind, lv:a};
+  save();
+}
 function petMsg(){
-  const p=S.pet;
+  const p=P();
   if(p.full<45) return '肚子有點餓了…';
   if(p.happy<45) return '想跟你一起玩！';
-  return pick(['今天好開心！','你最棒了！','我好喜歡你！','我們去學習吧！']);
+  if(lvOf(p)<MAXLV) return pick(['今天好開心！','你答對題目，我就會長大喔！','我好喜歡你！','我們去學習吧！']);
+  return pick(['我是宇宙無敵的寵物！','謝謝你一直照顧我！']);
 }
-function accHTML(){
-  const w=S.pet.wear||{};
-  return ['head','face','neck'].map(s=>{ const a=ACCS.find(x=>x.id===w[s]); return a?`<span class="acc ${s}">${a.e}</span>`:''; }).join('');
+function petScale(p){ const l=lvOf(p); return (l<=5 ? .8+.07*(l-1) : Math.min(1.15, 1.08+.008*(l-5))).toFixed(3); }
+function accFor(wear){
+  wear=wear||{};
+  return ['head','face','neck'].map(s=>{ const a=ACCS.find(x=>x.id===wear[s]); return a?`<span class="acc ${s}">${a.e}</span>`:''; }).join('');
 }
-function petScale(){ return (.8+.07*(level()-1)).toFixed(2); }
-function adopt(){
+function petInner(p, mood){
+  const l=lvOf(p);
+  const spk = l>=6 ? `<span class="spk k1">${l>=19?'🌟':'✨'}</span><span class="spk k2">${l>=19?'🌟':'✨'}</span><span class="spk k3">✨</span>` : '';
+  const halo = l>=8 ? `<span class="halo ${l>=14?'rb':''}"></span>` : '';
+  return halo + charSVG(p.kind,mood) + accFor(p.wear) + spk;
+}
+function lvClass(p){ return lvOf(p)>=10 ? 'gold' : ''; }
+function showLvUp(){
+  const q=S.lvq; S.lvq=null; save();
+  const p=S.pets.find(x=>x.kind===q.kind); if(!p) return;
+  const c=CH[q.kind], unlockAdopt = q.lv===ADOPT_LV && newest()===p && S.pets.length<Object.keys(CH).length;
+  sfx.win(); confetti();
+  say(`哇！${c.name}長大了！現在是${STAGE[q.lv-1]}！`);
+  modal(`<div class="lvfig ${lvClass(p)}"><div class="petbody">${petInner(p,'happy')}</div></div>
+    <h2>${c.name} 升到 Lv.${q.lv}！</h2>
+    <p>現在是「${STAGE[q.lv-1]}」${REWARD[q.lv]?`<br>🎁 ${REWARD[q.lv]}`:''}${unlockAdopt?'<br>🐣 可以再領養一隻新寵物了！':''}</p>
+    <div class="mbtns"><button class="bigbtn" data-act="go" data-to="pet">去寵物家族</button><button class="bigbtn alt" data-act="close">好</button></div>`);
+}
+function adoptView(){
   applySkin();
-  render(`${topBar('領養寵物')}
-  <main class="adopt"><p>選一個好朋友，帶回家照顧吧！</p>
-    <div class="agrid">${TH().chars.map(k=>`<button class="stk acard" data-act="adopt" data-k="${k}">${charSVG(k,'happy')}<b>${CH[k].name}</b><span>${CH[k].kind}</span></button>`).join('')}</div>
+  if(!canAdopt()){
+    const n=newest();
+    modal(`${charSVG(n.kind,'open')}<h2>再等一下下</h2><p>先把 ${CH[n.kind].name} 照顧到 Lv.${ADOPT_LV}，就能再領養一隻新寵物！<br>（現在 Lv.${lvOf(n)}）</p><div class="mbtns"><button class="bigbtn" data-act="close">好</button></div>`);
+    return;
+  }
+  const have=new Set(S.pets.map(p=>p.kind));
+  render(`${topBar(S.pets.length?'領養新寵物':'領養寵物', S.pets.length?'pet':'home')}
+  <main class="adopt"><p>${S.pets.length?'選一個新朋友，加入寵物家族吧！':'選一個好朋友，帶回家照顧吧！'}</p>
+    ${Object.keys(THEMES).map(t=>`<h3 class="athead">${THEMES[t].icon} ${THEMES[t].name}</h3>
+      <div class="agrid">${THEMES[t].chars.map(k=>have.has(k)
+        ? `<div class="stk acard owned">${charSVG(k,'happy')}<b>${CH[k].name}</b><span>已經在家了</span></div>`
+        : `<button class="stk acard" data-act="adopt" data-k="${k}">${charSVG(k,'happy')}<b>${CH[k].name}</b><span>${CH[k].kind}</span></button>`).join('')}</div>`).join('')}
   </main>`);
 }
+function familyHTML(){
+  const all=Object.keys(CH).length;
+  return `<div class="family">${S.pets.map(p=>{ const on=p.kind===S.partner;
+      return `<button class="stk fam ${on?'on':''}" data-act="partner" data-k="${p.kind}" aria-label="${CH[p.kind].name}">
+        ${on?'<i class="ptag">夥伴</i>':''}${charSVG(p.kind,on?'happy':'open')}<b>${CH[p.kind].name}</b><span>Lv.${lvOf(p)} ${badges(p)}</span></button>`; }).join('')}
+    ${S.pets.length<all ? (canAdopt()
+      ? `<button class="stk fam add" data-act="go" data-to="adopt"><span class="plus">＋</span><b>領養新寵物</b></button>`
+      : `<button class="stk fam add locked" data-act="go" data-to="adopt"><span class="plus">🔒</span><b>領養新寵物</b><span>${CH[newest().kind].name} 到 Lv.${ADOPT_LV}</span></button>`) : ''}
+  </div>`;
+}
 function panelHTML(){
-  const p=S.pet, l=level(), next=LV[l]??null, prev=LV[l-1];
+  const p=P(), l=lvOf(p), next=l<MAXLV?LV[l]:null, prev=LV[l-1];
   const expPct = next===null?100:Math.round((p.exp-prev)/(next-prev)*100);
-  return `<div class="pinfo"><b>${CH[p.kind].name}</b><span class="lv">Lv.${l} ${STAGE[l-1]}</span></div>
+  return `<div class="pinfo"><b>${CH[p.kind].name}</b><span class="lv">Lv.${l} ${STAGE[l-1]}</span><span>${badges(p)}</span></div>
     <div class="stat"><span>⭐ 長大</span><div class="bar"><i style="width:${expPct}%;background:#C3A5F7"></i></div></div>
+    <p class="expnote">${next===null?'已經是最高等級了！':`答對題目、餵食、玩耍都會長大。再 ${next-p.exp} 點升到 Lv.${l+1}${REWARD[l+1]?`（${REWARD[l+1]}）`:''}`}</p>
     <div class="stat"><span>🍎 飽飽</span><div class="bar"><i style="width:${Math.round(p.full)}%;background:#FF9F43"></i></div></div>
     <div class="stat"><span>💗 開心</span><div class="bar"><i style="width:${Math.round(p.happy)}%;background:var(--berry)"></i></div></div>
     <h3>餵東西吃</h3>
@@ -1240,47 +1346,54 @@ function panelHTML(){
       <button class="stk act" data-act="play"><span class="e">⚽</span>玩球<span class="pr">1 ⭐</span></button>
       <button class="stk act" data-act="bath"><span class="e">🫧</span>洗澡澡<span class="pr" style="background:var(--mint)">免費</span></button>
     </div>
-    <h3>裝扮</h3>
-    <div class="row">${ACCS.map(a=>{ const own=(p.owned||[]).includes(a.id), on=(p.wear||{})[a.slot]===a.id;
-      return `<button class="stk act ${own?'own':''} ${on?'on':''}" data-act="acc" data-id="${a.id}"><span class="e">${a.e}</span>${a.n}<span class="pr">${own?(on?'脫下':'穿上'):a.p+' ⭐'}</span></button>`; }).join('')}</div>`;
+    <h3>裝扮（大家共用衣櫃）</h3>
+    <div class="row">${ACCS.map(a=>{ const open=accOpen(a), on=(p.wear||{})[a.slot]===a.id;
+      const tag = open ? (on?'脫下':'穿上') : a.lvl ? `🔒 Lv.${a.lvl}` : `${a.p} ⭐`;
+      return `<button class="stk act ${open?'own':''} ${on?'on':''} ${!open&&a.lvl?'lock':''}" data-act="acc" data-id="${a.id}"><span class="e">${a.e}</span>${a.n}<span class="pr">${tag}</span></button>`; }).join('')}</div>
+    <h3>換房間</h3>
+    <div class="row">${ROOMS.map(r=>{ const open=roomOpen(r), on=S.room===r.id;
+      return `<button class="stk act ${on?'on':''} ${open?'':'lock'}" data-act="room" data-id="${r.id}"><span class="e">${r.icon}</span>${r.n}<span class="pr">${open?(on?'使用中':'換這間'):`🔒 Lv.${r.lv}`}</span></button>`; }).join('')}</div>`;
+}
+function roomStyle(){
+  const r=ROOMS.find(x=>x.id===S.room)||ROOMS[0];
+  if(r.id==='home') return {style:'', win:TH().win, shelf:TH().shelf};
+  return {style:`--roomsky:${r.sky};--floor:${r.floor}`, win:r.win, shelf:r.shelf};
 }
 function pet(){
-  if(!S.pet) return adopt();
+  if(!S.pets.length) return adoptView();
+  if(!P()) S.partner=S.pets[0].kind;
   applySkin(); decay();
-  const p=S.pet, T=TH();
-  render(`${topBar('寵物小屋')}
+  const p=P(), rs=roomStyle();
+  render(`${topBar('寵物家族')}
+  ${familyHTML()}
   <main class="petpage">
-    <section class="stk room">
-      <div class="window"><i>${T.win}</i></div><div class="shelf">${T.shelf}</div>
+    <section class="stk room" style="${rs.style}">
+      <div class="window"><i>${rs.win}</i></div><div class="shelf">${rs.shelf}</div>
       <div class="pbub" id="pbub">${petMsg()}</div>
       <div class="rug"></div>
-      <button class="petwrap" id="pet" data-act="petTap" style="--s:${petScale()}" aria-label="摸摸${CH[p.kind].name}">
-        <div class="petbody" id="petbody">${charSVG(p.kind, p.full<45||p.happy<45?'sad':'open')}${accHTML()}</div>
+      <button class="petwrap ${lvClass(p)}" id="pet" data-act="petTap" style="--s:${petScale(p)}" aria-label="摸摸${CH[p.kind].name}">
+        <div class="petbody" id="petbody">${petInner(p, p.full<45||p.happy<45?'sad':'open')}</div>
       </button>
     </section>
     <section class="stk panel" id="panel">${panelHTML()}</section>
   </main>`);
+  if(S.lvq) setTimeout(showLvUp,300);
 }
 function petRefresh(mood='open', anim=''){
-  const p=S.pet; save();
+  const p=P(); save();
   $('#panel').innerHTML=panelHTML();
-  const body=$('#petbody'); body.innerHTML=charSVG(p.kind,mood)+accHTML();
-  $('#pet').style.setProperty('--s',petScale());
+  const body=$('#petbody'); body.innerHTML=petInner(p,mood);
+  const w=$('#pet'); w.style.setProperty('--s',petScale(p)); w.className='petwrap '+lvClass(p);
   if(anim){ body.classList.remove('jump','nom','wig'); void body.offsetWidth; body.classList.add(anim); }
   clearTimeout(petRefresh.t);
-  petRefresh.t=setTimeout(()=>{ const b=$('#petbody'); if(b && S.pet){ b.classList.remove('jump','nom','wig'); b.innerHTML=charSVG(S.pet.kind,'open')+accHTML(); } },1400);
+  petRefresh.t=setTimeout(()=>{ const b=$('#petbody'), q=P(); if(b && q){ b.classList.remove('jump','nom','wig'); b.innerHTML=petInner(q,'open'); } },1400);
+  if(S.lvq) setTimeout(showLvUp,1000);
 }
 function bubble(t){ const b=$('#pbub'); if(b) b.textContent=t; }
 function needStars(){
   sfx.no(); say('星星不夠喔，去做任務賺星星吧！');
-  modal(`${charSVG(S.pet.kind,'sad')}<h2>星星不夠喔</h2><p>去玩小任務或小測驗，就能賺星星！</p>
+  modal(`${charSVG(P().kind,'sad')}<h2>星星不夠喔</h2><p>去玩小任務或小測驗，就能賺星星！</p>
     <div class="mbtns"><button class="bigbtn" data-act="go" data-to="quest">去貼紙大冒險</button><button class="bigbtn alt" data-act="close">好</button></div>`);
-}
-function gainExp(n){
-  const before=level(); S.pet.exp+=n;
-  if(level()>before){
-    setTimeout(()=>{ sfx.win(); confetti(); say(`哇！我長大了！我現在是${STAGE[level()-1]}了！`); bubble('我長大了！'); },900);
-  }
 }
 function flyTo(emoji, fromEl, toEl){
   const [x1,y1]=centerOf(fromEl), r=toEl.getBoundingClientRect();
@@ -1368,7 +1481,7 @@ function traceCheck(){
     sfx.win(); confetti(24);
     const recP=PRAISE.map((_,i)=>'praise-'+i).filter(hasClip);
     if(recP.length) playClip(pick(recP)); else say(pick(PRAISE));
-    if(!TR.done.has(key)){ TR.done.add(key); addStars(starPer(), I.cv); }
+    if(!TR.done.has(key)){ TR.done.add(key); addStars(starPer(), I.cv); gainExp(1); }
     if(msg) msg.textContent='描得好棒！馬上換下一個～';
     I.last=null; TR.ink=null;
     setTimeout(()=>{ if($('#tc')){ TR.idx[TR.set]++; learn('cards'); traceSay(); } },1800);
@@ -1378,7 +1491,7 @@ function traceCheck(){
 }
 
 /* ===================== 家長設定 ===================== */
-let resetAsk=false;
+let resetAsk=false, removeAsk='';
 function settings(){
   applySkin();
   const stk=myStk();
@@ -1392,6 +1505,13 @@ function settings(){
       <h2>難度</h2>
       <div class="choices">${[1,2,3].map(l=>`<button class="stk choice ${S.level===l?'on':''}" data-act="setLevel" data-l="${l}"><b>${LVN[l]}</b><span>${LVD[l]}</span><span>每答對一題 ${l} ⭐</span></button>`).join('')}</div>
       <button class="toggle ${S.autoLv?'on':''}" data-act="autoLv"><span class="sw"></span>答對率高時自動建議升級（太難時也會建議換回簡單）</button>
+    </section>
+    <section class="stk setsec">
+      <h2>寵物家族</h2>
+      <p>${S.pets.length?`目前有 ${S.pets.length} 隻寵物。移除後無法復原，只建議在不小心領錯時使用。`:'還沒有領養寵物。'}</p>
+      <div class="setbtns">${S.pets.map(p=> removeAsk===p.kind
+        ? `<button class="bigbtn danger" data-act="petRmYes" data-k="${p.kind}">確定移除 ${CH[p.kind].name}</button><button class="bigbtn alt" data-act="petRmNo">取消</button>`
+        : `<button class="bigbtn alt" data-act="petRm" data-k="${p.kind}">${CH[p.kind].name} Lv.${lvOf(p)}・移除</button>`).join('')}</div>
     </section>
     <section class="stk setsec">
       <h2>聲音</h2>
@@ -1516,7 +1636,7 @@ function help(){
         <div class="hcard" style="background:var(--pink)"><b>ㄅㄆㄇ ABC</b><p>注音、ABC（每個字母 2～3 個單字）、英文單字、描描看（用手指描數字、大小寫字母、注音）。大樹程度還有「拼音」。</p></div>
         <div class="hcard" style="background:var(--butter)"><b>貼紙大冒險</b><p>每回合 3 個小挑戰，題目會依難度變化。完成一回合拿一張新貼紙。</p></div>
         <div class="hcard" style="background:var(--lilac)"><b>我的貼紙簿</b><p>每個主題各有 24 張貼紙。</p></div>
-        <div class="hcard" style="background:var(--sky)"><b>寵物小屋</b><p>領養一隻寵物，用星星餵牠、陪牠玩、幫牠打扮，牠會慢慢長大到 Lv.5。</p></div>
+        <div class="hcard" style="background:var(--sky)"><b>寵物家族</b><p>領養寵物，用星星餵牠、陪牠玩、幫牠打扮。答對題目牠就會長大，最高到 Lv.20。</p></div>
       </div>
       <h3>每個學習分頁右上角的「⭐ 小測驗」</h3>
       <p>一次 5 題。答錯沒關係，會請孩子再想想看，不會扣星星。</p>
@@ -1547,7 +1667,22 @@ function help(){
         <tr><td>棒球帽、眼鏡、圍巾</td><td class="n">4 ⭐</td></tr>
         <tr><td>皇冠</td><td class="n">6 ⭐</td></tr>
       </table></div>
-      <p>貼紙大冒險完成一回合，另外加送 2 ⭐。描描看每描好一個新的字，也會得到星星。寵物的「飽飽」和「開心」會隨時間慢慢變少，但不會歸零，也不會生病或離開。</p>
+      <p>貼紙大冒險完成一回合，另外加送 2 ⭐。描描看每描好一個新的字，也會得到星星。</p>
+    </section>
+
+    <section class="stk hsec">
+      <h2>寵物家族和等級</h2>
+      <ul>
+        <li><b>怎麼長大：</b>夥伴寵物每答對一題 +1、完成一回合貼紙大冒險 +2、描好一個新的字 +1；餵食和玩球也會長大（吃飽、玩夠了就不會再加）。</li>
+        <li><b>多養幾隻：</b>最新領養的寵物長到 Lv.${ADOPT_LV}，就能再領養一隻。九種角色每種可以養一隻，不限目前的主題。</li>
+        <li><b>夥伴：</b>點寵物家族裡的任何一隻，就能換牠當夥伴。只有夥伴會慢慢變餓、變無聊；其他寵物在家休息，數值不會下降，也不會生病或離開。</li>
+        <li><b>衣櫃共用：</b>配件買過一次，每隻寵物都能戴。</li>
+        <li><b>大約多久：</b>每天玩 15 分鐘，一隻寵物大約 2～3 個月到 Lv.10，Lv.20 要更久。</li>
+      </ul>
+      <div class="htable"><table>
+        <tr><th>等級</th><th>名稱</th><th>得到什麼</th></tr>
+        ${STAGE.map((n,i)=>`<tr><td class="n">Lv.${i+1}</td><td>${n}</td><td>${REWARD[i+1]|| (i<5?'身體慢慢變大':'—')}</td></tr>`).join('')}
+      </table></div>
     </section>
 
     <section class="stk hsec" style="background:var(--lilac)">
@@ -1582,7 +1717,7 @@ function help(){
       <h2>第二部分：網頁維護 <small>給負責更新的大人</small></h2>
       <h3>進度存在哪裡</h3>
       <ul>
-        <li>星星、貼紙、寵物和爸媽的錄音都存在<b>這台裝置的 Safari 裡</b>，不會上傳到網路。</li>
+        <li>星星、貼紙、寵物家族和爸媽的錄音都存在<b>這台裝置的 Safari 裡</b>，不會上傳到網路。</li>
         <li>換一台裝置、用無痕模式、或清除 Safari 的網站資料，進度會不見。</li>
         <li>從主畫面圖示打開和從 Safari 打開，有時會是兩份不同的進度，建議固定用同一種方式。</li>
       </ul>
@@ -1601,8 +1736,8 @@ function help(){
 
 /* ===================== 事件 ===================== */
 const ACT = {
-  go(b){ sfx.tap(); const to=b.dataset.to; if(to!=='rec') micOff(); if(to!=='settings') resetAsk=false;
-    ({home, pet, quest, stickers, help, rec, voice, settings, town:()=>learn('town'), cards:()=>learn('cards')})[to](); },
+  go(b){ sfx.tap(); const to=b.dataset.to; if(to!=='rec') micOff(); if(to!=='settings'){ resetAsk=false; removeAsk=''; }
+    ({home, pet, quest, stickers, help, rec, voice, settings, adopt:adoptView, town:()=>learn('town'), cards:()=>learn('cards')})[to](); },
   sound(b){ S.sound=!S.sound; save(); b.textContent=S.sound?'🔊':'🔇'; if(!S.sound){ try{speechSynthesis.cancel();}catch(e){} stopAudio(); } else say('聲音打開了'); },
   close(){ closeModal(); },
   gift(){ addStars(5); settings(); },
@@ -1636,11 +1771,19 @@ const ACT = {
   async recDel(b){ await clipDel(b.dataset.k); rec(); },
   rate(b){ S.rate=+b.dataset.v; save(); voice(); say('你好，我們一起來學習吧！'); },
   pickVoice(b){ S.voice=decodeURIComponent(b.dataset.n); save(); voice(); say('你好，我們一起來學習吧！'); },
-  adopt(b){ const k=b.dataset.k;
-    S.pet={kind:k, exp:0, full:70, happy:70, t:Date.now(), owned:[], wear:{}}; save();
+  adopt(b){ const k=b.dataset.k; if(!canAdopt() || S.pets.some(p=>p.kind===k)) return;
+    S.pets.push({kind:k, exp:0, full:70, happy:70, t:Date.now(), wear:{}}); S.partner=k; save();
     sfx.win(); confetti(); pet(); say(`你好！我是${CH[k].name}，請多多照顧我！`); },
+  partner(b){ const k=b.dataset.k; if(k===S.partner){ sfx.pop(); return; }
+    S.partner=k; P().t=Date.now(); save(); sfx.pop(); pet(); say(`換${CH[k].name}來陪你囉！`); },
+  room(b){ const r=ROOMS.find(x=>x.id===b.dataset.id);
+    if(!roomOpen(r)){ sfx.no(); say(`要有寵物長到 ${r.lv} 級，才能打開${r.n}喔`); return; }
+    S.room=r.id; save(); sfx.pop(); pet(); },
+  petRm(b){ removeAsk=b.dataset.k; settings(); },
+  petRmNo(){ removeAsk=''; settings(); },
+  petRmYes(b){ const k=b.dataset.k; S.pets=S.pets.filter(p=>p.kind!==k); if(S.partner===k) S.partner=S.pets[0]?S.pets[0].kind:''; removeAsk=''; save(); settings(); },
   petTap(b,e){
-    const p=S.pet; p.happy=Math.min(100,p.happy+3);
+    const p=P(); p.happy=Math.min(100,p.happy+3);
     const x=e.clientX||centerOf(b)[0], y=e.clientY||centerOf(b)[1];
     floatAt(pick(['💗','💕','💖']),x,y); sfx.pop();
     ACT.petTap.n=(ACT.petTap.n||0)+1;
@@ -1648,7 +1791,7 @@ const ACT = {
     petRefresh('happy','wig');
   },
   feed(b){
-    const f=FOODS[+b.dataset.i], p=S.pet;
+    const f=FOODS[+b.dataset.i], p=P();
     if(S.stars<f.p) return needStars();
     if(p.full>=100){ say('我吃好飽了，等一下再吃！'); bubble('我吃好飽了！'); return; }
     addStars(-f.p, b); flyTo(f.e,b,$('#pet'));
@@ -1656,22 +1799,24 @@ const ACT = {
     setTimeout(()=>{ sfx.pop(); const t=`${f.n}好好吃！謝謝你！`; say(t); bubble(t); petRefresh('eat','nom'); },600);
   },
   play(b){
-    const p=S.pet; if(S.stars<1) return needStars();
+    const p=P(); if(S.stars<1) return needStars();
+    if(p.happy>=100){ say('我玩得好開心，先休息一下！'); bubble('先休息一下！'); return; }
     addStars(-1,b); p.happy=Math.min(100,p.happy+25); gainExp(1);
     flyTo('⚽',b,$('#pet')); sfx.ok();
     const t='耶！好好玩！'; say(t); bubble(t); petRefresh('happy','jump');
   },
   bath(){
-    const p=S.pet; p.happy=Math.min(100,p.happy+10);
+    const p=P(); p.happy=Math.min(100,p.happy+10);
     const r=$('#pet').getBoundingClientRect();
     for(let i=0;i<8;i++) setTimeout(()=>floatAt(pick(['🫧','💧','✨']), r.left+Math.random()*r.width, r.top+r.height*(.3+Math.random()*.5)), i*90);
     sfx.pop(); const t='洗得香香的！'; say(t); bubble(t); petRefresh('happy','wig');
   },
   acc(b){
-    const a=ACCS.find(x=>x.id===b.dataset.id), p=S.pet; p.owned=p.owned||[]; p.wear=p.wear||{};
-    if(!p.owned.includes(a.id)){
+    const a=ACCS.find(x=>x.id===b.dataset.id), p=P(); p.wear=p.wear||{};
+    if(!accOpen(a)){
+      if(a.lvl){ sfx.no(); say(`要有寵物長到 ${a.lvl} 級，才能得到${a.n}喔`); return; }
       if(S.stars<a.p) return needStars();
-      addStars(-a.p,b); p.owned.push(a.id); p.wear[a.slot]=a.id; p.happy=Math.min(100,p.happy+10);
+      addStars(-a.p,b); S.closet.push(a.id); p.wear[a.slot]=a.id; p.happy=Math.min(100,p.happy+10);
       sfx.win(); const t=`哇！我有${a.n}了！好看嗎？`; say(t); bubble(t); petRefresh('happy','jump'); return;
     }
     if(p.wear[a.slot]===a.id){ delete p.wear[a.slot]; say('先脫下來'); }
