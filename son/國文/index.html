@@ -34,9 +34,11 @@ body{font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,san
 header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px}
 header h1{font-size:22px;margin:0}
 .stars{font-weight:700;color:var(--star);white-space:nowrap}
-nav.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:5}
 nav.tabs button{border:0;background:none;color:var(--muted);font-size:15px;padding:6px 0;border-radius:10px;font-family:inherit}
 nav.tabs button .i{display:block;font-size:22px;line-height:1.2}
+nav.tabs button{position:relative}
+.badge{position:absolute;top:2px;left:50%;margin-left:8px;background:var(--bad);color:#fff;font-size:11px;line-height:16px;min-width:18px;padding:0 4px;border-radius:9px;font-weight:700}
 nav.tabs button.on{color:var(--brand);background:var(--brand-soft);font-weight:700}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
 .card h2{font-size:19px;margin:0 0 8px}
@@ -81,6 +83,39 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
 .toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:16px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 @media (min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+/* 寵物 */
+.petStage{text-align:center;padding:10px 0 4px;position:relative;min-height:190px}
+.petEmoji{display:inline-block;line-height:1.1;cursor:pointer;user-select:none;transition:font-size .4s}
+.petEmoji.bounce{animation:bounce .6s ease}
+@keyframes bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-22px) scale(1.08)}60%{transform:translateY(0) scale(.96)}}
+.petDeco{font-size:26px;letter-spacing:6px;min-height:34px}
+.bubble{display:inline-block;background:var(--chip);border-radius:16px;padding:6px 14px;font-size:17px;margin-top:6px;max-width:100%}
+.heart{position:absolute;left:50%;top:40%;font-size:28px;pointer-events:none;animation:float 1.2s ease-out forwards}
+@keyframes float{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-120px)}}
+.foods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.food{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:10px;font-family:inherit;font-size:16px;cursor:pointer;text-align:center}
+.food .fe{font-size:34px;display:block}
+.food[disabled]{opacity:.45;cursor:default}
+.wallet{display:flex;justify-content:space-around;text-align:center;gap:8px}
+.wallet b{display:block;font-size:26px;color:var(--star)}
+.petPick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.petPick button{font-size:46px;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:8px 0;cursor:pointer;color:var(--ink);font-family:inherit}
+.petPick button small{display:block;font-size:15px}
+.petPick button.on{border-color:var(--brand);background:var(--brand-soft)}
+input.txt{width:100%;font-size:18px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit}
+/* 翻牌 */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (min-width:480px){.board{grid-template-columns:repeat(4,1fr)}}
+.cardf{aspect-ratio:1/1;border-radius:14px;border:2px solid var(--line);background:var(--brand);color:#fff;font-size:30px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:4px;line-height:1.2}
+.cardf.zy{font-size:22px}
+.cardf.up{background:var(--card);color:var(--ink)}
+.cardf.done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.cardf.miss{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.reward{padding:10px 12px;border-radius:12px;background:var(--chip);margin-bottom:8px}
+.reward.ready{background:var(--ok-soft);border:2px solid var(--ok)}
+.gate{margin-top:10px;padding:12px;border-radius:12px;background:var(--chip)}
+.confetti{position:fixed;top:-20px;font-size:24px;pointer-events:none;z-index:20;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
 </style>
 </head>
 <body>
@@ -94,7 +129,7 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
   <section id="v-home">
     <div class="card">
       <h2>加油！期中考第 1～6 課</h2>
-      <div class="muted">答對一題得 1 顆星，答錯的題目會放進「不熟」，再答對就會移出。</div>
+      <div class="muted">答對一題得 1 顆星（同一題一天拿一次），可以到「寵物」餵寵物、玩翻牌遊戲。答錯的題目會放進「不熟」，再答對就會移出。</div>
     </div>
     <div class="card">
       <h2>各課進度</h2>
@@ -108,6 +143,8 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
       <h2>給家長</h2>
       <div class="muted" id="parentNote"></div>
       <div id="weakLessons" style="margin-top:8px"></div>
+      <div style="margin-top:12px"><button class="btn ghost" id="rewardSetBtn">🎁 設定實體獎勵</button></div>
+      <div id="rewardEditor"></div>
       <div class="muted" style="margin-top:10px">題目都是依課文整理後由 AI 出的模擬題（標「AI 模擬」），各課生字以網路上公開的課文資料整理，可能和課本的生字表有出入，請以課本和習作為準。</div>
     </div>
     <div class="card">
@@ -156,14 +193,24 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
         <div class="chips" id="eLessons"></div>
       </div>
       <div class="card">
+        <h2>考試方式</h2>
+        <div class="chips" id="eMode"></div>
+        <div class="muted" id="eModeNote" style="margin-top:6px"></div>
+      </div>
+      <div class="card" id="eNumCard">
         <h2>題數</h2>
         <div class="chips" id="eNum"></div>
-        <div style="margin-top:14px"><button class="btn wide" id="eStart">開始考試 📝</button></div>
-        <div class="muted" style="margin-top:6px">全部寫完再交卷，交卷後一起對答案，錯的題目會放進「不熟」。</div>
+      </div>
+      <div class="card">
+        <button class="btn wide" id="eStart">開始考試 📝</button>
+        <div class="muted" style="margin-top:6px">全部寫完再交卷，交卷後一起對答案，錯的題目會放進「不熟」。每次都會優先抽之前沒考過的題目，選項順序也會重新洗牌。</div>
       </div>
     </div>
     <div id="eRun" class="hide"></div>
   </section>
+
+  <!-- 寵物 -->
+  <section id="v-pet" class="hide"><div id="petHost"></div></section>
 </div>
 
 <nav class="tabs">
@@ -171,6 +218,7 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
   <button data-v="practice"><span class="i">✏️</span>練習</button>
   <button data-v="weak"><span class="i">🔁</span>不熟<span id="weakBadge"></span></button>
   <button data-v="exam"><span class="i">📝</span>模擬考</button>
+  <button data-v="pet"><span class="i" id="petTabIcon">🥚</span>寵物</button>
 </nav>
 <div class="toast" id="toast"></div>
 
@@ -184,7 +232,7 @@ const LESSONS = [
   {n:5, t:"飛舞的絲帶"},
   {n:6, t:"小女生"}
 ];
-const TYPES = {zy:"注音", gz:"國字", bs:"部首", bh:"筆畫", cz:"改錯字", zc:"造詞", kw:"課文理解"};
+const TYPES = {zy:"注音", gz:"國字", xj:"形近字", bs:"部首", bh:"筆畫", tk:"選詞填空", sy:"相似／相反詞", jx:"標點量詞句型", cz:"改錯字", zc:"造詞", kw:"課文理解"};
 
 /* 生字：字, 注音, 部首, 筆畫, 例詞 */
 const CHARS = {
@@ -269,7 +317,237 @@ const HAND = [
 [6,"gz","睡前要洗（ㄗㄠˇ）",["澡","早","操","燥"],"洗澡要用水，所以是水部（氵）。"],
 [6,"gz","小貓的毛很（ㄖㄡˊ）細",["柔","肉","揉","柚"],"「柔細」的「柔」是木部。"],
 [6,"cz","「小貓的肚子毛茸茸的，摸起來很揉細。」哪個字寫錯了？",["揉","肚","茸","摸"],"應該是「柔細」。"],
-[6,"cz","「他用交水把紙黏起來。」哪個字寫錯了？",["交","用","紙","黏"],"應該是「膠水」，膠是肉部（月）。"]
+[6,"cz","「他用交水把紙黏起來。」哪個字寫錯了？",["交","用","紙","黏"],"應該是「膠水」，膠是肉部（月）。"],
+
+/* ===== 第一課 新題型 ===== */
+[1,"tk","媽媽用水管在花園裡（　　），讓花草喝飽水。",["噴灑","搭載","發愁","禮讓"],"噴灑：把水噴出去、灑開。"],
+[1,"tk","公車上，我們要（　　）老人家，把座位讓出來。",["禮讓","忌妒","噴灑","嘆氣"],"禮讓：有禮貌地讓給別人。"],
+[1,"tk","這艘大船可以（　　）很多旅客。",["搭載","潑灑","標語","口訣"],"搭載：用車、船裝運人或東西。"],
+[1,"tk","九九乘法有好記的（　　），背起來很快。",["口訣","標語","輕舟","嘆息"],"口訣：方便記憶、好念的句子。"],
+[1,"tk","學校牆上貼著「愛護地球」的（　　）。",["標語","口訣","輕舟","嘆氣"],"標語：寫出來提醒大家的簡短句子。"],
+[1,"tk","看到同學得獎，要替他高興，不要（　　）他。",["忌妒","禮讓","搭載","休息"],"忌妒：看到別人比自己好就不開心。"],
+[1,"tk","功課太多寫不完，弟弟坐在桌前一直（　　）。",["發愁","噴灑","禮讓","標語"],"發愁：擔心、煩惱。"],
+[1,"xj","搭（　）：選出正確的字",["載","栽","戴","裁"],"搭「載」是車部；栽是種樹、戴是戴帽子、裁是裁剪。"],
+[1,"xj","口（　）：選出正確的字",["訣","決","缺","快"],"口「訣」是言部，和說話有關。"],
+[1,"xj","（　）氣：選出正確的字",["嘆","漢","灘","難"],"「嘆」氣和嘴巴有關，是口部。"],
+[1,"xj","輕（　）：選出正確的字",["舟","丹","冉","舌"],"輕「舟」就是小船。"],
+[1,"xj","（　）妒：選出正確的字",["忌","記","紀","起"],"「忌」妒和心情有關，是心部。"],
+[1,"sy","「發愁」的相似詞是哪一個？",["煩惱","開心","生氣","休息"],"發愁＝煩惱、擔心。"],
+[1,"sy","「消失」的相反詞是哪一個？",["出現","不見","離開","結束"],"消失 ↔ 出現。"],
+[1,"sy","「可惜」的相似詞是哪一個？",["遺憾","可愛","珍惜","可怕"],"可惜＝遺憾。"],
+[1,"sy","「休息」的相反詞是哪一個？",["忙碌","睡覺","放鬆","停止"],"休息 ↔ 忙碌。"],
+[1,"jx","一（　）小舟：選出正確的量詞",["葉","張","本","朵"],"課文說「心是一葉舟」，小船可以說一葉。"],
+[1,"jx","「只載自己好不好」是在問問題，句尾要加什麼標點？",["問號？","句號。","驚嘆號！","逗號，"],"問問題的句子用問號。"],
+[1,"jx","「不好，不好！」用驚嘆號，表示什麼語氣？",["語氣很強烈","在問問題","句子還沒說完","說話停頓"],"驚嘆號表示強烈的語氣或感情。"],
+[1,"jx","課文中「讓你變成您」，「您」比「你」多了什麼意思？",["尊敬、有禮貌","生氣","害怕","好笑"],"「您」是有禮貌的「你」，心裡想著別人。"],
+
+/* ===== 第二課 新題型 ===== */
+[2,"tk","考試時要（　　）看題目，才不會寫錯。",["專心","慌張","晃動","喊叫"],"專心：注意力集中在一件事上。"],
+[2,"tk","地震時，桌上的杯子不停（　　）。",["晃動","專心","收穫","喊叫"],"晃動：搖來搖去。"],
+[2,"tk","早上起晚了，哥哥（　　）地衝出家門。",["慌慌張張","歪打正著","安安靜靜","整整齊齊"],"趕時間很急，所以慌慌張張。"],
+[2,"tk","這次去農場學到很多，真是很有（　　）。",["收穫","晃動","答案","窗戶"],"收穫：得到的成果、學到的東西。"],
+[2,"tk","我隨便猜一個，沒想到（　　），答案剛好是對的。",["歪打正著","手忙腳亂","慌慌張張","飛也似的"],"方法不對卻剛好成功＝歪打正著。"],
+[2,"tk","下雨了，出門別忘了帶（　　）。",["雨傘","窗戶","答案","公車"],"下雨要帶雨傘。"],
+[2,"tk","客人一下子全來了，店員忙得（　　）。",["手忙腳亂","歪打正著","專心","收穫"],"事情太多太急＝手忙腳亂。"],
+[2,"xj","（　）經：選出正確的字",["已","己","巳","包"],"口訣：「己」開口、「已」半封、「巳」全封。已經的「已」，左邊那一豎只往上連一半。"],
+[2,"xj","（　）張：選出正確的字",["慌","荒","謊","恍"],"「慌」張是心情，所以是心部（忄）。"],
+[2,"xj","（　）動：選出正確的字",["晃","恍","光","幌"],"「晃」動是日部。"],
+[2,"xj","收（　）：選出正確的字",["穫","獲","護","穩"],"收「穫」是收成農作物，所以是禾部；「獲」得才用犬部。"],
+[2,"xj","（　）打正著：選出正確的字",["歪","否","丕","盃"],"「歪」就是不正。"],
+[2,"sy","「慌張」的相反詞是哪一個？",["冷靜","緊張","害怕","匆忙"],"慌張 ↔ 冷靜。"],
+[2,"sy","「專心」的相似詞是哪一個？",["認真","分心","擔心","傷心"],"專心＝認真。"],
+[2,"sy","「專心」的相反詞是哪一個？",["分心","認真","用心","細心"],"專心 ↔ 分心。"],
+[2,"sy","「喊叫」的相似詞是哪一個？",["大叫","小聲","安靜","唱歌"],"喊叫＝大叫。"],
+[2,"jx","一（　）雨傘：選出正確的量詞",["把","隻","條","張"],"雨傘用「把」。"],
+[2,"jx","一（　）窗戶：選出正確的量詞",["扇","本","朵","匹"],"門、窗用「扇」。"],
+[2,"jx","刪節號「……」在格子裡要占幾格？",["兩格","一格","三格","半格"],"刪節號有六個點，占兩格。"],
+[2,"jx","「慌慌張張」是 AABB 的語詞，下面哪一個也是 AABB？",["高高興興","歪打正著","手忙腳亂","飛也似的"],"高高興興＝高高＋興興，和慌慌張張一樣。"],
+
+/* ===== 第三課 新題型 ===== */
+[3,"tk","弟弟在山上（　　）了，找不到回家的路。",["迷路","上岸","參觀","碰撞"],"迷路：找不到路。"],
+[3,"tk","媽媽帶我們去（　　）動物園。",["參觀","碰撞","迷失","命令"],"參觀：到一個地方去看一看。"],
+[3,"tk","船慢慢靠近，大家終於平安（　　）了。",["上岸","迷路","參觀","碰撞"],"從水裡、船上到陸地＝上岸。"],
+[3,"tk","你遲到了，有什麼（　　）嗎？",["理由","方向","材料","老闆"],"理由：原因。"],
+[3,"tk","做蛋糕需要準備麵粉、雞蛋等（　　）。",["材料","理由","方向","命令"],"材料：做東西要用的東西。"],
+[3,"tk","公車快開了，他（　　）得一直看手錶。",["著急","實在","參觀","環繞"],"著急：心裡很急。"],
+[3,"tk","這家麵店的（　　）很親切，總是笑咪咪的。",["老闆","材料","方向","理由"],"老闆：開店的人。"],
+[3,"xj","參（　）：選出正確的字",["觀","歡","權","勸"],"參「觀」和看有關，是見部。"],
+[3,"xj","（　）口令：選出正確的字",["繞","燒","曉","澆"],"「繞」是糸部，像線繞來繞去。"],
+[3,"xj","上（　）：選出正確的字",["岸","岩","崖","炭"],"上「岸」是山部，下面是「干」。"],
+[3,"xj","碰（　）：選出正確的字",["撞","憧","鐘","童"],"碰「撞」要用力，是手部（扌）。"],
+[3,"xj","（　）起跌倒的同學：選出正確的字",["扶","芙","夫","浮"],"「扶」要用手，是手部（扌）。"],
+[3,"xj","老（　）：選出正確的字",["闆","闖","閃","關"],"老「闆」是門部，裡面是「品」。"],
+[3,"sy","「著急」的相似詞是哪一個？",["焦急","輕鬆","開心","冷靜"],"著急＝焦急。"],
+[3,"sy","「上岸」的相反詞是哪一個？",["出海","上山","上車","回家"],"上岸 ↔ 出海。"],
+[3,"sy","「碰撞」的相似詞是哪一個？",["相撞","分開","躲開","跑開"],"碰撞＝相撞。"],
+[3,"sy","「迷路」的意思和哪一個最接近？",["迷失方向","走得很快","去參觀","上岸"],"迷路＝迷失方向。"],
+[3,"jx","一（　）葡萄：選出正確的量詞",["串","張","隻","本"],"一串葡萄。"],
+[3,"jx","一（　）商店：選出正確的量詞",["家","位","條","片"],"商店可以說一家。"],
+[3,"jx","「抱著灰雞上飛機」，「灰」和「飛」念起來很像，是因為？",["都有「ㄟ」的音","字形一樣","意思一樣","筆畫一樣"],"灰ㄏㄨㄟ、飛ㄈㄟ，都有ㄟ的音。"],
+[3,"jx","繞口令用什麼方法讓人容易念錯？",["把讀音相近的字放在一起","句子寫得很長","用很難寫的字","要說得很小聲"],"讀音相近的字擠在一起，舌頭就容易打結。"],
+
+/* ===== 第四課 新題型 ===== */
+[4,"tk","小魚（　　）大魚，嚇得趕快躲起來。",["遇到","欺負","擺動","露出"],"遇到：碰見。"],
+[4,"tk","海葵的觸手輕輕（　　），好像在跳舞。",["擺動","欺負","遇到","準備"],"擺動：搖來搖去。"],
+[4,"tk","大哥哥不可以（　　）小朋友。",["欺負","擺動","露出","準備"],"欺負：用力量或手段讓別人受委屈。"],
+[4,"tk","在馬路上玩球很（　　）。",["危險","有毒","擺動","準備"],"危險：可能會受傷。"],
+[4,"tk","小狗從門後（　　）一顆頭，好可愛。",["露出","欺負","擺動","遇到"],"露出：讓藏著的東西被看見。"],
+[4,"tk","明天要考試，今天要好好（　　）。",["準備","欺負","擺動","露出"],"準備：事先做好安排。"],
+[4,"xj","（　）迷藏：選出正確的字",["捉","促","足","捏"],"「捉」要用手，是手部（扌）。"],
+[4,"xj","危（　）：選出正確的字",["險","檢","驗","臉"],"危「險」是阜部（阝）。檢查用木部、考驗用馬部。"],
+[4,"xj","欺（　）：選出正確的字",["負","員","貞","頁"],"欺「負」是貝部，下面是「貝」。"],
+[4,"xj","（　）手：選出正確的字",["觸","獨","燭","濁"],"「觸」手是角部。"],
+[4,"xj","不（　）好意：選出正確的字",["懷","壞","環","還"],"不「懷」好意，懷是心部，指心裡想的。"],
+[4,"xj","小（　）魚：選出正確的字",["丑","丘","且","田"],"小「丑」魚，像馬戲團的小丑。"],
+[4,"sy","「危險」的相反詞是哪一個？",["安全","害怕","小心","緊張"],"危險 ↔ 安全。"],
+[4,"sy","「欺負」的相似詞是哪一個？",["欺侮","幫助","保護","照顧"],"欺負＝欺侮。"],
+[4,"sy","「勇敢」的相反詞是哪一個？",["膽小","大膽","勇猛","堅強"],"勇敢 ↔ 膽小。"],
+[4,"sy","「美麗」的相似詞是哪一個？",["漂亮","醜陋","可怕","普通"],"美麗＝漂亮。"],
+[4,"jx","一（　）小丑魚：選出正確的量詞",["條","頭","匹","張"],"魚可以說一條。"],
+[4,"jx","「雖然……卻……」用對的是哪一句？",["雖然下大雨，他卻還是準時到校。","雖然天氣很好，所以我們去玩。","雖然他很高，因為他吃很多。","雖然我考一百分，而且很開心。"],"「雖然……卻……」前後意思相反、轉折。"],
+[4,"jx","海葵說的話，要用什麼標點框起來？",["引號「」","括號（）","刪節號……","冒號："],"說出來的話用引號框起來。"],
+[4,"kw","故事最後的結果是什麼？",["海葵保護了小丑魚，小丑魚平安沒事","小丑魚被大魚吃掉了","海葵搬家了","大家一起玩捉迷藏"],"海葵用有毒的觸手保護好朋友小丑魚。"],
+
+/* ===== 第五課 新題型 ===== */
+[5,"tk","夜空中，月亮（　　）在天上。",["高掛","飛舞","練習","懷著"],"高掛：高高地掛著。"],
+[5,"tk","花園裡，蝴蝶在花叢中（　　）。",["飛舞","高掛","練習","字條"],"飛舞：一邊飛一邊像在跳舞。"],
+[5,"tk","每天（　　）寫字，字就會越寫越漂亮。",["練習","飛舞","高掛","字條"],"練習：反覆做，讓自己更熟練。"],
+[5,"tk","老師在桌上留了一張（　　），請我放學去找她。",["字條","絲帶","彩蝶","朝會"],"字條：寫著短短的話的小紙條。"],
+[5,"tk","每週一早上，全校都要到操場參加（　　）。",["朝會","字條","彩蝶","絲帶"],"朝會：早上全校集合的活動。"],
+[5,"tk","他（　　）緊張的心情走上司令臺。",["懷著","高掛","練習","飛舞"],"懷著：心裡帶著。"],
+[5,"xj","（　）習：選出正確的字",["練","煉","揀","諫"],"「練」習是糸部；「煉」是用火燒，火部。"],
+[5,"xj","高（　）：選出正確的字",["掛","卦","褂","桂"],"高「掛」要用手掛上去，是手部（扌）。"],
+[5,"xj","字（　）：選出正確的字",["條","修","悠","倏"],"字「條」是木部。"],
+[5,"xj","彩（　）：選出正確的字",["蝶","碟","諜","喋"],"蝴「蝶」是昆蟲，虫部；碟子是石部。"],
+[5,"xj","（　）帶：選出正確的字",["絲","系","紗","細"],"「絲」帶，兩個糸並排。"],
+[5,"sy","「緊張」的相反詞是哪一個？",["放鬆","害怕","擔心","著急"],"緊張 ↔ 放鬆。"],
+[5,"sy","「高掛」的「高」，相反詞是哪一個？",["低","長","大","遠"],"高 ↔ 低。"],
+[5,"sy","「練習」的相似詞是哪一個？",["演練","休息","玩耍","比賽"],"練習＝演練。"],
+[5,"sy","「困難」的相反詞是哪一個？",["容易","麻煩","辛苦","複雜"],"困難 ↔ 容易。"],
+[5,"jx","一（　）絲帶：選出正確的量詞",["條","塊","本","隻"],"長長的帶子用「條」。"],
+[5,"jx","一（　）字條：選出正確的量詞",["張","隻","朵","匹"],"紙用「張」。"],
+[5,"jx","六何法中的「何地」是在問什麼？",["在哪裡","什麼時候","是誰","為什麼"],"何地＝在什麼地方。"],
+[5,"jx","六何法中的「為何」是在問什麼？",["為什麼","在哪裡","是誰","怎麼做"],"為何＝為什麼，問原因。"],
+[5,"zc","「左右不分」是什麼意思？",["分不清左邊和右邊","不想往左右走","左右手一樣大","喜歡站中間"],"李文貴常常分不清左右。"],
+
+/* ===== 第六課 新題型 ===== */
+[6,"tk","小貓的毛摸起來（　　）的，好舒服。",["毛茸茸","四腳朝天","黏人","一副"],"毛茸茸：毛又多又軟。"],
+[6,"tk","我叫小狗的名字，牠馬上「汪」一聲（　　）我。",["回應","洗澡","關門","黏人"],"回應：回答、有反應。"],
+[6,"tk","（　　）下大雨，爺爺也每天去公園散步。",["哪怕","平時","整天","柔細"],"哪怕：就算、即使。"],
+[6,"tk","弟弟很（　　），媽媽走到哪裡他就跟到哪裡。",["黏人","柔細","回應","平時"],"黏人：一直跟著別人。"],
+[6,"tk","美勞課要用（　　）把紙貼起來。",["膠水","肚子","洗澡","柔細"],"膠水可以把東西黏起來。"],
+[6,"tk","小狗吃太多，（　　）圓滾滾的。",["肚子","膠水","回應","平時"],"吃太飽，肚子圓滾滾。"],
+[6,"xj","洗（　）：選出正確的字",["澡","燥","躁","操"],"洗「澡」用水，水部（氵）；乾燥用火、急躁用足、做操用手。"],
+[6,"xj","（　）水：選出正確的字",["膠","廖","謬","寥"],"「膠」水是肉部（月）。"],
+[6,"xj","（　）細：選出正確的字",["柔","揉","矛","茅"],"「柔」細，上面是矛、下面是木。"],
+[6,"xj","哪（　）：選出正確的字",["怕","拍","泊","伯"],"哪「怕」和心情有關，心部（忄）。"],
+[6,"xj","（　）人：選出正確的字",["黏","點","站","沾"],"「黏」人是黍部。"],
+[6,"sy","「柔細」的相反詞是哪一個？",["粗糙","柔軟","光滑","細小"],"柔細 ↔ 粗糙。"],
+[6,"sy","「平時」的相似詞是哪一個？",["平常","有時","從來","偶爾"],"平時＝平常。"],
+[6,"sy","「高興」的相似詞是哪一個？",["開心","難過","生氣","害怕"],"高興＝開心。"],
+[6,"sy","「安靜」的相反詞是哪一個？",["吵鬧","寧靜","沉默","平靜"],"安靜 ↔ 吵鬧。"],
+[6,"jx","一（　）貓：選出正確的量詞",["隻","條","頭","匹"],"貓用「隻」。"],
+[6,"jx","牠露出一（　）不開心的樣子：選出正確的量詞",["副","隻","本","條"],"表情、樣子可以說「一副」。"],
+[6,"jx","「小女生是一隻黏人的膠水貓」，把貓比喻成膠水，這是什麼寫作方法？",["譬喻","排比","設問","對偶"],"把甲（貓）說成像乙（膠水），是譬喻。"],
+[6,"jx","「膠水貓」加上引號，是為了什麼？",["強調特別的稱呼","表示在問問題","表示說話停頓","表示很生氣"],"引號也可以用來強調特別的詞。"],
+
+/* ===== 第三批：國字、改錯字、造詞、課文理解、選詞填空 ===== */
+// 第一課
+[1,"gz","細雨灑輕（ㄓㄡ）",["舟","州","周","洲"],"輕「舟」就是小船。"],
+[1,"gz","互相禮（ㄖㄤˋ）",["讓","嚷","壤","釀"],"禮「讓」是言部。"],
+[1,"gz","公車搭（ㄗㄞˋ）乘客",["載","在","再","宰"],"搭「載」用車子裝，車部。"],
+[1,"gz","為了小事發（ㄔㄡˊ）",["愁","仇","綢","籌"],"發「愁」是心情，心部。"],
+[1,"cz","「這艘船可以搭栽很多人。」哪個字寫錯了？",["栽","搭","船","人"],"應該是「搭載」。"],
+[1,"cz","「老師教我們背九九乘法的口決。」哪個字寫錯了？",["決","背","乘","師"],"應該是「口訣」。"],
+[1,"cz","「他看著窗外，嘆了一口器。」哪個字寫錯了？",["器","嘆","窗","口"],"應該是「嘆了一口氣」。"],
+[1,"zc","「祕訣」是什麼意思？",["很有用的好方法","一種花","很遠的地方","一種食物"],"祕訣：不常被人知道、很有效的方法。"],
+[1,"zc","「潑灑」的「灑」是什麼意思？",["讓水散落出去","曬太陽","很帥氣","打掃"],"灑：把水散開落下。"],
+[1,"zc","「禮讓」是什麼意思？",["有禮貌地讓給別人","送別人禮物","讓別人生氣","不讓別人走"],"禮讓：有禮貌地把機會、位子讓給別人。"],
+[1,"kw","課文說「小船停下不航行」，是因為心變成了哪個字？",["息（愛休息）","您","忌","念"],"「一下變成息，愛休息。小船停下不航行。」"],
+[1,"kw","課文最後，心的小船想載著誰，一起去看美麗新世界？",["你","自己","爺爺","小狗"],"「還是讓我載著你，讓你變成您，一起去看美麗新世界！」"],
+[1,"kw","這一課最想告訴我們什麼？",["心裡要想著別人，不要只想到自己","要多休息","下雨天要坐船","寫字要很快"],"只載自己會變成息、忌，載著你才會變成您。"],
+[1,"tk","跑完步，我們先坐下來（　　）一下。",["休息","忌妒","禮讓","標語"],"休息：停下來讓身體放鬆。"],
+[1,"tk","這部漫畫在雜誌上（　　）了一整年。",["連載","搭載","潑灑","口訣"],"連載：一段一段接著刊登。"],
+// 第二課
+[2,"gz","推開（ㄔㄨㄤ）戶",["窗","床","創","瘡"],"「窗」戶是穴部。"],
+[2,"gz","寫出正確答（ㄢˋ）",["案","岸","暗","按"],"答「案」是木部。"],
+[2,"gz","天氣冷，起大（ㄨˋ）了",["霧","務","物","誤"],"「霧」和天氣有關，是雨部。"],
+[2,"gz","大聲（ㄏㄢˇ）叫",["喊","罕","憾","漢"],"「喊」要用嘴巴，口部。"],
+[2,"cz","「大風把小樹吹得東搖西幌。」哪個字寫錯了？",["幌","搖","風","樹"],"應該是「東搖西晃」。"],
+[2,"cz","「他己經寫完功課了。」哪個字寫錯了？",["己","經","寫","功"],"應該是「已經」。己是自己。"],
+[2,"cz","「我們把窗護打開吧！」哪個字寫錯了？",["護","我","窗","開"],"應該是「窗戶」。"],
+[2,"zc","「慌慌張張」是什麼樣子？",["很急、很緊張","很安靜","很開心","很慢"],"慌張：心裡急，動作亂。"],
+[2,"zc","「霧裡看花」是什麼意思？",["看不清楚","花很漂亮","天氣很好","很愛賞花"],"在霧裡看花，怎麼看都看不清楚。"],
+[2,"zc","「收穫」是什麼意思？",["得到的成果","打掃房間","送禮物","收拾書包"],"收穫：收成，也指學到、得到的東西。"],
+[2,"kw","〈歪打正著〉故事中的主角是誰？",["以樂","王叔叔","小金","李文貴"],"〈歪打正著〉說的是以樂的故事。"],
+[2,"kw","〈忙中有錯〉故事中，拿錯雨傘的是誰？",["王叔叔","以樂","小金","老師"],"王叔叔太匆忙，拿了別人的雨傘。"],
+[2,"kw","這兩個故事都用了哪個標點，讓說話的樣子更生動？",["刪節號","書名號","冒號","括號"],"兩個故事都用到刪節號「……」。"],
+[2,"tk","他一接到電話，（　　）跑了出去。",["飛也似的","霧裡看花","歪打正著","慌張"],"飛也似的：跑得像飛一樣快。"],
+[2,"tk","媽媽打開（　　），讓新鮮空氣跑進來。",["窗戶","雨傘","答案","收穫"],"打開窗戶，空氣就能流通。"],
+// 第三課
+[3,"gz","在森林裡（ㄇㄧˊ）路",["迷","謎","彌","米"],"「迷」路是辵部（辶），和走路有關。"],
+[3,"gz","朝著東方的方（ㄒㄧㄤˋ）走",["向","像","象","項"],"方「向」是口部。"],
+[3,"gz","心裡很著（ㄐㄧˊ）",["急","及","級","吉"],"著「急」是心情，心部。"],
+[3,"gz","街角有一家商（ㄉㄧㄢˋ）",["店","電","墊","點"],"商「店」是广部，和房子有關。"],
+[3,"cz","「他心裡很著及，一直看時鐘。」哪個字寫錯了？",["及","著","心","鐘"],"應該是「著急」。"],
+[3,"cz","「我們到水果點買葡萄。」哪個字寫錯了？",["點","水","果","葡"],"應該是「水果店」。"],
+[3,"cz","「小船慢慢靠近河按。」哪個字寫錯了？",["按","船","靠","河"],"應該是「河岸」。"],
+[3,"zc","「三令五申」是什麼意思？",["一再地命令、提醒","三個人和五個人","一道數學題","一種遊戲"],"三令五申：說了好多次、一直提醒。"],
+[3,"zc","「貪小失大」是什麼意思？",["貪小便宜，反而損失更多","吃很多東西","小東西很重要","大家都失敗"],"為了小利益，失去更大的東西。"],
+[3,"zc","「環繞」是什麼意思？",["圍著四周轉","走直線","跳起來","睡覺"],"環繞：圍在四周。"],
+[3,"kw","小金在繞口令村遇到了誰？",["村裡的小孩和商店老闆","小丑魚和海葵","王叔叔","李文貴"],"村裡的小孩、老闆說話都像繞口令。"],
+[3,"kw","「小綠送紅花……」這種句子叫做什麼？",["繞口令","謎語","童詩","成語"],"讀音相近、念起來容易打結的句子是繞口令。"],
+[3,"kw","想把繞口令念得又快又清楚，最重要的是什麼？",["把每個字的讀音念正確","越大聲越好","隨便亂念","只念第一句"],"先把每個字念準，再慢慢加快。"],
+[3,"tk","大風一吹，小船（　　）了方向。",["迷失","參觀","實在","老闆"],"迷失：找不到、弄不清楚。"],
+[3,"tk","這碗麵（　　）太好吃了！",["實在","材料","理由","方向"],"實在：真的、的確。"],
+// 第四課
+[4,"gz","玩（ㄓㄨㄛ）迷藏",["捉","桌","卓","濁"],"「捉」要用手，手部（扌）。"],
+[4,"gz","海葵的觸手有（ㄉㄨˊ）",["毒","讀","獨","堵"],"有「毒」的毒是毋部。"],
+[4,"gz","在馬路上玩很（ㄨㄟˊ）險",["危","圍","為","微"],"「危」險的危是卩部。"],
+[4,"gz","魚兒（ㄅㄞˇ）動尾巴",["擺","百","柏","白"],"「擺」動要用手腳，手部（扌）。"],
+[4,"cz","「小魚在海裡玩促迷藏。」哪個字寫錯了？",["促","魚","海","藏"],"應該是「捉迷藏」。"],
+[4,"cz","「他被蜜蜂叮了，覺得很疼通。」哪個字寫錯了？",["通","被","叮","疼"],"應該是「疼痛」，痛是疒部。"],
+[4,"cz","「大魚不壞好意地游過來。」哪個字寫錯了？",["壞","魚","游","意"],"應該是「不懷好意」。"],
+[4,"zc","「居心不良」是什麼意思？",["心裡打著壞主意","住的地方不好","心臟不好","很善良"],"居心：心裡的想法。"],
+[4,"zc","「露出」是什麼意思？",["顯現出來、被看見","下雨了","躲起來","去露營"],"露出：本來藏著的被看見了。"],
+[4,"zc","課文中的「觸手」是什麼？",["海葵像手一樣的部分","人的手指","小丑魚的尾巴","一種貝殼"],"海葵用觸手抓食物、保護自己。"],
+[4,"kw","小丑魚遇到危險時，躲到海葵那裡的原因是？",["海葵可以保護牠","海葵有好吃的東西","牠迷路了","牠想睡覺"],"海葵有毒的觸手能嚇走敵人。"],
+[4,"kw","黃色大魚一開始是怎麼做的？",["假裝很友善","直接大叫","躲起來哭","去找海葵"],"大魚先假裝友善，其實不懷好意。"],
+[4,"kw","海葵說「誰都不能欺負他」，海葵和小丑魚是什麼關係？",["好朋友","敵人","不認識","兄弟"],"「小丑魚是我的好朋友。」"],
+[4,"tk","爸爸（　　）籃框，把球投了進去。",["對準","欺負","露出","擺動"],"對準：瞄好目標。"],
+[4,"tk","這種野菇有（　　），千萬不可以吃。",["毒性","觸手","鄰居","準備"],"有毒性的東西吃了會生病。"],
+// 第五課
+[5,"gz","每天（ㄌㄧㄢˋ）習寫字",["練","煉","戀","斂"],"「練」習是糸部。"],
+[5,"gz","牆上（ㄍㄨㄚˋ）著一幅畫",["掛","卦","褂","瓜"],"「掛」要用手，手部（扌）。"],
+[5,"gz","桌上有一張字（ㄊㄧㄠˊ）",["條","調","跳","挑"],"字「條」是木部。"],
+[5,"gz","漂亮的（ㄙ）帶",["絲","思","斯","私"],"「絲」帶是糸部。"],
+[5,"cz","「天上高卦著一輪明月。」哪個字寫錯了？",["卦","天","高","月"],"應該是「高掛」。"],
+[5,"cz","「美麗的彩碟在花間飛舞。」哪個字寫錯了？",["碟","美","花","舞"],"應該是「彩蝶」，蝶是虫部。"],
+[5,"cz","「我們每天都在練習大會躁。」哪個字寫錯了？",["躁","練","習","會"],"應該是「大會操」，操是手部。"],
+[5,"zc","「懷著」是什麼意思？",["心裡帶著","抱著東西","壞掉了","穿著衣服"],"懷著緊張的心情＝心裡帶著緊張。"],
+[5,"zc","「彩蝶」是什麼？",["彩色的蝴蝶","彩色的盤子","一種花","一種糖果"],"蝶就是蝴蝶。"],
+[5,"zc","「朝會」是什麼？",["早上全校集合的活動","晚上的聚會","一種車子","做早餐"],"朝：早上。"],
+[5,"kw","李文貴收到一張什麼，請他到司令臺？",["字條","獎狀","書","禮物"],"課文中有一張字條請他到司令臺。"],
+[5,"kw","右手綁上絲帶後，李文貴就能怎麼樣？",["分清左右，跟上大家的動作","跳得更高","不用練習了","變成彩蝶"],"看絲帶就知道哪邊是右邊。"],
+[5,"kw","從這一課可以看出，班上同學是怎樣的人？",["會互相幫忙","喜歡笑別人","不愛運動","不守規矩"],"大家一起想辦法幫李文貴。"],
+[5,"tk","全校同學在操場上練習（　　）。",["大會操","字條","彩蝶","司令臺"],"大會操：全校一起做的操。"],
+[5,"tk","校長站在（　　）上說話。",["司令臺","字條","絲帶","朝會"],"司令臺：操場前面高高的臺子。"],
+// 第六課
+[6,"gz","我很（ㄆㄚˋ）黑",["怕","帕","爬","趴"],"害「怕」是心情，心部（忄）。"],
+[6,"gz","用（ㄐㄧㄠ）水黏紙",["膠","交","焦","嬌"],"「膠」水是肉部（月）。"],
+[6,"gz","小狗的（ㄉㄨˋ）子圓滾滾",["肚","度","杜","渡"],"「肚」子是身體，肉部（月）。"],
+[6,"gz","（ㄓㄥˇ）天都在玩",["整","正","證","爭"],"「整」天的整是攴部。"],
+[6,"cz","「我每天睡前都會先洗操。」哪個字寫錯了？",["操","洗","每","睡"],"應該是「洗澡」。"],
+[6,"cz","「哪拍下大雨，他也要出門。」哪個字寫錯了？",["拍","雨","出","門"],"應該是「哪怕」。"],
+[6,"cz","「小狗很點人，一直跟著我。」哪個字寫錯了？",["點","狗","跟","我"],"應該是「黏人」。"],
+[6,"zc","「毛茸茸」是什麼樣子？",["毛又多又軟","毛很硬","沒有毛","濕濕的"],"茸茸：又細又軟又多。"],
+[6,"zc","「哪怕」的意思和哪一個最接近？",["就算","因為","所以","但是"],"哪怕下雨＝就算下雨。"],
+[6,"zc","「回應」是什麼意思？",["回答、有反應","回家","不理人","應該"],"叫牠，牠有反應就是回應。"],
+[6,"kw","小女生心情不好的時候，會怎麼走過來？",["安靜地走過來，露出不開心的樣子","跳著過來","大聲叫著跑過來","不會過來"],"心情不好時，牠會安靜地走過來。"],
+[6,"kw","小女生會把前腳放在作者的哪裡？",["大腿上","頭上","書包上","鞋子上"],"牠會把前腳搭在作者的大腿上。"],
+[6,"kw","作者把小女生當成什麼？",["重要的家人","玩具","陌生人","別人的貓"],"「也是我重要的家人」。"],
+[6,"tk","小貓在沙發上睡得（　　），露出白白的肚子。",["四腳朝天","毛茸茸","黏人","哪怕"],"四腳朝天：仰躺、腳朝上。"],
+[6,"tk","小貓（　　）都跟在我身邊。",["整天","哪怕","柔細","膠水"],"整天：一整天。"]
 ];
 
 /* ===================== 建題 ===================== */
@@ -285,27 +563,39 @@ for(const L of LESSONS){
   for(const [ch,zy,rad,st,word] of CHARS[L.n]){
     const rnd=seeded(ch);
     Q.push({id:`L${L.n}-zy-${ch}`,l:L.n,ty:"zy",q:`「${hlWord(word,ch)}」的「${ch}」怎麼念？`,a:zy,o:toneVariants(zy).filter(x=>x!==zy),e:`${ch}：${zy}（${word}）`});
-    Q.push({id:`L${L.n}-bs-${ch}`,l:L.n,ty:"bs",q:`<span class="big">${ch}</span><br>部首是什麼？`,a:radShow(rad),o:pickN(RAD_POOL,3,rnd,[rad]).map(radShow),e:`「${ch}」是${radShow(rad)}部。`});
-    const d=pickN([-2,-1,1,2],3,rnd,[]).map(x=>st+x).filter(x=>x>0);
-    Q.push({id:`L${L.n}-bh-${ch}`,l:L.n,ty:"bh",q:`<span class="big">${ch}</span><br>一共有幾畫？`,a:st+" 畫",o:d.map(x=>x+" 畫"),e:`「${ch}」共 ${st} 畫。`});
+    // 部首、筆畫的干擾選項每次出題都重新抽
+    Q.push({id:`L${L.n}-bs-${ch}`,l:L.n,ty:"bs",q:`<span class="big">${ch}</span><br>部首是什麼？`,a:radShow(rad),
+      gen:()=>pickN(RAD_POOL,3,Math.random,[rad]).map(radShow),e:`「${ch}」是${radShow(rad)}部。`});
+    Q.push({id:`L${L.n}-bh-${ch}`,l:L.n,ty:"bh",q:`<span class="big">${ch}</span><br>一共有幾畫？`,a:st+" 畫",
+      gen:()=>pickN([-3,-2,-1,1,2,3].map(x=>st+x).filter(x=>x>0),3,Math.random,[]).map(x=>x+" 畫"),e:`「${ch}」共 ${st} 畫。`});
   }
 }
 HAND.forEach((h,i)=>{const [l,ty,q,opts,e]=h;Q.push({id:`L${l}-${ty}-h${i}`,l,ty,q,a:opts[0],o:opts.slice(1),e});});
 const QMAP=Object.fromEntries(Q.map(q=>[q.id,q]));
+function optsOf(q){return shuffle([q.a,...(q.gen?q.gen():q.o)]);}
 
 /* ===================== 紀錄 ===================== */
 const KEY="son-guoyu-3a-v1";
-let S={rec:{},stars:0,weak:[]};
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);S=Object.assign(S,p);}}catch(e){}}
+/* stars：累積得到的星星（家長獎勵看這個）；spent：花在寵物和遊戲的星星 */
+function freshState(){return {rec:{},stars:0,weak:[],spent:0,pet:null,rewards:[],redeemed:[],games:0};}
+let S=freshState();
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);S=Object.assign(freshState(),p);}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}renderTop();}
 load();
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();};
+const balance=()=>Math.max(0,S.stars-S.spent);
 function rec(id){return S.rec[id]||(S.rec[id]={r:0,w:0});}
+let lastStar=false;
 function markResult(id,ok){
-  const r=rec(id);
-  if(ok){r.r++;S.stars++;S.weak=S.weak.filter(x=>x!==id);}
+  const r=rec(id);lastStar=false;
+  if(ok){r.r++;
+    // 同一題一天只給一次星星（避免一直刷同一題）
+    if(r.d!==today()){r.d=today();S.stars++;lastStar=true;}
+    S.weak=S.weak.filter(x=>x!==id);}
   else{r.w++;if(!S.weak.includes(id))S.weak.push(id);}
-  save();
+  save();checkRewards();
 }
+function addBonus(n,why){S.stars+=n;save();toast(`${why}，加 ${n} 顆星！`);checkRewards();}
 function toggleWeak(id){if(S.weak.includes(id)){S.weak=S.weak.filter(x=>x!==id);toast("已移出不熟");}else{S.weak.push(id);toast("已加入不熟");}save();}
 
 /* ===================== 共用 ===================== */
@@ -332,7 +622,7 @@ function Runner(host,list,opts){
   active=this;this.render();
 }
 Runner.prototype.optsFor=function(q){
-  if(!this.cache[q.id])this.cache[q.id]=shuffle([q.a,...q.o]);
+  if(!this.cache[q.id])this.cache[q.id]=optsOf(q);
   return this.cache[q.id];
 };
 Runner.prototype.render=function(){
@@ -352,7 +642,7 @@ Runner.prototype.render=function(){
     <div class="qtext">${q.q}</div>
     <div class="opts">${os.map((o,k)=>{let c="opt";if(given){if(o===q.a)c+=" ok";else if(o===given.pick)c+=" bad";}
       return `<button class="${c}" data-k="${k}" ${given?"disabled":""}><span class="k">${k+1}</span><span>${o}</span></button>`;}).join("")}</div>
-    ${given?`<div class="fb ${given.ok?"ok":"bad"} pop"><b>${given.ok?pick(CHEER_OK):pick(CHEER_BAD)}</b><br>${given.ok?"":"正確答案："+q.a+"<br>"}${q.e}</div>`:""}
+    ${given?`<div class="fb ${given.ok?"ok":"bad"} pop"><b>${given.ok?given.cheer:pick(CHEER_BAD)}</b>${given.ok?(given.star?" ⭐+1":"（這題今天已拿過星星）"):""}<br>${given.ok?"":"正確答案："+q.a+"<br>"}${q.e}</div>`:""}
     <div class="nav2">
       <button class="btn ghost" id="prev" ${this.i===0?"disabled":""}>← 上一題</button>
       <button class="btn ghost" id="flag">${isWeak?"移出不熟":"標不熟"}</button>
@@ -368,7 +658,7 @@ Runner.prototype.render=function(){
 Runner.prototype.answer=function(k){
   const q=this.list[this.i];if(!q||this.ans[q.id])return;
   const os=this.optsFor(q);if(k>=os.length)return;
-  const ok=os[k]===q.a;this.ans[q.id]={pick:os[k],ok};markResult(q.id,ok);this.render();
+  const ok=os[k]===q.a;markResult(q.id,ok);this.ans[q.id]={pick:os[k],ok,star:lastStar,cheer:pick(CHEER_OK)};this.render();
 };
 Runner.prototype.next=function(){if(this.i<this.list.length){this.i++;this.render();window.scrollTo(0,0);}};
 Runner.prototype.prev=function(){if(this.i>0){this.i--;this.render();}};
@@ -387,8 +677,9 @@ document.addEventListener("keydown",e=>{
 /* ===================== 首頁 ===================== */
 function stat(list){let done=0,ok=0;list.forEach(q=>{const r=S.rec[q.id];if(r&&(r.r+r.w)){done++;if(r.r>0&&!S.weak.includes(q.id))ok++;}});return {n:list.length,done,ok};}
 function renderTop(){
-  $("#starCount").textContent="⭐ "+S.stars;
-  $("#weakBadge").textContent=S.weak.length?`（${S.weak.length}）`:"";
+  $("#starCount").textContent="⭐ "+balance();
+  const pi=$("#petTabIcon");if(pi)pi.textContent=S.pet?(petLevel().lv>1?PETS.find(p=>p.k===S.pet.k).e:"🥚"):"🥚";
+  const wb=$("#weakBadge");wb.textContent=S.weak.length?(S.weak.length>99?"99+":S.weak.length):"";wb.className=S.weak.length?"badge":"";
 }
 function renderHome(){
   $("#lessonList").innerHTML=LESSONS.map(L=>{const s=stat(Q.filter(q=>q.l===L.n));const p=Math.round(s.ok/s.n*100);
@@ -430,20 +721,43 @@ function renderWeak(){
 }
 
 /* ===================== 模擬考 ===================== */
-const eL=new Set(LESSONS.map(l=>l.n)),eN=new Set([20]);
+const eL=new Set(LESSONS.map(l=>l.n)),eN=new Set([20]),eM=new Set(["free"]);
 let examState=null;
+/* 仿段考：各大題題數（共 50 題） */
+const SECTIONS=[["zy",6],["gz",6],["xj",6],["bs",3],["bh",3],["tk",8],["sy",5],["jx",4],["cz",3],["zc",2],["kw",4]];
+const CN_NUM="一二三四五六七八九十";
+const secName=i=>i<10?CN_NUM[i]:"十"+CN_NUM[i-10];
 function renderExamSetup(){
   chips($("#eLessons"),LESSONS.map(L=>[L.n,`第${L.n}課`]),eL,true);
-  chips($("#eNum"),[[10,"10 題"],[20,"20 題"],[30,"30 題"]],eN,false);
+  const upd=()=>{const m=[...eM][0];$("#eNumCard").classList.toggle("hide",m==="duan");
+    $("#eModeNote").textContent=m==="duan"?"仿學校考卷：固定 50 題，分成注音、國字、形近字、部首、筆畫、選詞填空、相似／相反詞、標點量詞句型、改錯字、造詞、課文理解等大題，每次重新抽題。":"自己選題數，各種題型混在一起出。";};
+  chips($("#eMode"),[["free","自選題數"],["duan","仿段考（50 題）"]],eM,false,upd);
+  chips($("#eNum"),[[10,"10 題"],[20,"20 題"],[30,"30 題"],[40,"40 題"],[50,"50 題"]],eN,false);
+  upd();
 }
+// 依「考過幾次」排序：沒考過的優先，同次數隨機
+function freshFirst(list){S.ex=S.ex||{};return shuffle(list).sort((a,b)=>(S.ex[a.id]||0)-(S.ex[b.id]||0));}
 $("#eStart").onclick=()=>{
-  const pool=Q.filter(q=>eL.has(q.l));
-  // 每種題型都抽到一些
-  const byType={};shuffle(pool).forEach(q=>(byType[q.ty]=byType[q.ty]||[]).push(q));
-  const n=Math.min([...eN][0],pool.length),list=[];const keys=Object.keys(byType);
-  while(list.length<n){let added=false;for(const k of shuffle(keys)){if(list.length>=n)break;if(byType[k].length){list.push(byType[k].shift());added=true;}}if(!added)break;}
-  examState={on:true,list:shuffle(list),i:0,pick:{},opts:{}};
-  examState.list.forEach(q=>examState.opts[q.id]=shuffle([q.a,...q.o]));
+  const pool=Q.filter(q=>eL.has(q.l));const mode=[...eM][0];let list=[];
+  if(mode==="duan"){
+    const used=new Set();
+    SECTIONS.forEach(([ty,n],si)=>{freshFirst(pool.filter(q=>q.ty===ty)).slice(0,n).forEach(q=>{used.add(q.id);list.push(Object.assign({},q,{sec:si}));});});
+    // 範圍太小、某題型不夠時，用其他題補到 50 題
+    const target=50;const rest=freshFirst(pool.filter(q=>!used.has(q.id)));
+    while(list.length<target&&rest.length){const q=rest.shift();const si=SECTIONS.findIndex(s=>s[0]===q.ty);list.push(Object.assign({},q,{sec:si}));}
+    list.sort((a,b)=>a.sec-b.sec);
+    // 每個大題內打亂
+    const grouped=[];SECTIONS.forEach((s,si)=>grouped.push(...shuffle(list.filter(q=>q.sec===si))));list=grouped;
+  }else{
+    // 每種題型都抽到一些，且沒考過的優先
+    const byType={};freshFirst(pool).forEach(q=>(byType[q.ty]=byType[q.ty]||[]).push(q));
+    const n=Math.min([...eN][0],pool.length);const keys=Object.keys(byType);
+    while(list.length<n){let added=false;for(const k of shuffle(keys)){if(list.length>=n)break;if(byType[k].length){list.push(byType[k].shift());added=true;}}if(!added)break;}
+    list=shuffle(list);
+  }
+  S.ex=S.ex||{};list.forEach(q=>S.ex[q.id]=(S.ex[q.id]||0)+1);save();
+  examState={on:true,list,i:0,pick:{},opts:{},duan:mode==="duan"};
+  examState.list.forEach(q=>examState.opts[q.id]=optsOf(q));
   active=null;$("#eSetup").classList.add("hide");$("#eRun").classList.remove("hide");renderExam();
 };
 function examAnswer(k){const st=examState,q=st.list[st.i];const os=st.opts[q.id];if(k<os.length){st.pick[q.id]=os[k];renderExam();}}
@@ -453,7 +767,7 @@ function renderExam(){
   const q=st.list[st.i],L=LESSONS.find(x=>x.n===q.l),os=st.opts[q.id];
   const doneN=Object.keys(st.pick).length;
   h.innerHTML=`<div class="card">
-    <div class="qmeta"><span><span class="tag">第${q.l}課 ${L.t}</span><span class="tag">${TYPES[q.ty]}</span></span><span>第 ${st.i+1} / ${st.list.length} 題・已作答 ${doneN}</span></div>
+    <div class="qmeta"><span>${st.duan?`<span class="tag" style="background:var(--brand-soft);color:var(--brand)">${secName(q.sec)}、${TYPES[q.ty]}</span>`:`<span class="tag">${TYPES[q.ty]}</span>`}<span class="tag">第${q.l}課 ${L.t}</span></span><span>第 ${st.i+1} / ${st.list.length} 題・已作答 ${doneN}</span></div>
     <div class="qtext">${q.q}</div>
     <div class="opts">${os.map((o,k)=>`<button class="opt${st.pick[q.id]===o?" pick":""}" data-k="${k}"><span class="k">${k+1}</span><span>${o}</span></button>`).join("")}</div>
     <div class="nav2"><button class="btn ghost" id="ep" ${st.i===0?"disabled":""}>← 上一題</button>
@@ -475,7 +789,9 @@ function submitExam(){
   st.list.forEach(q=>{const good=st.pick[q.id]===q.a;if(good)ok++;markResult(q.id,good);});
   const score=Math.round(ok/st.list.length*100);
   const wrong=st.list.filter(q=>st.pick[q.id]!==q.a);
-  $("#eRun").innerHTML=`<div class="card result pop"><div style="font-size:48px">${score>=90?"🏆":score>=70?"🎉":"💪"}</div><h2>模擬考成績</h2><div class="score">${score} 分</div><div class="muted">答對 ${ok} / ${st.list.length} 題${wrong.length?"，錯題已放進「不熟」":""}</div></div>
+  const bonus=st.list.length>=10?(score===100?10:score>=90?5:0):0;
+  if(bonus){addBonus(bonus,score===100?"模擬考滿分":"模擬考 90 分以上");confetti();}
+  $("#eRun").innerHTML=`<div class="card result pop"><div style="font-size:48px">${score>=90?"🏆":score>=70?"🎉":"💪"}</div><h2>模擬考成績</h2><div class="score">${score} 分</div><div class="muted">答對 ${ok} / ${st.list.length} 題${wrong.length?"，錯題已放進「不熟」":""}</div>${bonus?`<div class="bubble">🎁 獎勵星星 +${bonus}</div>`:`<div class="muted" style="margin-top:6px">考 10 題以上拿 90 分，可以多拿 5 顆星；滿分多拿 10 顆！</div>`}</div>
   ${wrong.map(q=>`<div class="card"><div class="qmeta"><span><span class="tag">第${q.l}課</span><span class="tag">${TYPES[q.ty]}</span></span></div><div style="font-size:19px;margin:6px 0">${q.q}</div><div class="fb bad">你的答案：${st.pick[q.id]||"（沒寫）"}<br>正確答案：<b>${q.a}</b><br>${q.e}</div></div>`).join("")}
   <div class="nav2"><button class="btn" id="eAgain">再考一次</button><button class="btn ghost" id="eWeak">去練不熟</button></div>`;
   $("#eAgain").onclick=()=>{$("#eRun").classList.add("hide");$("#eSetup").classList.remove("hide");renderExamSetup();};
@@ -485,12 +801,13 @@ function submitExam(){
 
 /* ===================== 切換頁面 ===================== */
 function show(v){
-  ["home","practice","weak","exam"].forEach(x=>$("#v-"+x).classList.toggle("hide",x!==v));
+  ["home","practice","weak","exam","pet"].forEach(x=>$("#v-"+x).classList.toggle("hide",x!==v));
   document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
   active=null;
   if(v==="home")renderHome();
   if(v==="practice"){$("#pRun").classList.add("hide");$("#pSetup").classList.remove("hide");renderPracticeSetup();}
   if(v==="weak")renderWeak();
+  if(v==="pet")renderPet();
   if(v==="exam"){if(!examState||!examState.on){$("#eRun").classList.add("hide");$("#eSetup").classList.remove("hide");renderExamSetup();}}
   window.scrollTo(0,0);
 }
@@ -509,11 +826,170 @@ $("#copyWrongBtn").onclick=()=>{
   copyText(t,"錯題清單已複製");
 };
 $("#importBtn").onclick=()=>{
-  try{const p=JSON.parse(decodeURIComponent(escape(atob($("#importBox").value.trim()))));if(!p||typeof p.rec!=="object")throw 0;S={rec:p.rec,stars:p.stars||0,weak:p.weak||[]};save();renderHome();$("#importBox").value="";toast("匯入成功！");}
+  try{const p=JSON.parse(decodeURIComponent(escape(atob($("#importBox").value.trim()))));if(!p||typeof p.rec!=="object")throw 0;S=Object.assign(freshState(),p);save();renderHome();$("#importBox").value="";toast("匯入成功！");}
   catch(e){toast("備份碼不正確");}
 };
 let resetArm=false;
-$("#resetBtn").onclick=()=>{if(!resetArm){resetArm=true;toast("再按一次才會清除");setTimeout(()=>resetArm=false,3000);return;}S={rec:{},stars:0,weak:[]};save();renderHome();toast("已清除");};
+$("#resetBtn").onclick=()=>{if(!resetArm){resetArm=true;toast("再按一次才會清除");setTimeout(()=>resetArm=false,3000);return;}const keep=S.rewards;S=freshState();S.rewards=keep;save();renderHome();toast("已清除（家長獎勵設定保留）");};
+
+/* ===================== 寵物養成 ===================== */
+const PETS=[{k:"cat",e:"🐱",n:"小貓"},{k:"dog",e:"🐶",n:"小狗"},{k:"rabbit",e:"🐰",n:"小兔"},{k:"dragon",e:"🐲",n:"小龍"},{k:"panda",e:"🐼",n:"熊貓"},{k:"chick",e:"🐥",n:"小雞"},{k:"beaver",e:"🦫",n:"河狸"},{k:"bear",e:"🐻",n:"小熊"}];
+const LV_XP=[0,20,60,120,200,300,430,600,800,1050];
+const LV_TITLE=["神秘的蛋","剛出生的寶寶","小不點","活潑寶寶","國語小幫手","生字小達人","注音高手","部首博士","課文大師","國語之王"];
+const LV_DECO=["","","🌱","🌱🌼","🌼🎀🌼","🌈🎀🌈","🌟🎀🌟","🏅🎀🏅","🎓🌟🎓","👑✨👑"];
+const FOODS=[{e:"🍪",n:"小餅乾",c:1,x:5},{e:"🍙",n:"飯糰",c:3,x:18},{e:"🍰",n:"蛋糕",c:5,x:32},{e:"🍱",n:"豪華便當",c:10,x:70}];
+const GAME_COST=5;
+const TALK=["今天也要一起練國語喔！","摸摸我～好舒服 😊","你答對的時候我最開心了！","我想吃蛋糕 🍰","多練幾題，我就會長大喔！","不熟的題目，我們一起打敗它！","你是我最好的朋友 💛"];
+function petLevel(){const xp=S.pet?S.pet.xp:0;let lv=1;LV_XP.forEach((t,i)=>{if(xp>=t)lv=i+1;});const next=LV_XP[lv]||null;return {lv,xp,cur:LV_XP[lv-1],next};}
+function daysSince(d){if(!d)return 99;const [y,m,dd]=d.split("-").map(Number);return Math.floor((new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())-new Date(y,m-1,dd))/864e5);}
+let petPickTmp="cat";
+function renderPet(){
+  const h=$("#petHost");
+  if(!S.pet){
+    h.innerHTML=`<div class="card"><h2>🥚 領養一隻寵物</h2><div class="muted">答對題目拿到的星星，可以餵寵物、讓牠長大！先選一隻吧：</div>
+      <div class="petPick" style="margin-top:10px">${PETS.map(p=>`<button data-k="${p.k}" class="${p.k===petPickTmp?"on":""}">${p.e}<small>${p.n}</small></button>`).join("")}</div>
+      <div style="margin-top:12px"><input class="txt" id="petName" maxlength="8" placeholder="幫牠取名字（例如：小黃）"></div>
+      <div style="margin-top:12px"><button class="btn wide" id="adopt">領養 💛</button></div></div>`;
+    h.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{petPickTmp=b.dataset.k;h.querySelectorAll(".petPick button").forEach(x=>x.classList.toggle("on",x===b));});
+    h.querySelector("#adopt").onclick=()=>{const nm=(h.querySelector("#petName").value||"").trim()||PETS.find(p=>p.k===petPickTmp).n;
+      S.pet={k:petPickTmp,name:nm,xp:0,fed:null};save();renderPet();toast("領養成功！快餵牠讓蛋孵化 🥚");};
+    renderRewardsInto(h,true);
+    return;
+  }
+  const P=PETS.find(p=>p.k===S.pet.k),L=petLevel();
+  const emoji=L.lv===1?"🥚":P.e;
+  const size=L.lv===1?90:80+L.lv*9;
+  const pct=L.next?Math.round((L.xp-L.cur)/(L.next-L.cur)*100):100;
+  const ds=daysSince(S.pet.fed);
+  const say=L.lv===1?"蛋裡好像有東西在動……餵我就會孵化！":ds>=3?`${S.pet.name}好想你 🥺 快來練習、餵我吃東西！`:pick(TALK);
+  const bal=balance();
+  h.innerHTML=`<div class="card">
+    <div class="petStage" id="stage">
+      <div class="petDeco">${LV_DECO[L.lv-1]}</div>
+      <div class="petEmoji" id="petE" style="font-size:${size}px">${emoji}</div>
+      <div><b style="font-size:20px">${S.pet.name}</b>　<span class="tag">Lv.${L.lv} ${LV_TITLE[L.lv-1]}</span></div>
+      <div class="bubble" id="say">${say}</div>
+    </div>
+    <div class="bar" style="height:14px;margin-top:10px"><i style="width:${pct}%"></i></div>
+    <div class="muted" style="text-align:center">${L.next?`成長值 ${L.xp} / ${L.next}，再 ${L.next-L.xp} 點升到 Lv.${L.lv+1}`:"已經是最高等級，太厲害了！👑"}</div>
+  </div>
+  <div class="card"><div class="wallet"><div><b>${bal}</b>可以用的星星</div><div><b>${S.stars}</b>累積拿到的星星</div></div>
+    <div class="muted" style="text-align:center;margin-top:6px">答對題目拿星星（同一題一天拿一次）</div></div>
+  <div class="card"><h2>🍽️ 餵 ${S.pet.name}</h2>
+    <div class="foods">${FOODS.map((f,i)=>`<button class="food" data-i="${i}" ${bal<f.c?"disabled":""}><span class="fe">${f.e}</span>${f.n}<br><span class="muted">⭐${f.c}・成長 +${f.x}</span></button>`).join("")}</div>
+    ${bal<1?`<div class="muted" style="margin-top:8px">星星不夠了，去「練習」答題賺星星吧！</div>`:""}
+  </div>
+  <div class="card"><h2>🃏 翻牌配對小遊戲</h2>
+    <div class="muted">花 ⭐${GAME_COST} 玩一局，把生字和注音（或部首）配成一對。過關可以讓 ${S.pet.name} 成長 +15！</div>
+    <div class="row" style="margin-top:10px"><button class="btn" id="gZy" ${bal<GAME_COST?"disabled":""}>注音配對</button><button class="btn" id="gBs" ${bal<GAME_COST?"disabled":""}>部首配對</button></div>
+    <div id="gameHost"></div>
+  </div>
+  <div class="card"><div class="row"><button class="btn ghost" id="rename">改名字</button><button class="btn ghost" id="repick">換寵物</button></div>
+    <div class="muted" style="margin-top:6px">換寵物會保留等級。</div></div>`;
+  h.querySelector("#petE").onclick=()=>{bounce();hearts(3);h.querySelector("#say").textContent=pick(TALK);};
+  h.querySelectorAll(".food").forEach(b=>b.onclick=()=>feed(FOODS[+b.dataset.i]));
+  h.querySelector("#gZy").onclick=()=>startGame("zy");
+  h.querySelector("#gBs").onclick=()=>startGame("bs");
+  h.querySelector("#rename").onclick=()=>{const box=h.querySelector("#rename").parentNode;box.innerHTML=`<input class="txt" id="nn" maxlength="8" value="${S.pet.name}"><button class="btn" id="nok">確定</button>`;
+    box.querySelector("#nok").onclick=()=>{const v=box.querySelector("#nn").value.trim();if(v){S.pet.name=v;save();}renderPet();};};
+  h.querySelector("#repick").onclick=()=>{const box=h.querySelector("#repick").parentNode;box.innerHTML=`<div class="petPick" style="width:100%">${PETS.map(p=>`<button data-k="${p.k}" class="${p.k===S.pet.k?"on":""}">${p.e}<small>${p.n}</small></button>`).join("")}</div>`;
+    box.querySelectorAll("button").forEach(b=>b.onclick=()=>{S.pet.k=b.dataset.k;save();renderPet();});};
+  renderRewardsInto(h,false);
+}
+function bounce(){const e=$("#petE");if(!e)return;e.classList.remove("bounce");void e.offsetWidth;e.classList.add("bounce");}
+function hearts(n,ch){const st=$("#stage");if(!st)return;for(let i=0;i<n;i++){const s=document.createElement("span");s.className="heart";s.textContent=ch||pick(["💛","💕","✨","💖"]);s.style.setProperty("--dx",(Math.random()*120-60)+"px");s.style.animationDelay=(i*0.12)+"s";st.appendChild(s);setTimeout(()=>s.remove(),1600);}}
+function confetti(){for(let i=0;i<24;i++){const s=document.createElement("span");s.className="confetti";s.textContent=pick(["🎉","⭐","🎊","✨","💛"]);s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),2600);}}
+function growPet(x){
+  const before=petLevel().lv;S.pet.xp+=x;S.pet.fed=today();save();
+  const after=petLevel().lv;
+  if(after>before){renderPet();confetti();hearts(6,"⭐");toast(after===2?`蛋孵化了！${S.pet.name}出生了 🎉`:`${S.pet.name}升到 Lv.${after}「${LV_TITLE[after-1]}」！`);}
+  return after>before;
+}
+function feed(f){
+  if(balance()<f.c){toast("星星不夠喔");return;}
+  S.spent+=f.c;
+  const up=growPet(f.x);
+  if(!up){renderPet();bounce();hearts(4,f.e);const s=$("#say");if(s)s.textContent=pick([`好好吃！謝謝你 ${f.e}`,"吃飽飽，好開心！","嗯～還想再吃！","我覺得自己變大了一點！"]);}
+}
+
+/* ===================== 翻牌配對 ===================== */
+let G=null;
+function startGame(mode){
+  if(balance()<GAME_COST){toast("星星不夠喔");return;}
+  // 抽 6 個字，注音／部首不能重複，避免配對有兩種答案
+  const all=shuffle(Object.values(CHARS).flat());const used=new Set(),pairs=[];
+  for(const c of all){const key=mode==="zy"?c[1]:c[2];if(used.has(key))continue;used.add(key);pairs.push(c);if(pairs.length===6)break;}
+  S.spent+=GAME_COST;S.games=(S.games||0)+1;save();
+  const cards=[];pairs.forEach((c,i)=>{cards.push({p:i,t:c[0],z:false});cards.push({p:i,t:mode==="zy"?c[1]:radShow(c[2])+"部",z:true});});
+  G={mode,cards:shuffle(cards),open:[],done:new Set(),moves:0,lock:false,pairs};
+  renderPetTopOnly();renderGame();
+  const gh=$("#gameHost");if(gh)gh.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function renderPetTopOnly(){const w=document.querySelector("#v-pet .wallet b");if(w)w.textContent=balance();document.querySelectorAll("#gZy,#gBs").forEach(b=>b.disabled=true);}
+function renderGame(){
+  const h=$("#gameHost");if(!h||!G)return;
+  h.innerHTML=`<div class="muted" style="margin:10px 0 6px">${G.mode==="zy"?"把「字」和它的「注音」配成一對":"把「字」和它的「部首」配成一對"}・翻了 ${G.moves} 次</div>
+  <div class="board">${G.cards.map((c,i)=>{const up=G.open.includes(i)||G.done.has(c.p);const cls="cardf"+(up?" up":"")+(G.done.has(c.p)?" done":"")+(c.z?" zy":"")+(c.miss?" miss":"");return `<button class="${cls}" data-i="${i}">${up?c.t:"？"}</button>`;}).join("")}</div>`;
+  h.querySelectorAll(".cardf").forEach(b=>b.onclick=()=>flip(+b.dataset.i));
+}
+function flip(i){
+  if(!G||G.lock)return;const c=G.cards[i];
+  if(G.done.has(c.p)||G.open.includes(i))return;
+  G.open.push(i);
+  if(G.open.length===2){
+    G.moves++;const [a,b]=G.open.map(k=>G.cards[k]);
+    if(a.p===b.p){G.done.add(a.p);G.open=[];
+      if(G.done.size===G.pairs.length){renderGame();winGame();return;}
+    }else{G.lock=true;a.miss=b.miss=true;renderGame();setTimeout(()=>{a.miss=b.miss=false;G.open=[];G.lock=false;renderGame();},900);return;}
+  }
+  renderGame();
+}
+function winGame(){
+  const moves=G.moves,mode=G.mode,pairs=G.pairs;G=null;
+  const great=moves<=10;
+  const up=growPet(great?25:15);
+  confetti();
+  if(!up)renderPet();
+  const h=$("#gameHost");
+  if(h)h.innerHTML=`<div class="fb ok pop" style="text-align:center"><div style="font-size:40px">🏆</div><b>過關了！只翻了 ${moves} 次</b><br>${great?"翻得超準！成長 +25":"成長 +15"}<br><span class="muted">${pairs.map(c=>`${c[0]} ${mode==="zy"?c[1]:radShow(c[2])+"部"}`).join("、")}</span></div>`;
+  if(h)h.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+/* ===================== 家長獎勵 ===================== */
+function renderRewardsInto(h,beforePet){
+  const div=document.createElement("div");div.className="card";
+  const list=S.rewards||[];
+  div.innerHTML=`<h2>🎁 爸媽的獎勵</h2>${list.length?list.map(r=>{const got=S.redeemed.includes(r.id),ready=S.stars>=r.need&&!got,p=Math.min(100,Math.round(S.stars/r.need*100));
+    return `<div class="reward ${ready?"ready":""}"><b>${got?"✅ ":ready?"🎉 ":""}${esc(r.name)}</b>　<span class="muted">累積 ⭐${r.need}</span>
+      ${got?`<div class="muted">已經兌換過了</div>`:ready?`<div>達成了！拿給爸媽看，請他們按確認 👇</div><button class="btn" style="margin-top:6px;font-size:16px;padding:8px 14px" data-r="${r.id}">家長確認兌換</button><div class="gateBox"></div>`:`<div class="bar"><i style="width:${p}%"></i></div><div class="muted">還差 ${r.need-S.stars} 顆星</div>`}</div>`;}).join(""):`<div class="muted">爸媽還沒設定獎勵。請爸媽到「首頁 → 給家長 → 設定實體獎勵」新增。</div>`}
+    <div class="muted" style="margin-top:6px">獎勵看「累積拿到的星星」，餵寵物花掉的星星不會扣。</div>`;
+  h.appendChild(div);
+  div.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{
+    const box=b.nextElementSibling;parentGate(box,()=>{S.redeemed.push(b.dataset.r);save();confetti();toast("兌換成功！");renderPet();});});
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function parentGate(box,ok){
+  const a=12+Math.floor(Math.random()*8),b=13+Math.floor(Math.random()*7);
+  box.innerHTML=`<div class="gate"><div>家長驗證：${a} × ${b} = ？</div><div class="row" style="margin-top:6px"><input class="txt" style="flex:1;min-width:0" inputmode="numeric" id="gateIn"><button class="btn" id="gateOk">確定</button></div></div>`;
+  box.querySelector("#gateOk").onclick=()=>{if(+box.querySelector("#gateIn").value===a*b){box.innerHTML="";ok();}else toast("答案不對喔");};
+}
+let rewardOpen=false;
+function renderRewardEditor(){
+  const ed=$("#rewardEditor");
+  ed.innerHTML=`<div class="gate"><b>實體獎勵設定</b><div class="muted">孩子「累積拿到的星星」達到門檻就能兌換。參考：每天認真練大約可拿 20～40 顆星。</div>
+    ${(S.rewards||[]).map(r=>`<div class="row" style="justify-content:space-between;margin-top:8px"><span>${esc(r.name)}（⭐${r.need}）${S.redeemed.includes(r.id)?"✅":""}</span><button class="chip" data-del="${r.id}">刪除</button></div>`).join("")}
+    <div style="margin-top:10px"><input class="txt" id="rwName" placeholder="獎勵內容，例如：看卡通 20 分鐘"></div>
+    <div class="row" style="margin-top:8px"><input class="txt" id="rwNeed" inputmode="numeric" placeholder="需要幾顆星，例如 50" style="flex:1;min-width:0"><button class="btn" id="rwAdd">新增</button></div>
+    <div style="margin-top:8px"><button class="btn ghost" id="rwClose">完成</button></div></div>`;
+  ed.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{S.rewards=S.rewards.filter(r=>r.id!==b.dataset.del);save();renderRewardEditor();});
+  ed.querySelector("#rwAdd").onclick=()=>{const n=ed.querySelector("#rwName").value.trim(),k=parseInt(ed.querySelector("#rwNeed").value,10);
+    if(!n||!(k>0)){toast("請填獎勵內容和星星數");return;}S.rewards.push({id:"r"+Date.now(),name:n,need:k});save();renderRewardEditor();toast("已新增獎勵");};
+  ed.querySelector("#rwClose").onclick=()=>{ed.innerHTML="";rewardOpen=false;};
+}
+$("#rewardSetBtn").onclick=()=>parentGate($("#rewardEditor"),renderRewardEditor);
+let notified=new Set();
+function checkRewards(){(S.rewards||[]).forEach(r=>{if(S.stars>=r.need&&!S.redeemed.includes(r.id)&&!notified.has(r.id)){notified.add(r.id);setTimeout(()=>{toast(`🎁 達成獎勵「${r.name}」！到寵物頁找爸媽兌換`);confetti();},600);}});}
+(S.rewards||[]).forEach(r=>{if(S.stars>=r.need)notified.add(r.id);});
 
 /* ===================== 深淺色 ===================== */
 (function(){
