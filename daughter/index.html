@@ -283,6 +283,7 @@ button.stk:active,.press:active{transform:translateY(4px);box-shadow:0 2px 0 var
 body[data-skin="dino"]{--bg:#F0F7E6;--berry:#E46F3A;--mint:#CDEBB5;--butter:#FFE29A;--pink:#F7CDAE;--lilac:#DCEBC8;--sky:#CFEAF5;--peach:#E7D3AE;--dot:#DCEAC6}
 body[data-skin="space"]{--bg:#EEF1FB;--berry:#FF7A59;--mint:#C9E4FF;--butter:#FFE08A;--pink:#FFCFC2;--lilac:#DAD3FF;--sky:#CFDAFF;--roomsky:#34407A;--peach:#B9C3E6;--dot:#D8DEF5}
 body[data-skin="space"] .window{background:#1F2752}
+body[data-skin="race"]{--bg:#F4F3EE;--berry:#E63946;--mint:#BFE3D0;--butter:#FFD166;--pink:#FFC9B9;--lilac:#D6DCE8;--sky:#BFD9F2;--peach:#C9CBD2;--dot:#E3E1D9}
 
 /* ---------- home extras ---------- */
 .lvchip{font-size:16px;background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:3px 12px;white-space:nowrap}
@@ -332,7 +333,7 @@ body[data-skin="space"] .window{background:#1F2752}
 .setsec{padding:18px 22px;display:flex;flex-direction:column;gap:12px}
 .setsec h2{margin:0;font-size:24px}
 .setsec p{margin:0;font-size:17px;line-height:1.6}
-.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .choice{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px;border-radius:22px;text-align:center}
 .choice .ch{width:90px}
 .choice b{font-size:21px}
@@ -396,7 +397,10 @@ const CH = {
   longneck:{name:'長長',kind:'長脖子龍',body:'#A9D8F2',inner:'#7FBFE3'},
   rocket:{name:'咻咻',kind:'小火箭',body:'#FFF0F0',inner:'#FF6B6B'},
   alien:{name:'嗶嗶',kind:'外星寶寶',body:'#B7F0C4',inner:'#FFE066'},
-  robot:{name:'嘟嘟',kind:'小機器人',body:'#D3E6FA',inner:'#9EC5EE'}
+  robot:{name:'嘟嘟',kind:'小機器人',body:'#D3E6FA',inner:'#9EC5EE'},
+  racecar:{name:'速速',kind:'小賽車',body:'#7FD3E6',inner:'#FFD166'},
+  helmet:{name:'盔盔',kind:'安全帽寶寶',body:'#FFFFFF',inner:'#E63946'},
+  trophy:{name:'杯杯',kind:'獎盃寶寶',body:'#FFD54A',inner:'#F2A900'}
 };
 const THEMES = {
   sweet:{name:'甜心小鎮', icon:'🌸', town:'甜心小鎮', chars:['bunny','bear','duck'], win:'☁️', shelf:'🌷🧸',
@@ -404,7 +408,9 @@ const THEMES = {
   dino:{name:'恐龍探險隊', icon:'🦖', town:'恐龍谷', chars:['tri','rex','longneck'], win:'🌋', shelf:'🦴🌿',
     stickers:['🦕','🦖','🌋','🥚','🦴','🌿','🌴','🐊','🦎','🐢','🍃','🌵','🍄','🪨','🌲','🐾','☄️','🏔️','🌊','🐚','🦀','🐌','🌞','🌈']},
   space:{name:'太空車車站', icon:'🚀', town:'星星站', chars:['rocket','alien','robot'], win:'🪐', shelf:'🔭🛸',
-    stickers:['🚀','🛸','🪐','🌙','⭐','☄️','🌍','🌕','🛰️','👽','🤖','🔭','🌌','✨','🚗','🚌','🚒','🚓','🚑','🚜','🚂','🚁','✈️','🏎️']}
+    stickers:['🚀','🛸','🪐','🌙','⭐','☄️','🌍','🌕','🛰️','👽','🤖','🔭','🌌','✨','🚗','🚌','🚒','🚓','🚑','🚜','🚂','🚁','✈️','🏎️']},
+  race:{name:'賽車大道', icon:'🏎️', town:'賽車場', chars:['racecar','helmet','trophy'], win:'🏁', shelf:'🏆🚦',
+    stickers:['🏎️','🏁','🏆','🚦','🚗','🚙','🚓','🚒','🚑','🚕','🚌','🚜','⛽','🔧','🔩','🥇','🥈','🥉','🚨','🛣️','🏍️','🛵','🚲','🎖️']}
 };
 const LVN = ['','🌱 小芽','🌿 小樹','🌳 大樹'];
 const LVD = ['',
@@ -502,7 +508,7 @@ const WORDS = {
 };
 const CVC = [['cat','🐱'],['dog','🐶'],['pig','🐷'],['sun','☀️'],['bus','🚌'],['hat','🎩'],['bed','🛏️'],['cup','🥤'],['box','📦'],['fox','🦊'],['hen','🐔'],['egg','🥚'],['car','🚗'],['ant','🐜'],['bee','🐝'],['cow','🐮'],['owl','🦉'],['map','🗺️']];
 const STICKERS_LEN = 24;
-const ODD_PAIRS = [['🐶','🐱'],['🍎','🍌'],['⭐','🌙'],['🚗','🚌'],['🌸','🌻'],['🐟','🐢'],['🍓','🍒'],['🐰','🐻'],['🍦','🍩'],['🐥','🐸'],['🦕','🦖'],['🚀','🛸']];
+const ODD_PAIRS = [['🐶','🐱'],['🍎','🍌'],['⭐','🌙'],['🚗','🚌'],['🌸','🌻'],['🐟','🐢'],['🍓','🍒'],['🐰','🐻'],['🍦','🍩'],['🐥','🐸'],['🦕','🦖'],['🚀','🛸'],['🏎️','🚓']];
 const FOODS = [
   {e:'🍎',n:'蘋果',p:1,f:18,x:1},{e:'🥕',n:'紅蘿蔔',p:1,f:18,x:1},
   {e:'🍓',n:'草莓',p:1,f:16,x:1},{e:'🍰',n:'蛋糕',p:2,f:32,x:2}
@@ -549,7 +555,7 @@ const todayStr = () => { const d=new Date(); return d.getFullYear()+'-'+(d.getMo
 const KEY = 'yunduo-learning-v1';
 let S = load();
 function load(){
-  const d = {stars:5, stk:{sweet:[],dino:[],space:[]}, pets:[], partner:'', closet:[], room:'home', lvq:null, today:0, day:'', sound:true, voice:'', rate:.95,
+  const d = {stars:5, stk:{sweet:[],dino:[],space:[],race:[]}, pets:[], partner:'', closet:[], room:'home', lvq:null, today:0, day:'', sound:true, voice:'', rate:.95,
              theme:'sweet', level:1, autoLv:true, hist:[], sug:''};
   try {
     const r = localStorage.getItem(KEY);
@@ -560,7 +566,7 @@ function load(){
       if(o.pet && !o.pets){ o.pets=[{kind:o.pet.kind, exp:o.pet.exp||0, full:o.pet.full??70, happy:o.pet.happy??70, t:o.pet.t||Date.now(), wear:o.pet.wear||{}}]; o.partner=o.pet.kind; o.closet=o.pet.owned||[]; }
       delete o.pet;
       const m = Object.assign(d, o);
-      m.stk = Object.assign({sweet:[],dino:[],space:[]}, m.stk||{});
+      m.stk = Object.assign({sweet:[],dino:[],space:[],race:[]}, m.stk||{});
       if(!THEMES[m.theme]) m.theme='sweet';
       if(![1,2,3].includes(m.level)) m.level=1;
       return m;
@@ -749,6 +755,39 @@ function charSVG(k, mood='open'){
       `<rect x="14" y="28" width="92" height="80" rx="24" fill="${c.body}" ${sw}/>`+
       `<rect x="26" y="42" width="68" height="54" rx="16" fill="#fff" stroke="${INK}" stroke-width="2"/>`+
       face(60,64,.82,mood));
+  }
+  if(k==='racecar'){
+    return wrap(
+      `<rect x="8" y="82" width="20" height="30" rx="8" fill="#3A3F5C" ${sw}/><rect x="92" y="82" width="20" height="30" rx="8" fill="#3A3F5C" ${sw}/>`+
+      `<rect x="22" y="14" width="76" height="9" rx="4" fill="${c.inner}" ${sw}/><path d="M34 23 V30 M86 23 V30" stroke="${INK}" stroke-width="3"/>`+
+      `<path d="M30 56 L40 30 H80 L90 56 Z" fill="#E4F6FB" ${sw} stroke-linejoin="round"/>`+
+      `<path d="M46 34 L42 52 M54 34 L52 44" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`+
+      `<rect x="14" y="54" width="92" height="52" rx="22" fill="${c.body}" ${sw}/>`+
+      `<rect x="53" y="54" width="14" height="52" fill="${c.inner}"/>`+
+      `<rect x="14" y="54" width="92" height="52" rx="22" fill="none" ${sw}/>`+
+      face(60,76,.82,mood));
+  }
+  if(k==='helmet'){
+    return wrap(feet+
+      `<path d="M12 92 C10 40 36 12 62 12 C90 12 110 38 110 76 L108 98 L14 98 Z" fill="${c.body}" ${sw} stroke-linejoin="round"/>`+
+      `<path d="M52 13 C54 30 54 40 52 50 M70 13 C68 30 68 40 70 50" stroke="${c.inner}" stroke-width="8" fill="none"/>`+
+      `<rect x="22" y="48" width="80" height="40" rx="18" fill="#3A3F5C" ${sw}/>`+
+      `<path d="M30 56 Q36 52 44 52" stroke="#8FA0D8" stroke-width="3" fill="none" stroke-linecap="round"/>`+
+      (mood==='happy'||mood==='eat'
+        ? `<path d="M40 70 Q46 62 52 70 M68 70 Q74 62 80 70" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>`
+        : `<ellipse cx="46" cy="67" rx="4.5" ry="6" fill="#fff"/><ellipse cx="74" cy="67" rx="4.5" ry="6" fill="#fff"/>`)+
+      (mood==='eat' ? `<ellipse cx="60" cy="80" rx="5" ry="4" fill="#FF9DBF"/>` : mood==='sad' ? `<path d="M54 82 Q60 77 66 82" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>` : `<path d="M54 78 Q60 84 66 78" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>`)+
+      `<ellipse cx="32" cy="80" rx="6" ry="4" fill="#FF9DBF" opacity=".8"/><ellipse cx="88" cy="80" rx="6" ry="4" fill="#FF9DBF" opacity=".8"/>`);
+  }
+  if(k==='trophy'){
+    return wrap(
+      `<path d="M28 28 C8 28 8 58 32 60 M92 28 C112 28 112 58 88 60" stroke="${INK}" stroke-width="9" fill="none" stroke-linecap="round"/>`+
+      `<path d="M28 28 C8 28 8 58 32 60 M92 28 C112 28 112 58 88 60" stroke="${c.body}" stroke-width="4" fill="none" stroke-linecap="round"/>`+
+      `<rect x="50" y="82" width="20" height="14" fill="${c.inner}" ${sw}/>`+
+      `<rect x="30" y="94" width="60" height="18" rx="5" fill="${c.inner}" ${sw}/><path d="M52 103 h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`+
+      `<path d="M24 14 H96 C96 60 82 84 60 84 C38 84 24 60 24 14 Z" fill="${c.body}" ${sw} stroke-linejoin="round"/>`+
+      `<path d="M34 22 C34 40 38 52 44 60" stroke="#FFF3B0" stroke-width="5" fill="none" stroke-linecap="round"/>`+
+      face(60,46,.8,mood));
   }
   // 甜心小鎮三隻
   let back='', mouthPart='';
@@ -1680,7 +1719,7 @@ function help(){
       <h2>寵物家族和等級</h2>
       <ul>
         <li><b>怎麼長大：</b>夥伴寵物每答對一題 +1、完成一回合貼紙大冒險 +2、描好一個新的字 +1；餵食和玩球也會長大（吃飽、玩夠了就不會再加）。</li>
-        <li><b>多養幾隻：</b>最新領養的寵物長到 Lv.${ADOPT_LV}，就能再領養一隻。九種角色每種可以養一隻，不限目前的主題。</li>
+        <li><b>多養幾隻：</b>最新領養的寵物長到 Lv.${ADOPT_LV}，就能再領養一隻。每種角色可以養一隻，不限目前的主題。</li>
         <li><b>夥伴：</b>點寵物家族裡的任何一隻，就能換牠當夥伴。只有夥伴會慢慢變餓、變無聊；其他寵物在家休息，數值不會下降，也不會生病或離開。</li>
         <li><b>衣櫃共用：</b>配件買過一次，每隻寵物都能戴。</li>
         <li><b>大約多久：</b>每天玩 15 分鐘，一隻寵物大約 2～3 個月到 Lv.10，Lv.20 要更久。</li>
