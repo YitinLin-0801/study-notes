@@ -358,7 +358,7 @@ body[data-skin="space"] .window{background:#1F2752}
 .fam.add{justify-content:center;background:var(--butter)}
 .fam.add.locked{background:#EFE8EC}
 .fam .plus{font-size:40px;line-height:1.1}
-.room{height:clamp(360px,calc(100vh - 270px),620px) !important;background:linear-gradient(var(--roomsky,var(--sky)) 0 60%,var(--floor,var(--peach)) 60%) !important}
+.room{height:clamp(360px,calc(100vh - 300px),560px) !important;background:linear-gradient(var(--roomsky,var(--sky)) 0 60%,var(--floor,var(--peach)) 60%) !important}
 .petwrap.gold .petbody,.lvfig.gold .petbody{filter:drop-shadow(0 0 8px #FFD54A) drop-shadow(0 0 3px #FFB300)}
 .lvfig{width:170px;position:relative;margin-top:10px}
 .lvfig .ch{width:100% !important}
@@ -374,6 +374,9 @@ body[data-skin="space"] .window{background:#1F2752}
 .adopt{justify-content:flex-start !important}
 .athead{margin:6px 0 0;font-size:22px;width:100%;max-width:880px}
 .acard.owned{opacity:.5;box-shadow:none}
+.famhead{margin:14px 0 0;font-size:20px}
+.petleft{min-width:0;display:flex;flex-direction:column}
+.family{flex-wrap:wrap;overflow:visible}
 </style>
 
 </head>
@@ -396,7 +399,7 @@ const CH = {
   robot:{name:'嘟嘟',kind:'小機器人',body:'#D3E6FA',inner:'#9EC5EE'}
 };
 const THEMES = {
-  sweet:{name:'甜心小鎮', icon:'🌸', town:'甜心小鎮', chars:['bunny','bear','duck'], win:'☁️', shelf:'🪴🧸',
+  sweet:{name:'甜心小鎮', icon:'🌸', town:'甜心小鎮', chars:['bunny','bear','duck'], win:'☁️', shelf:'🌷🧸',
     stickers:['🌈','⭐','🌸','🍓','🦄','🍭','🧁','🎈','🌙','☀️','🍀','🦋','🐳','🍉','🎀','🌻','🍩','🐞','🍦','🎠','🐣','🍒','🌷','🐬']},
   dino:{name:'恐龍探險隊', icon:'🦖', town:'恐龍谷', chars:['tri','rex','longneck'], win:'🌋', shelf:'🦴🌿',
     stickers:['🦕','🦖','🌋','🥚','🦴','🌿','🌴','🐊','🦎','🐢','🍃','🌵','🍄','🪨','🌲','🐾','☄️','🏔️','🌊','🐚','🦀','🐌','🌞','🌈']},
@@ -1365,8 +1368,8 @@ function pet(){
   applySkin(); decay();
   const p=P(), rs=roomStyle();
   render(`${topBar('寵物家族')}
-  ${familyHTML()}
   <main class="petpage">
+    <div class="petleft">
     <section class="stk room" style="${rs.style}">
       <div class="window"><i>${rs.win}</i></div><div class="shelf">${rs.shelf}</div>
       <div class="pbub" id="pbub">${petMsg()}</div>
@@ -1375,6 +1378,9 @@ function pet(){
         <div class="petbody" id="petbody">${petInner(p, p.full<45||p.happy<45?'sad':'open')}</div>
       </button>
     </section>
+    <h3 class="famhead">我的寵物家族（點一下換夥伴）</h3>
+    ${familyHTML()}
+    </div>
     <section class="stk panel" id="panel">${panelHTML()}</section>
   </main>`);
   if(S.lvq) setTimeout(showLvUp,300);
