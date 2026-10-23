@@ -102,6 +102,13 @@ textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px
 .petPick button{border:2px solid var(--line);background:var(--card);border-radius:16px;padding:4px 0 6px;cursor:pointer;color:var(--ink);font-family:inherit}
 .petPick button svg{width:100%;max-width:96px;height:auto;display:block;margin:0 auto}
 .pickKind{font-weight:700;margin:12px 0 6px}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.slot{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:4px 2px;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:96px;cursor:pointer;min-width:0}
+.slot svg{width:100%;max-width:52px;height:auto}
+.slot small{font-size:12px;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot.on{border-color:var(--brand);background:var(--brand-soft)}
+.slot.add{border-style:dashed;color:var(--brand)}
+.slot.lock{opacity:.5;cursor:default;background:var(--chip)}
 .petEmoji svg{display:block;width:100%;height:auto}
 #petTabIcon svg{width:26px;height:26px;display:block;margin:0 auto}
 .petPick button small{display:block;font-size:15px}
@@ -581,9 +588,17 @@ function optsOf(q){return shuffle([q.a,...(q.gen?q.gen():q.o)]);}
 /* ===================== 紀錄 ===================== */
 const KEY="son-guoyu-3a-v1";
 /* stars：累積得到的星星（家長獎勵看這個）；spent：花在寵物和遊戲的星星 */
-function freshState(){return {rec:{},stars:0,weak:[],spent:0,pet:null,rewards:[],redeemed:[],games:0};}
+function plainState(){return {rec:{},stars:0,weak:[],spent:0,pets:[],active:0,rewards:[],redeemed:[],games:0};}
+/* S.pet 永遠指向「目前陪伴的寵物」，不會另外存檔 */
+function setupState(st){
+  if(st.pet&&(!st.pets||!st.pets.length))st.pets=[st.pet];
+  delete st.pet;if(!Array.isArray(st.pets))st.pets=[];
+  st.active=Math.max(0,Math.min(st.active||0,st.pets.length-1));
+  Object.defineProperty(st,"pet",{configurable:true,enumerable:false,get(){return this.pets[this.active]||null;},set(x){}});
+  return st;}
+function freshState(){return setupState(plainState());}
 let S=freshState();
-function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);S=Object.assign(freshState(),p);}}catch(e){}}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);S=setupState(Object.assign(plainState(),p));}}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}renderTop();}
 load();
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();};
@@ -830,7 +845,7 @@ $("#copyWrongBtn").onclick=()=>{
   copyText(t,"錯題清單已複製");
 };
 $("#importBtn").onclick=()=>{
-  try{const p=JSON.parse(decodeURIComponent(escape(atob($("#importBox").value.trim()))));if(!p||typeof p.rec!=="object")throw 0;S=Object.assign(freshState(),p);save();renderHome();$("#importBox").value="";toast("匯入成功！");}
+  try{const p=JSON.parse(decodeURIComponent(escape(atob($("#importBox").value.trim()))));if(!p||typeof p.rec!=="object")throw 0;S=setupState(Object.assign(plainState(),p));save();renderHome();$("#importBox").value="";toast("匯入成功！");}
   catch(e){toast("備份碼不正確");}
 };
 let resetArm=false;
@@ -1041,45 +1056,70 @@ function eggSVG(kind,vi,size){const v=KINDS[kind].variants[vi];const c=v.c||(kin
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${size}" height="${size}"><path d="M100 22 C140 22 168 92 166 128 C164 166 136 186 100 186 C64 186 36 166 34 128 C32 92 60 22 100 22 Z" fill="#fffaf0" stroke="${OL}" stroke-width="3.2"/><ellipse cx="78" cy="96" rx="12" ry="9" fill="${c}" opacity=".8"/><ellipse cx="124" cy="128" rx="15" ry="11" fill="${c}" opacity=".8"/><ellipse cx="90" cy="152" rx="8" ry="6" fill="${c}" opacity=".8"/><ellipse cx="122" cy="74" rx="7" ry="5" fill="${c}" opacity=".8"/><path d="M70 60 Q76 46 88 40" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".9"/></svg>`;}
 function petPickerHTML(selK,selV){return Object.keys(KINDS).map(k=>`<div class="pickKind">${KINDS[k].name}</div><div class="petPick">${KINDS[k].variants.map((v,i)=>`<button data-k="${k}" data-v="${i}" class="${k===selK&&i===selV?"on":""}">${petSVG(k,i,{size:96})}<small>${v.name}</small></button>`).join("")}</div>`).join("");}
 const curV=()=>S.pet&&KINDS[S.pet.k]?(S.pet.v||0):0;
-const LV_XP=[0,20,60,120,200,300,430,600,800,1050];
-const LV_TITLE=["神秘的蛋","剛出生的寶寶","小不點","活潑寶寶","國語小幫手","生字小達人","注音高手","部首博士","課文大師","國語之王"];
-const LV_DECO=["","","🌱","🌱🌼","🌼🎀🌼","🌈🎀🌈","🌟🎀🌟","🏅🎀🏅","🎓🌟🎓","👑✨👑"];
+const MAX_LV=50;
+const needXP=l=>15+14*l; // 從 l 級升到 l+1 級需要的成長值
+const LV_TITLE=["剛出生的寶寶","小不點","活潑寶寶","國語小幫手","生字小達人","注音高手","部首博士","課文大師","國語王子","國語之王"];
+const lvTitle=l=>l===1?"神秘的蛋":LV_TITLE[Math.min(9,Math.floor((l-1)/5))];
+const LV_DECO=["","🌱","🌱🌼","🌼🎀🌼","🌈🎀🌈","🌟🎀🌟","🏅🎀🏅","🎓🌟🎓","💎🎓💎","👑✨👑"];
+const lvDeco=l=>l===1?"":LV_DECO[Math.min(9,Math.floor((l-1)/5))];
 const FOODS=[{e:"🍪",n:"小餅乾",c:1,x:5},{e:"🍙",n:"飯糰",c:3,x:18},{e:"🍰",n:"蛋糕",c:5,x:32},{e:"🍱",n:"豪華便當",c:10,x:70}];
 const GAME_COST=5;
 const TALK=["今天也要一起練國語喔！","摸摸我～好舒服 😊","你答對的時候我最開心了！","我想吃蛋糕 🍰","多練幾題，我就會長大喔！","不熟的題目，我們一起打敗它！","你是我最好的朋友 💛"];
-function petLevel(){const xp=S.pet?S.pet.xp:0;let lv=1;LV_XP.forEach((t,i)=>{if(xp>=t)lv=i+1;});const next=LV_XP[lv]||null;return {lv,xp,cur:LV_XP[lv-1],next};}
+function petLevel(pt){pt=pt||S.pet;const xp=pt?pt.xp:0;let lv=1,cur=0;while(lv<MAX_LV&&xp>=cur+needXP(lv)){cur+=needXP(lv);lv++;}return {lv,xp,cur,next:lv<MAX_LV?cur+needXP(lv):null};}
+/* 寵物欄位：最高等級到 10／20／30／40 各多開一格，最多 5 隻 */
+const UNLOCK=[10,20,30,40];
+function petSlots(){const m=Math.max(0,...S.pets.map(x=>petLevel(x).lv));return Math.min(5,1+UNLOCK.filter(t=>m>=t).length);}
+let adding=false;
+function petBarHTML(){
+  if(!S.pets.length)return "";
+  const slots=petSlots();let html="";
+  for(let i=0;i<5;i++){
+    const pt=S.pets[i];
+    if(pt){const l=petLevel(pt).lv;html+=`<button class="slot ${i===S.active&&!adding?"on":""}" data-i="${i}">${l===1?eggSVG(pt.k,pt.v||0,52):petSVG(pt.k,pt.v||0,{size:52})}<small>${esc(pt.name)}</small><small>Lv.${l}</small></button>`;}
+    else if(i<slots)html+=`<button class="slot add ${adding?"on":""}" data-add="1"><span style="font-size:30px">＋</span><small>新寵物</small></button>`;
+    else html+=`<div class="slot lock"><span style="font-size:24px">🔒</span><small>Lv.${UNLOCK[i-1]}</small><small>解鎖</small></div>`;
+  }
+  return `<div class="card"><h2>🏡 我的寵物</h2><div class="slots">${html}</div><div class="muted" style="margin-top:6px">點寵物可以切換誰陪你練習。任一隻寵物到 Lv.10、20、30、40，就能多養一隻（最多 5 隻）。</div></div>`;
+}
+function bindPetBar(h){
+  h.querySelectorAll(".slot[data-i]").forEach(b=>b.onclick=()=>{S.active=+b.dataset.i;adding=false;save();renderPet();window.scrollTo(0,0);});
+  h.querySelectorAll(".slot[data-add]").forEach(b=>b.onclick=()=>{adding=true;renderPet();});
+}
 function daysSince(d){if(!d)return 99;const [y,m,dd]=d.split("-").map(Number);return Math.floor((new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())-new Date(y,m-1,dd))/864e5);}
 let petPickTmp={k:"cat",v:0};
 function renderPet(){
   const h=$("#petHost");
-  if(!S.pet){
-    h.innerHTML=`<div class="card"><h2>🥚 領養一隻寵物</h2><div class="muted">答對題目拿到的星星，可以餵寵物、讓牠長大！先選一隻吧（共 24 款）：</div>
+  if(!S.pet||adding){
+    h.innerHTML=petBarHTML()+`<div class="card"><h2>🥚 領養${S.pets.length?"新的":"一隻"}寵物</h2><div class="muted">答對題目拿到的星星，可以餵寵物、讓牠長大！先選一隻吧（共 24 款）：</div>
       <div style="margin-top:4px">${petPickerHTML(petPickTmp.k,petPickTmp.v)}</div>
       <div style="margin-top:12px"><input class="txt" id="petName" maxlength="8" placeholder="幫牠取名字（例如：小黃）"></div>
-      <div style="margin-top:12px"><button class="btn wide" id="adopt">領養 💛</button></div></div>`;
+      <div style="margin-top:12px"><button class="btn wide" id="adopt">領養 💛</button></div>
+      ${S.pets.length?`<div style="margin-top:8px"><button class="btn ghost wide" id="cancelAdopt">先不要</button></div>`:""}</div>`;
+    bindPetBar(h);
+    const ca=h.querySelector("#cancelAdopt");if(ca)ca.onclick=()=>{adding=false;renderPet();};
     h.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{petPickTmp={k:b.dataset.k,v:+b.dataset.v};h.querySelectorAll(".petPick button").forEach(x=>x.classList.toggle("on",x===b));});
     h.querySelector("#adopt").onclick=()=>{const nm=(h.querySelector("#petName").value||"").trim()||KINDS[petPickTmp.k].variants[petPickTmp.v].name;
-      S.pet={k:petPickTmp.k,v:petPickTmp.v,name:nm,xp:0,fed:null};save();renderPet();toast("領養成功！快餵牠讓蛋孵化 🥚");};
+      S.pets.push({k:petPickTmp.k,v:petPickTmp.v,name:nm,xp:0,fed:null});S.active=S.pets.length-1;adding=false;save();renderPet();window.scrollTo(0,0);toast("領養成功！快餵牠讓蛋孵化 🥚");};
     renderRewardsInto(h,true);
     return;
   }
   if(!KINDS[S.pet.k]){S.pet.k="cat";S.pet.v=0;}
   const L=petLevel();
-  const size=L.lv===1?120:110+L.lv*11;
+  const size=L.lv===1?120:Math.round(120+L.lv*2.2);
   const art=L.lv===1?eggSVG(S.pet.k,curV(),size):petSVG(S.pet.k,curV(),{size});
   const pct=L.next?Math.round((L.xp-L.cur)/(L.next-L.cur)*100):100;
   const ds=daysSince(S.pet.fed);
   const say=L.lv===1?"蛋裡好像有東西在動……餵我就會孵化！":ds>=3?`${S.pet.name}好想你 🥺 快來練習、餵我吃東西！`:pick(TALK);
   const bal=balance();
-  h.innerHTML=`<div class="card">
+  h.innerHTML=petBarHTML()+`<div class="card">
     <div class="petStage" id="stage">
-      <div class="petDeco">${LV_DECO[L.lv-1]}</div>
+      <div class="petDeco">${lvDeco(L.lv)}</div>
       <div class="petEmoji" id="petE" style="width:${size}px">${art}</div>
-      <div><b style="font-size:20px">${S.pet.name}</b>　<span class="tag">Lv.${L.lv} ${LV_TITLE[L.lv-1]}</span></div>
+      <div><b style="font-size:20px">${S.pet.name}</b>　<span class="tag">Lv.${L.lv} ${lvTitle(L.lv)}</span></div>
       <div class="bubble" id="say">${say}</div>
     </div>
     <div class="bar" style="height:14px;margin-top:10px"><i style="width:${pct}%"></i></div>
-    <div class="muted" style="text-align:center">${L.next?`成長值 ${L.xp} / ${L.next}，再 ${L.next-L.xp} 點升到 Lv.${L.lv+1}`:"已經是最高等級，太厲害了！👑"}</div>
+    <div class="muted" style="text-align:center">${L.next?`成長值 ${L.xp} / ${L.next}，再 ${L.next-L.xp} 點升到 Lv.${L.lv+1}`:"已經是最高等級 Lv.50，太厲害了！👑"}</div>
   </div>
   <div class="card"><div class="wallet"><div><b>${bal}</b>可以用的星星</div><div><b>${S.stars}</b>累積拿到的星星</div></div>
     <div class="muted" style="text-align:center;margin-top:6px">答對題目拿星星（同一題一天拿一次）</div></div>
@@ -1094,6 +1134,7 @@ function renderPet(){
   </div>
   <div class="card"><div class="row"><button class="btn ghost" id="rename">改名字</button><button class="btn ghost" id="repick">換寵物／換造型</button></div>
     <div class="muted" style="margin-top:6px">換寵物或換造型都會保留等級。</div></div>`;
+  bindPetBar(h);
   h.querySelector("#petE").onclick=()=>{bounce();hearts(3);h.querySelector("#say").textContent=pick(TALK);};
   h.querySelectorAll(".food").forEach(b=>b.onclick=()=>feed(FOODS[+b.dataset.i]));
   h.querySelector("#gZy").onclick=()=>startGame("zy");
@@ -1108,9 +1149,10 @@ function bounce(){const e=$("#petE");if(!e)return;e.classList.remove("bounce");v
 function hearts(n,ch){const st=$("#stage");if(!st)return;for(let i=0;i<n;i++){const s=document.createElement("span");s.className="heart";s.textContent=ch||pick(["💛","💕","✨","💖"]);s.style.setProperty("--dx",(Math.random()*120-60)+"px");s.style.animationDelay=(i*0.12)+"s";st.appendChild(s);setTimeout(()=>s.remove(),1600);}}
 function confetti(){for(let i=0;i<24;i++){const s=document.createElement("span");s.className="confetti";s.textContent=pick(["🎉","⭐","🎊","✨","💛"]);s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),2600);}}
 function growPet(x){
-  const before=petLevel().lv;S.pet.xp+=x;S.pet.fed=today();save();
+  const before=petLevel().lv,slotsBefore=petSlots();S.pet.xp+=x;S.pet.fed=today();save();
   const after=petLevel().lv;
-  if(after>before){renderPet();confetti();hearts(6,"⭐");toast(after===2?`蛋孵化了！${S.pet.name}出生了 🎉`:`${S.pet.name}升到 Lv.${after}「${LV_TITLE[after-1]}」！`);}
+  if(after>before){renderPet();confetti();hearts(6,"⭐");toast(after===2?`蛋孵化了！${S.pet.name}出生了 🎉`:`${S.pet.name}升到 Lv.${after}「${lvTitle(after)}」！`);
+    if(petSlots()>slotsBefore)setTimeout(()=>{toast("🎉 解鎖新的寵物欄位！可以再領養一隻");confetti();},1600);}
   return after>before;
 }
 function feed(f){
