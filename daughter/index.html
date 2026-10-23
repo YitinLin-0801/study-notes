@@ -234,6 +234,28 @@ button.stk:active,.press:active{transform:translateY(4px);box-shadow:0 2px 0 var
 .htable td.n{font-variant-numeric:tabular-nums;text-align:center}
 .helplink{align-self:center;font-size:18px;padding:8px 18px;border-radius:999px;border:2px solid var(--ink);background:var(--card)}
 
+/* recorder */
+.recintro{padding:16px 22px;display:flex;flex-direction:column;gap:6px}
+.recintro p{margin:0;font-size:18px;line-height:1.6}
+.note{font-size:16px !important;opacity:.85}
+.warn{background:#FFE3E3;border:2px solid #E5484D;border-radius:12px;padding:8px 12px}
+.reclist{display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
+.recrow{display:grid;grid-template-columns:150px minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:12px 16px;border-radius:20px;box-shadow:0 4px 0 var(--ink);text-align:left}
+.recrow.live{background:#FFE3EC}
+.vrow{grid-template-columns:minmax(0,1fr) auto}
+.rl{font-size:22px;display:flex;align-items:center;gap:8px;min-width:0}
+.rs{font-size:18px;min-width:0}
+.zyl{font-size:30px}
+.dot{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px solid var(--ink)}
+.chip{font-size:15px;border:2px solid var(--ink);border-radius:999px;padding:2px 10px;background:#fff;white-space:nowrap}
+.chip.ok{background:var(--mint)}
+.rb{display:flex;gap:8px}
+.rbtn{font-size:17px;padding:10px 14px;border-radius:999px;border:2px solid var(--ink);background:var(--card);white-space:nowrap}
+.rbtn.rec{background:var(--butter)}
+.rbtn.rec.on{background:#E5484D;color:#fff;animation:bump 1s infinite}
+.rbtn:disabled{opacity:.35}
+@media (max-width:820px){ .recrow{grid-template-columns:minmax(0,1fr) auto} .recrow .rs{grid-column:1/-1} .recrow .rb{grid-column:1/-1} }
+
 @media (max-width:820px){
   .home,.petpage{grid-template-columns:1fr}
   .petcard{min-height:240px}
@@ -324,7 +346,8 @@ const ACCS = [
 ];
 const LV = [0,6,16,32,56];
 const STAGE = ['寶寶','小可愛','好朋友','大明星','超級寶貝'];
-const PRAISE = ['答對了，好棒！','好厲害！','哇，你好聰明！','太棒了！','完全正確！'];
+const PRAISE = ['答對了！好棒喔！','哇～你好厲害！','對了對了！太棒了！','好聰明喔！','沒錯！就是這個！'];
+const RETRY = '嗯～再想想看喔';
 
 /* ===================== 小工具 ===================== */
 const $ = s => document.querySelector(s);
@@ -339,7 +362,7 @@ const todayStr = () => { const d=new Date(); return d.getFullYear()+'-'+(d.getMo
 const KEY = 'yunduo-learning-v1';
 let S = load();
 function load(){
-  const d = {stars:5, stickers:[], pet:null, today:0, day:'', sound:true};
+  const d = {stars:5, stickers:[], pet:null, today:0, day:'', sound:true, voice:'', rate:.95};
   try { const r = localStorage.getItem(KEY); if(r) return Object.assign(d, JSON.parse(r)); } catch(e){}
   return d;
 }
@@ -350,15 +373,29 @@ function checkDay(){ const t=todayStr(); if(S.day!==t){ S.day=t; S.today=0; save
 let voices = [];
 function loadVoices(){ try { voices = speechSynthesis.getVoices() || []; } catch(e){} }
 if('speechSynthesis' in window){ loadVoices(); try{ speechSynthesis.onvoiceschanged = loadVoices; }catch(e){} }
+function zhVoices(){
+  return voices.filter(v=>/^zh|cmn/i.test(v.lang));
+}
+function voiceScore(v){
+  let sc=0; const n=v.name+' '+v.lang;
+  if(/tw|hant/i.test(v.lang)) sc+=5;
+  if(/premium|enhanced|加強|高品質|進階|neural|natural|online/i.test(n)) sc+=4;
+  if(/compact|精簡/i.test(n)) sc-=2;
+  return sc;
+}
 function pickVoice(lang){
   const norm = v => v.lang.toLowerCase().replace('_','-');
   if(lang.startsWith('zh')){
-    return voices.find(v=>norm(v)==='zh-tw') || voices.find(v=>/zh.*(hant|tw)/i.test(v.lang)) || voices.find(v=>norm(v).startsWith('zh'));
+    if(S.voice){ const m=voices.find(v=>v.name===S.voice); if(m) return m; }
+    return zhVoices().slice().sort((a,b)=>voiceScore(b)-voiceScore(a))[0];
   }
-  return voices.find(v=>norm(v)==='en-us') || voices.find(v=>norm(v).startsWith('en'));
+  const en=voices.filter(v=>norm(v).startsWith('en'));
+  return en.sort((a,b)=>(/en-us/i.test(norm(b))+(/premium|enhanced|natural/i.test(b.name)?2:0))-(/en-us/i.test(norm(a))+(/premium|enhanced|natural/i.test(a.name)?2:0)))[0];
 }
+function stopAudio(){ try{ if(AUD.el){ AUD.el.pause(); } }catch(e){} }
 function say(...parts){
   if(!S.sound || !('speechSynthesis' in window)) return;
+  stopAudio();
   try {
     speechSynthesis.cancel();
     parts.forEach(p=>{
@@ -366,11 +403,58 @@ function say(...parts){
       if(!t) return;
       const u = new SpeechSynthesisUtterance(t);
       u.lang = lang; const v = pickVoice(lang); if(v) u.voice = v;
-      u.rate = lang.startsWith('en') ? .8 : .9; u.pitch = 1.15;
+      u.rate = lang.startsWith('en') ? Math.min(S.rate,.85) : S.rate; u.pitch = 1;
       speechSynthesis.speak(u);
     });
   } catch(e){}
 }
+
+/* ===================== 家長錄音（存在這台裝置的 IndexedDB） ===================== */
+const AUD = {db:null, urls:new Map(), el:null};
+function idb(){
+  return new Promise((res,rej)=>{
+    if(AUD.db) return res(AUD.db);
+    try{
+      const r=indexedDB.open('yunduo-audio',1);
+      r.onupgradeneeded=()=>r.result.createObjectStore('clips');
+      r.onsuccess=()=>{AUD.db=r.result;res(AUD.db);};
+      r.onerror=()=>rej(r.error);
+    }catch(e){rej(e);}
+  });
+}
+async function loadClips(){
+  try{
+    const db=await idb();
+    await new Promise(res=>{
+      const req=db.transaction('clips').objectStore('clips').openCursor();
+      req.onsuccess=()=>{ const c=req.result; if(c){ AUD.urls.set(c.key, URL.createObjectURL(c.value)); c.continue(); } else res(); };
+      req.onerror=()=>res();
+    });
+  }catch(e){}
+}
+async function clipSave(k,blob){
+  try{ const db=await idb(); await new Promise((res,rej)=>{ const tx=db.transaction('clips','readwrite'); tx.objectStore('clips').put(blob,k); tx.oncomplete=res; tx.onerror=()=>rej(tx.error); }); }catch(e){}
+  const old=AUD.urls.get(k); if(old) URL.revokeObjectURL(old);
+  AUD.urls.set(k, URL.createObjectURL(blob));
+}
+async function clipDel(k){
+  try{ const db=await idb(); await new Promise(res=>{ const tx=db.transaction('clips','readwrite'); tx.objectStore('clips').delete(k); tx.oncomplete=res; tx.onerror=res; }); }catch(e){}
+  const old=AUD.urls.get(k); if(old) URL.revokeObjectURL(old); AUD.urls.delete(k);
+}
+const hasClip = k => AUD.urls.has(k);
+function playClip(k, force){
+  if((!S.sound && !force) || !AUD.urls.has(k)) return false;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  try{
+    AUD.el = AUD.el || new Audio();
+    AUD.el.pause(); AUD.el.src = AUD.urls.get(k); AUD.el.currentTime = 0;
+    const pr = AUD.el.play(); if(pr && pr.catch) pr.catch(()=>{});
+    return true;
+  }catch(e){ return false; }
+}
+// 有錄音就放錄音，沒有就用機器聲音
+function speak(key, ...parts){ if(!playClip(key)) say(...parts); }
+
 let ac;
 function tone(freqs,dur=.12,type='sine',gap=.09){
   if(!S.sound) return;
@@ -543,12 +627,34 @@ function learn(w){
   <main class="lgrid ${t==='zy'?'zy':''}">${LISTS[t].map((_,i)=>cardHTML(t,i)).join('')}</main>`);
 }
 function sayItem(t,i){
-  if(t==='num'){ const f=FRUITS[i%FRUITS.length]; say(`${ZH[i]}。${ZH[i]==='二'?'兩':ZH[i]}個${f.n}`); }
-  if(t==='color'){ const c=COLORS[i]; say(`${c.n}。${c.n}的${c.o}`); }
-  if(t==='shape'){ say(SHAPES[i].n); }
-  if(t==='animal'){ const a=ANIMALS[i]; say(`${a.n}。${a.s}`); }
-  if(t==='zy'){ const z=ZY[i]; say(`${z.s}。${z.w}`); }
-  if(t==='abc'){ const a=ABC[i]; say([a.L,'en-US'],[a.w,'en-US'],a.zh); }
+  const k=`${t}-${i}`;
+  if(t==='num'){ const f=FRUITS[i%FRUITS.length]; speak(k,`${ZH[i]}。${ZH[i]==='二'?'兩':ZH[i]}個${f.n}`); }
+  if(t==='color'){ const c=COLORS[i]; speak(k,`${c.n}。${c.n}的${c.o}`); }
+  if(t==='shape'){ speak(k,SHAPES[i].n); }
+  if(t==='animal'){ const a=ANIMALS[i]; speak(k,`${a.n}。${a.s}`); }
+  if(t==='zy'){ const z=ZY[i]; speak(k,`${z.s}。${z.w}`); }
+  if(t==='abc'){ const a=ABC[i]; speak(k,[a.L,'en-US'],[a.w,'en-US'],a.zh); }
+}
+// 錄音腳本：給家長照著念
+function recScript(t,i){
+  if(t==='num'){ const f=FRUITS[i%FRUITS.length]; return `${ZH[i]}，${ZH[i]==='二'?'兩':ZH[i]}個${f.n}`; }
+  if(t==='color'){ const c=COLORS[i]; return `${c.n}，${c.n}的${c.o}`; }
+  if(t==='shape') return SHAPES[i].n;
+  if(t==='animal'){ const a=ANIMALS[i]; return `${a.n}，${a.s}`; }
+  if(t==='zy'){ const z=ZY[i]; return `${z.z}～${z.w}`; }
+  if(t==='abc'){ const a=ABC[i]; return `${a.L}，${a.w}`; }
+  if(t==='praise') return PRAISE[i];
+  if(t==='retry') return RETRY;
+}
+function recLabel(t,i){
+  if(t==='num') return `${i+1} ${FRUITS[i%FRUITS.length].e}`;
+  if(t==='color') return `<i class="dot" style="background:${COLORS[i].c}"></i>${COLORS[i].n}`;
+  if(t==='shape') return SHAPES[i].n;
+  if(t==='animal') return `${ANIMALS[i].e} ${ANIMALS[i].n}`;
+  if(t==='zy') return `<span class="zyl">${ZY[i].z}</span> ${ZY[i].e}`;
+  if(t==='abc') return `<span class="zyl">${ABC[i].L}</span> ${ABC[i].e}`;
+  if(t==='praise') return '答對時 💮';
+  if(t==='retry') return '答錯時 🤔';
 }
 
 /* ===================== 題目產生器 ===================== */
@@ -587,11 +693,11 @@ const GEN = {
   },
   zy(){
     const t=pick(ZY), list=shuffle([t,...others(ZY,2,t)]);
-    return {text:'聽聽看，是哪一個注音？', say:[`聽聽看。${t.s}。${t.w}。`], opts:list.map(x=>opt(`<span class="zy">${x.z}</span>`,x===t,`${x.s}`)), cols:3};
+    return {text:'聽聽看，是哪一個注音？', say:[`聽聽看。${t.s}。${t.w}。`], key:`zy-${ZY.indexOf(t)}`, opts:list.map(x=>opt(`<span class="zy">${x.z}</span>`,x===t,`${x.s}`)), cols:3};
   },
   abc(){
     const t=pick(ABC), list=shuffle([t,...others(ABC,2,t)]);
-    return {text:'聽聽看，是哪一個字母？', say:['聽聽看，是哪一個字母？',[t.L,'en-US'],[t.w,'en-US']],
+    return {text:'聽聽看，是哪一個字母？', say:['聽聽看，是哪一個字母？',[t.L,'en-US'],[t.w,'en-US']], key:`abc-${ABC.indexOf(t)}`,
       opts:list.map(x=>opt(`<span class="en">${x.L}</span>`,x===t,null)), cols:3, en:t.L};
   }
 };
@@ -611,7 +717,7 @@ function gameView(){
     <div class="opts" style="--cols:${q.cols}">${q.opts.map((o,j)=>`<button class="stk opt ${q.cls||''}" data-act="ans" data-j="${j}">${o.html}</button>`).join('')}</div>
   </main>`);
   G.cnt=0; G.lock=false;
-  say(...q.say);
+  if(!(q.key && playClip(q.key))) say(...q.say);
 }
 function answer(btn){
   if(G.lock || btn.disabled) return;
@@ -620,12 +726,13 @@ function answer(btn){
     G.lock=true; btn.classList.add('right'); sfx.ok();
     $('#gm').innerHTML=charSVG(G.m,'happy');
     G.earned++; addStars(1,btn);
-    const praise=pick(PRAISE);
-    if(q.en) say([q.en,'en-US'],praise); else say(o.say?o.say+'！':'',praise);
+    const recP=PRAISE.map((_,i)=>'praise-'+i).filter(hasClip);
+    if(recP.length) playClip(pick(recP));
+    else { const praise=pick(PRAISE); if(q.en) say([q.en,'en-US'],praise); else say(o.say?o.say+'！':'',praise); }
     setTimeout(()=>{ G.i++; if(G.i<G.qs.length) gameView(); else G.onDone(G.earned); },1500);
   } else {
     btn.disabled=true; btn.classList.add('wrong'); sfx.no();
-    say('再想想看喔');
+    speak('retry-0', RETRY);
   }
 }
 
@@ -830,6 +937,23 @@ function help(){
       <p>寵物的「飽飽」和「開心」會隨時間慢慢變少，但不會歸零，也不會生病或離開，不用擔心孩子難過。餵食和玩耍會讓寵物長大，最高到 Lv.5「超級寶貝」。</p>
     </section>
 
+    <section class="stk hsec" style="background:var(--lilac)">
+      <h2>讓聲音更像真人</h2>
+      <h3>方法一：錄下爸媽自己的聲音（最推薦）</h3>
+      <ol>
+        <li>點右上角 ⚙️ →「🎙️ 錄製爸媽的聲音」。</li>
+        <li>選分類（鼓勵的話、數字、注音……），照著畫面上的字念，按「錄音」開始、「停止」結束。</li>
+        <li>錄好的卡片和鼓勵語，孩子點到或答題時就會播您的聲音；沒錄的還是用機器聲音，可以慢慢補。</li>
+        <li>建議先錄「鼓勵的話」和「注音」，孩子最常聽到，注音也最需要正確發音。</li>
+      </ol>
+      <p>錄音只存在這台裝置上，每個家庭各自錄自己的，不會互相影響。第一次錄音時 Safari 會問能不能用麥克風，請按「允許」。</p>
+      <h3>方法二：換一個比較自然的機器聲音</h3>
+      <ol>
+        <li>iPad「設定 → 輔助使用 → 朗讀內容 → 聲音 → 中文」，下載標示「加強版」或「高品質」的台灣中文聲音。</li>
+        <li>回到網頁，點 ⚙️ →「🗣️ 選擇機器聲音」，試聽後選一個喜歡的，也可以調整說話速度。</li>
+      </ol>
+    </section>
+
     <section class="stk hsec" style="background:#FFF7FA">
       <h2>陪玩小技巧</h2>
       <ul>
@@ -837,7 +961,7 @@ function help(){
         <li>星星不夠時，寵物會提醒她去做任務。這是設計好的，讓她知道要先學習才能照顧寵物。</li>
         <li>數一數的題目裡，可以點水果，一個一個數，網頁會跟著念「一、二、三」。</li>
         <li>聽不清楚題目時，點對話框右邊的 🔊 可以再聽一次。</li>
-        <li>注音發音是用 iPad 內建語音念的近似字（例如ㄅ念「玻」），少數幾個不夠準，大人可以在旁邊示範正確發音。</li>
+        <li>注音的機器發音是用近似字念的（例如ㄅ念「玻」），少數幾個不夠準。建議爸媽把注音錄成自己的聲音。</li>
       </ul>
     </section>
 
@@ -846,12 +970,12 @@ function help(){
       <h3>家長設定（右上角 ⚙️）</h3>
       <ul>
         <li>可以看目前的星星數、貼紙數、今天玩了幾回合。</li>
-        <li>「送她 5 顆 ⭐」：當作額外獎勵，例如她幫忙做家事。</li>
+        <li>「送 5 顆 ⭐」：當作額外獎勵，例如孩子幫忙做家事。</li>
         <li>「重設全部進度」：要再按一次「確定全部重來」才會清除，避免誤觸。</li>
       </ul>
       <h3>進度存在哪裡</h3>
       <ul>
-        <li>星星、貼紙、寵物都存在<b>這台 iPad 的 Safari 裡</b>，不會上傳到網路。</li>
+        <li>星星、貼紙、寵物和爸媽的錄音都存在<b>這台 iPad 的 Safari 裡</b>，不會上傳到網路。</li>
         <li>換一台裝置、用無痕模式、或清除 Safari 的網站資料，進度會不見。</li>
         <li>從主畫面圖示打開和從 Safari 打開，有時會是兩份不同的進度，建議固定用同一種方式打開。</li>
       </ul>
@@ -868,14 +992,97 @@ function help(){
   </main>`);
 }
 
+
+/* ===================== 錄音室 ===================== */
+const REC_TABS=[['cheer','鼓勵的話'],['num','數字'],['color','顏色'],['shape','形狀'],['animal','動物'],['zy','注音'],['abc','ABC']];
+const REC = {tab:'cheer', active:null, stream:null, timer:null};
+function recItems(t){
+  if(t==='cheer') return [...PRAISE.map((_,i)=>['praise',i]),['retry',0]];
+  return LISTS[t].map((_,i)=>[t,i]);
+}
+function recCount(){ return AUD.urls.size; }
+function recSupported(){ return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder); }
+function rec(){
+  const items=recItems(REC.tab);
+  render(`${topBar('錄製爸媽的聲音')}
+  <section class="stk recintro">
+    <p>錄下您自己的聲音，孩子點卡片、答題時就會聽到您的聲音。沒錄的部分會用機器聲音。</p>
+    <p class="note">按「錄音」開始，說完按「停止」（最長 6 秒）。錄音只存在這台裝置上，不會上傳。目前已錄 <b>${recCount()}</b> 段。</p>
+    ${recSupported()?'':'<p class="warn">這個畫面現在沒辦法使用麥克風。請用 iPad 的 Safari 打開 GitHub 上的網址再錄音。</p>'}
+  </section>
+  <div class="tabs" role="tablist">${REC_TABS.map(([k,n])=>`<button class="tab" role="tab" aria-selected="${k===REC.tab}" data-act="recTab" data-t="${k}">${n}</button>`).join('')}</div>
+  <main class="reclist">${items.map(([t,i])=>{
+    const k=`${t}-${i}`, on=REC.active&&REC.active.key===k, have=hasClip(k);
+    return `<div class="stk recrow ${on?'live':''}">
+      <div class="rl">${recLabel(t,i)}</div>
+      <div class="rs">請念：「${recScript(t,i)}」</div>
+      <span class="chip ${have?'ok':''}">${have?'已錄':'未錄'}</span>
+      <div class="rb">
+        <button class="rbtn rec ${on?'on':''}" data-act="recDo" data-k="${k}">${on?'⏹ 停止':'⏺ 錄音'}</button>
+        <button class="rbtn" data-act="recPlay" data-k="${k}" ${have?'':'disabled'}>▶ 播放</button>
+        <button class="rbtn" data-act="recDel" data-k="${k}" ${have?'':'disabled'} aria-label="刪除">🗑</button>
+      </div>
+    </div>`; }).join('')}</main>`);
+}
+function micOff(){
+  if(REC.active){ try{ REC.active.mr.onstop=null; REC.active.mr.stop(); }catch(e){} REC.active=null; }
+  clearTimeout(REC.timer);
+  if(REC.stream){ REC.stream.getTracks().forEach(t=>t.stop()); REC.stream=null; }
+}
+async function recToggle(key){
+  if(REC.active){ const same=REC.active.key===key; try{ REC.active.mr.stop(); }catch(e){} if(same) return; }
+  if(!recSupported()){ modal(`<h2>沒辦法錄音</h2><p>請用 iPad 的 Safari 打開 GitHub 上的網址，再到這裡錄音。</p><div class="mbtns"><button class="bigbtn" data-act="close">好</button></div>`); return; }
+  try{
+    stopAudio(); try{ speechSynthesis.cancel(); }catch(e){}
+    if(!REC.stream) REC.stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+    const type=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t))||'';
+    const mr=new MediaRecorder(REC.stream, type?{mimeType:type}:undefined);
+    const chunks=[];
+    mr.ondataavailable=e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+    mr.onstop=async()=>{
+      clearTimeout(REC.timer);
+      const blob=new Blob(chunks,{type:mr.mimeType||type||'audio/mp4'});
+      REC.active=null;
+      if(blob.size>800){ await clipSave(key,blob); playClip(key,true); }
+      rec();
+    };
+    mr.start(); REC.active={key,mr};
+    REC.timer=setTimeout(()=>{ try{ mr.stop(); }catch(e){} },6000);
+    rec();
+  }catch(e){
+    micOff();
+    modal(`<h2>需要麥克風權限</h2><p>請在跳出的視窗按「允許」。如果之前按了不允許，請到 iPad「設定 → Safari → 麥克風」改成「詢問」或「允許」。</p><div class="mbtns"><button class="bigbtn" data-act="close">好</button></div>`);
+  }
+}
+
+/* ===================== 機器聲音設定 ===================== */
+function voice(){
+  loadVoices();
+  const list=zhVoices().slice().sort((a,b)=>voiceScore(b)-voiceScore(a));
+  const cur=pickVoice('zh-TW');
+  render(`${topBar('選擇機器聲音')}
+  <section class="stk recintro">
+    <p>點一下聲音就能試聽，聽起來最自然的就選它。</p>
+    <p class="note">想要更自然的聲音：到 iPad「設定 → 輔助使用 → 朗讀內容 → 聲音 → 中文」，下載標示「加強版」或「高品質」的台灣中文聲音，下載完重新打開這個網頁再來選。</p>
+  </section>
+  <div class="tabs"><span style="font-size:20px">說話速度</span>
+    ${[['.8','慢慢說'],['.95','正常'],['1.05','快一點']].map(([v,n])=>`<button class="tab" aria-selected="${Math.abs(S.rate-+v)<.01}" data-act="rate" data-v="${v}">${n}</button>`).join('')}
+  </div>
+  <main class="reclist">${list.length? list.map(v=>`<button class="stk recrow vrow ${cur&&cur.name===v.name?'live':''}" data-act="pickVoice" data-n="${encodeURIComponent(v.name)}">
+      <div class="rl">${v.name}</div><div class="rs">${v.lang}${cur&&cur.name===v.name?'・使用中':''}</div></button>`).join('')
+    : '<p class="note">還沒讀到 iPad 的聲音清單，請稍等幾秒後再打開一次這一頁。</p>'}</main>`);
+}
+
 /* ===================== 家長設定 ===================== */
 function parent(confirmReset=false){
   modal(`<h2>家長設定</h2>
     <p>星星 ${S.stars} 顆・貼紙 ${S.stickers.length}/${STICKERS.length}・今天 ${S.today} 回合</p>
     <p style="font-size:17px;opacity:.8">進度存在這台 iPad 的瀏覽器裡。清除 Safari 網站資料或用無痕模式，進度會不見。</p>
     <div class="mbtns">
+      <button class="bigbtn alt" data-act="go" data-to="rec">🎙️ 錄製爸媽的聲音</button>
+      <button class="bigbtn alt" data-act="go" data-to="voice">🗣️ 選擇機器聲音</button>
       <button class="bigbtn alt" data-act="go" data-to="help">📖 使用說明</button>
-      <button class="bigbtn alt" data-act="gift">送她 5 顆 ⭐</button>
+      <button class="bigbtn alt" data-act="gift">送 5 顆 ⭐</button>
       ${confirmReset
         ? `<button class="bigbtn danger" data-act="resetYes">確定全部重來</button>`
         : `<button class="bigbtn alt" data-act="reset">重設全部進度</button>`}
@@ -885,10 +1092,16 @@ function parent(confirmReset=false){
 
 /* ===================== 事件 ===================== */
 const ACT = {
-  go(b){ sfx.tap(); const to=b.dataset.to;
-    ({home, pet, quest, stickers, help, town:()=>learn('town'), cards:()=>learn('cards')})[to](); },
+  go(b){ sfx.tap(); const to=b.dataset.to; if(to!=='rec') micOff();
+    ({home, pet, quest, stickers, help, rec, voice, town:()=>learn('town'), cards:()=>learn('cards')})[to](); },
   sound(b){ S.sound=!S.sound; save(); b.textContent=S.sound?'🔊':'🔇'; if(!S.sound) try{speechSynthesis.cancel();}catch(e){} else say('聲音打開了'); },
   parent(){ parent(); },
+  recTab(b){ REC.tab=b.dataset.t; rec(); },
+  recDo(b){ recToggle(b.dataset.k); },
+  recPlay(b){ playClip(b.dataset.k,true); },
+  async recDel(b){ await clipDel(b.dataset.k); rec(); },
+  rate(b){ S.rate=+b.dataset.v; save(); voice(); say('你好，我是雲朵，我們一起來學習吧！'); },
+  pickVoice(b){ S.voice=decodeURIComponent(b.dataset.n); save(); voice(); say('你好，我是雲朵，我們一起來學習吧！'); },
   close(){ closeModal(); },
   gift(){ addStars(5); parent(); },
   reset(){ parent(true); },
@@ -897,7 +1110,7 @@ const ACT = {
   item(b){ sfx.pop(); b.classList.remove('hit'); void b.offsetWidth; b.classList.add('hit'); sayItem(b.dataset.t, +b.dataset.i); },
   quiz(b){ const w=b.dataset.w, t=b.dataset.t, g=TAB_GEN[t];
     startGame({title:WORLDS[w].title+'・小測驗', back:w, m:w==='town'?'bear':'bunny', qs:Array.from({length:5},()=>GEN[g]()), onDone:quizDone(w,t)}); },
-  replay(){ const q=G&&G.qs[G.i]; if(q) say(...q.say); },
+  replay(){ const q=G&&G.qs[G.i]; if(q && !(q.key && playClip(q.key))) say(...q.say); },
   ans(b){ answer(b); },
   cnt(b){ if(b.classList.contains('counted')) return; G.cnt++; b.classList.add('counted'); b.insertAdjacentHTML('beforeend',`<b>${G.cnt}</b>`); sfx.pop(); say(ZH[G.cnt-1]||String(G.cnt)); },
   startQuest(){ sfx.tap(); startQuest(); },
@@ -952,7 +1165,7 @@ document.addEventListener('click', e=>{
 // 防止 iPad 雙擊放大
 document.addEventListener('dblclick', e=>e.preventDefault(), {passive:false});
 
-home();
+loadClips().finally(()=>home());
 </script>
 
 </body>
