@@ -142,8 +142,11 @@ input.txt{width:100%;font-size:18px;padding:10px 12px;border-radius:12px;border:
 .vt td{border:0;padding:0 6px;text-align:center;min-width:28px;line-height:1.35}
 .vt tr.vl td{border-top:3px solid var(--ink)}
 .vt td.vq{color:var(--bad)}
-ruby{ruby-position:over}
-rt{font-size:.36em;letter-spacing:-.02em;color:var(--muted);font-weight:400;letter-spacing:0}
+.zw{display:inline-flex;align-items:center;vertical-align:middle;margin-right:1px}
+.zb{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;font-size:.46em;line-height:.98;font-weight:500;color:var(--ink);opacity:.8;font-style:normal;margin-left:1px}
+.zb i{font-style:normal;display:block}
+.zb .zl{line-height:.6}
+.zt{font-size:.46em;font-weight:500;color:var(--ink);opacity:.8;width:.6em;align-self:center;line-height:1}
 #zyBtn.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:700}
 </style>
 </head>
@@ -494,9 +497,11 @@ const QMAP=Object.fromEntries(Q.map(q=>[q.id,q]));
 /* ===================== 注音（難字加注音，可在右上角關閉） ===================== */
 const ZYW={"應用":"ㄧㄥˋ ㄩㄥˋ","還剩":"ㄏㄞˊ ㄕㄥˋ","剩下":"ㄕㄥˋ ㄒㄧㄚˋ","剩":"ㄕㄥˋ","幾":"ㄐㄧˇ","驗算":"ㄧㄢˋ ㄙㄨㄢˋ","面積":"ㄇㄧㄢˋ ㄐㄧ","迴紋針":"ㄏㄨㄟˊ ㄨㄣˊ ㄓㄣ","公分":"ㄍㄨㄥ ㄈㄣ","直式":"ㄓˊ ㄕˋ","箭頭":"ㄐㄧㄢˋ ㄊㄡˊ","代表":"ㄉㄞˋ ㄅㄧㄠˇ","合起來":"ㄏㄜˊ ㄑㄧˇ ㄌㄞˊ","換":"ㄏㄨㄢˋ","湊":"ㄘㄡˋ","夠":"ㄍㄡˋ","玩具":"ㄨㄢˊ ㄐㄩˋ","故事書":"ㄍㄨˋ ㄕˋ ㄕㄨ","紙鶴":"ㄓˇ ㄏㄜˋ","摺":"ㄓㄜˊ","芭樂":"ㄅㄚ ㄌㄜˋ","貼紙":"ㄊㄧㄝ ㄓˇ","鉛筆盒":"ㄑㄧㄢ ㄅㄧˇ ㄏㄜˊ","鉛筆":"ㄑㄧㄢ ㄅㄧˇ","彩色筆":"ㄘㄞˇ ㄙㄜˋ ㄅㄧˇ","橡皮擦":"ㄒㄧㄤˋ ㄆㄧˊ ㄘㄚ","緞帶":"ㄉㄨㄢˋ ㄉㄞˋ","繩子":"ㄕㄥˊ ˙ㄗ","剪掉":"ㄐㄧㄢˇ ㄉㄧㄠˋ","剪開":"ㄐㄧㄢˇ ㄎㄞ","吸管":"ㄒㄧ ㄍㄨㄢˇ","重疊":"ㄔㄨㄥˊ ㄉㄧㄝˊ","疊":"ㄉㄧㄝˊ","大約":"ㄉㄚˋ ㄩㄝ","指甲":"ㄓˇ ㄐㄧㄚˇ","餅乾":"ㄅㄧㄥˇ ㄍㄢ","筆記本":"ㄅㄧˇ ㄐㄧˋ ㄅㄣˇ","氣球":"ㄑㄧˋ ㄑㄧㄡˊ","郵票":"ㄧㄡˊ ㄆㄧㄠˋ","著色":"ㄓㄨㄛˊ ㄙㄜˋ","磁磚":"ㄘˊ ㄓㄨㄢ","鋪":"ㄆㄨ","桌墊":"ㄓㄨㄛ ㄉㄧㄢˋ","通用":"ㄊㄨㄥ ㄩㄥˋ","對齊":"ㄉㄨㄟˋ ㄑㄧˊ","借":"ㄐㄧㄝˋ","進位":"ㄐㄧㄣˋ ㄨㄟˋ","進":"ㄐㄧㄣˋ","被減數":"ㄅㄟˋ ㄐㄧㄢˇ ㄕㄨˋ","算式":"ㄙㄨㄢˋ ㄕˋ","色紙":"ㄙㄜˋ ㄓˇ","搬":"ㄅㄢ","隨便":"ㄙㄨㄟˊ ㄅㄧㄢˋ","滑":"ㄏㄨㄚˊ","拼":"ㄆㄧㄣ","形狀":"ㄒㄧㄥˊ ㄓㄨㄤˋ","丟掉":"ㄉㄧㄡ ㄉㄧㄠˋ","文具":"ㄨㄣˊ ㄐㄩˋ","數字卡":"ㄕㄨˋ ㄗˋ ㄎㄚˇ","顏色":"ㄧㄢˊ ㄙㄜˋ","比較":"ㄅㄧˇ ㄐㄧㄠˋ","比較重":"ㄅㄧˇ ㄐㄧㄠˋ ㄓㄨㄥˋ","數一數":"ㄕㄨˇ ㄧ ㄕㄨˇ","數線":"ㄕㄨˋ ㄒㄧㄢˋ","個位":"ㄍㄜˋ ㄨㄟˋ","百位":"ㄅㄞˇ ㄨㄟˋ","十位":"ㄕˊ ㄨㄟˋ","最":"ㄗㄨㄟˋ","錢幣":"ㄑㄧㄢˊ ㄅㄧˋ","圖書角":"ㄊㄨˊ ㄕㄨ ㄐㄧㄠˇ","花圃":"ㄏㄨㄚ ㄆㄨˇ","果園":"ㄍㄨㄛˇ ㄩㄢˊ","磁":"ㄘˊ","估一估":"ㄍㄨ ㄧ ㄍㄨ","普遍":"ㄆㄨˇ ㄅㄧㄢˋ","單位":"ㄉㄢ ㄨㄟˋ","規律":"ㄍㄨㄟ ㄌㄩˋ","算錯":"ㄙㄨㄢˋ ㄘㄨㄛˋ","寬":"ㄎㄨㄢ","課本":"ㄎㄜˋ ㄅㄣˇ","突出":"ㄊㄨˊ ㄔㄨ","原來":"ㄩㄢˊ ㄌㄞˊ","一共":"ㄧ ㄍㄨㄥˋ","共":"ㄍㄨㄥˋ","貼":"ㄊㄧㄝ","牆":"ㄑㄧㄤˊ","塊":"ㄎㄨㄞˋ","隻":"ㄓ","顆":"ㄎㄜ","朵":"ㄉㄨㄛˇ","張":"ㄓㄤ","甲":"ㄐㄧㄚˇ","乙":"ㄧˇ"};
 const ZRE=new RegExp(Object.keys(ZYW).sort((a,b)=>b.length-a.length).join("|"),"g");
+function zyChar(c,z){let light=z[0]==="˙";if(light)z=z.slice(1);const m=z.match(/[ˊˇˋ]$/);const tone=m?m[0]:"";const body=tone?z.slice(0,-1):z;
+  return `<span class="zw"><span class="zc">${c}</span><span class="zb">${light?'<span class="zl">˙</span>':""}${[...body].map(x=>`<i>${x}</i>`).join("")}</span><span class="zt">${tone}</span></span>`;}
 function Z(h){if(h==null)return "";h=String(h);if(!S.zy)return h;let depth=0;
   return h.split(/(<[^>]+>)/).map(p=>{if(p[0]==="<"){if(/^<svg/i.test(p))depth++;else if(/^<\/svg/i.test(p))depth--;return p;}
-    if(depth>0||!p)return p;return p.replace(ZRE,w=>{const z=ZYW[w].split(" ");return [...w].map((c,i)=>`<ruby>${c}<rt>${z[i]}</rt></ruby>`).join("");});}).join("");}
+    if(depth>0||!p)return p;return p.replace(ZRE,w=>{const z=ZYW[w].split(" ");return [...w].map((c,i)=>zyChar(c,z[i])).join("");});}).join("");}
 
 
 /* ===================== 科目設定 ===================== */
