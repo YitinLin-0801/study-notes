@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>二上段考複習</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="二上複習">
+<meta name="theme-color" content="#2f7d5b">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%232f7d5b'/%3E%3Ctext x='90' y='122' font-size='100' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E8%A4%87%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f4ee;--card:#ffffff;--ink:#22302a;--muted:#66736c;--line:#e2ddd2;
+  --brand:#2f7d5b;--brand-soft:#e3f1e9;--ok:#2f8f4e;--ok-soft:#e2f4e6;--bad:#c2463d;--bad-soft:#fbe6e3;
+  --star:#e3a20b;--chip:#efece4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151a17;--card:#1f2622;--ink:#eef2ee;--muted:#a5b1aa;--line:#2f3833;
+    --brand:#5cc196;--brand-soft:#21362c;--ok:#5fcf84;--ok-soft:#1d3426;--bad:#f0827a;--bad-soft:#3a2321;
+    --star:#f4c04a;--chip:#29312c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151a17;--card:#1f2622;--ink:#eef2ee;--muted:#a5b1aa;--line:#2f3833;
+  --brand:#5cc196;--brand-soft:#21362c;--ok:#5fcf84;--ok-soft:#1d3426;--bad:#f0827a;--bad-soft:#3a2321;
+  --star:#f4c04a;--chip:#29312c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;font-size:18px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;padding:12px 16px 90px}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px}
+header h1{font-size:22px;margin:0}
+.stars{font-weight:700;color:var(--star);white-space:nowrap}
+nav.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs button{border:0;background:none;color:var(--muted);font-size:15px;padding:6px 0;border-radius:10px;font-family:inherit}
+nav.tabs button .i{display:block;font-size:22px;line-height:1.2}
+nav.tabs button{position:relative}
+.badge{position:absolute;top:2px;left:50%;margin-left:8px;background:var(--bad);color:#fff;font-size:11px;line-height:16px;min-width:18px;padding:0 4px;border-radius:9px;font-weight:700}
+nav.tabs button.on{color:var(--brand);background:var(--brand-soft);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.card h2{font-size:19px;margin:0 0 8px}
+.muted{color:var(--muted);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:16px;font-family:inherit;cursor:pointer}
+.chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:700}
+.btn{display:inline-block;border:0;border-radius:14px;padding:12px 18px;font-size:18px;font-weight:700;font-family:inherit;cursor:pointer;background:var(--brand);color:#fff}
+.btn.ghost{background:var(--chip);color:var(--ink)}
+.btn.wide{width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lessons{display:grid;grid-template-columns:1fr;gap:8px}
+.lesson{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--chip)}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:4px}
+.bar>i{display:block;height:100%;background:var(--brand)}
+.qmeta{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:13px;padding:1px 8px;border-radius:999px;background:var(--chip);color:var(--muted);margin-right:4px}
+.qtext{font-size:23px;font-weight:700;margin:10px 0 14px;line-height:1.5}
+.qtext .hl{color:var(--brand);text-decoration:underline;text-underline-offset:5px}
+.big{font-size:44px;letter-spacing:4px}
+.opts{display:grid;grid-template-columns:1fr;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;font-size:21px;font-family:inherit;cursor:pointer;min-height:56px}
+.opt .k{flex:0 0 30px;height:30px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--muted)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt.pick{border-color:var(--brand);background:var(--brand-soft)}
+.opt[disabled]{cursor:default}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:17px}
+.fb.ok{background:var(--ok-soft)}
+.fb.bad{background:var(--bad-soft)}
+.nav2{display:flex;gap:8px;margin-top:14px}
+.nav2 .btn{flex:1;font-size:16px;padding:12px 6px;white-space:nowrap}
+.pop{animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+table{width:100%;border-collapse:collapse;font-size:16px}
+td,th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}
+textarea{width:100%;min-height:90px;font-size:14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px;font-family:monospace}
+.hide{display:none}
+.result{text-align:center}
+.result .score{font-size:56px;font-weight:800;color:var(--brand)}
+.kbd{font-size:13px;color:var(--muted);margin-top:10px}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:16px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.subbar{margin:0 0 4px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.subbar .chip{white-space:nowrap;flex:0 0 auto}
+.subbar .chip.soon{opacity:.5}
+.subbar .chip small{font-size:12px}
+.ansbox{font-size:32px;font-weight:800;text-align:center;padding:10px;border:3px solid var(--brand);border-radius:14px;background:var(--bg);min-height:56px;letter-spacing:2px}
+.ansbox.done{border-color:var(--line)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.key{font-size:22px;font-weight:700;padding:8px 0;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;cursor:pointer}
+.key.go{background:var(--brand);color:#fff;border-color:var(--brand);font-size:20px}
+@media (min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+/* 寵物 */
+.petStage{text-align:center;padding:10px 0 4px;position:relative;min-height:190px}
+.petEmoji{display:inline-block;line-height:1.1;cursor:pointer;user-select:none;transition:font-size .4s}
+.petEmoji.bounce{animation:bounce .6s ease}
+@keyframes bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-22px) scale(1.08)}60%{transform:translateY(0) scale(.96)}}
+.petDeco{font-size:26px;letter-spacing:6px;min-height:34px}
+.bubble{display:inline-block;background:var(--chip);border-radius:16px;padding:6px 14px;font-size:17px;margin-top:6px;max-width:100%}
+.heart{position:absolute;left:50%;top:40%;font-size:28px;pointer-events:none;animation:float 1.2s ease-out forwards}
+@keyframes float{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-120px)}}
+.foods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.food{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:10px;font-family:inherit;font-size:16px;cursor:pointer;text-align:center}
+.food .fe{font-size:34px;display:block}
+.food[disabled]{opacity:.45;cursor:default}
+.wallet{display:flex;justify-content:space-around;text-align:center;gap:8px}
+.wallet b{display:block;font-size:26px;color:var(--star)}
+.petPick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.petPick button{border:2px solid var(--line);background:var(--card);border-radius:16px;padding:4px 0 6px;cursor:pointer;color:var(--ink);font-family:inherit}
+.petPick button svg{width:100%;max-width:96px;height:auto;display:block;margin:0 auto}
+.pickKind{font-weight:700;margin:12px 0 6px}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.slot{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:4px 2px;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:96px;cursor:pointer;min-width:0}
+.slot svg{width:100%;max-width:52px;height:auto}
+.slot small{font-size:12px;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot.on{border-color:var(--brand);background:var(--brand-soft)}
+.slot.add{border-style:dashed;color:var(--brand)}
+.slot.lock{opacity:.5;cursor:default;background:var(--chip)}
+.petEmoji svg{display:block;width:100%;height:auto}
+#petTabIcon svg{width:26px;height:26px;display:block;margin:0 auto}
+.petPick button small{display:block;font-size:15px}
+.petPick button.on{border-color:var(--brand);background:var(--brand-soft)}
+input.txt{width:100%;font-size:18px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit}
+/* 翻牌 */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (min-width:480px){.board{grid-template-columns:repeat(4,1fr)}}
+.cardf{aspect-ratio:1/1;border-radius:14px;border:2px solid var(--line);background:var(--brand);color:#fff;font-size:30px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:4px;line-height:1.2}
+.cardf.zy{font-size:22px}
+.cardf.up{background:var(--card);color:var(--ink)}
+.cardf.done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.cardf.miss{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.reward{padding:10px 12px;border-radius:12px;background:var(--chip);margin-bottom:8px}
+.reward.ready{background:var(--ok-soft);border:2px solid var(--ok)}
+.gate{margin-top:10px;padding:12px;border-radius:12px;background:var(--chip)}
+.confetti{position:fixed;top:-20px;font-size:24px;pointer-events:none;z-index:20;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+/* 直式、注音 */
+.vt{text-align:center;margin:8px 0 2px}
+.vt table{display:inline-table;width:auto;border-collapse:collapse;font-size:32px;font-weight:700;font-family:ui-monospace,"SF Mono",Menlo,monospace}
+.vt td{border:0;padding:0 6px;text-align:center;min-width:28px;line-height:1.35}
+.vt tr.vl td{border-top:3px solid var(--ink)}
+.vt td.vq{color:var(--bad)}
+ruby{ruby-position:over}
+rt{font-size:.36em;letter-spacing:-.02em;color:var(--muted);font-weight:400;letter-spacing:0}
+#zyBtn.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📚 二上段考複習</h1>
+    <div class="row"><span class="stars" id="starCount">⭐ 0</span><button class="chip" id="zyBtn" aria-label="注音開關">ㄅ</button><button class="chip" id="themeBtn" aria-label="切換深淺色">🌓</button></div>
+  </header>
+  <div class="chips subbar" id="subBar"></div>
+
+  <!-- 首頁 -->
+  <section id="v-home">
+    <div class="card">
+      <h2 id="subTitle">加油！</h2>
+      <div class="muted">答對一題得 1 顆星（同一題一天拿一次），可以到「寵物」餵寵物、玩翻牌遊戲。答錯的題目會放進「不熟」，再答對就會移出。</div>
+    </div>
+    <div class="card">
+      <h2 id="unitHead">各課進度</h2>
+      <div class="lessons" id="lessonList"></div>
+    </div>
+    <div class="card">
+      <h2>題型進度</h2>
+      <div class="lessons" id="typeList"></div>
+    </div>
+    <div class="card">
+      <h2>給家長</h2>
+      <div class="muted" id="parentNote"></div>
+      <div id="weakLessons" style="margin-top:8px"></div>
+      <div style="margin-top:12px"><button class="btn ghost" id="rewardSetBtn">🎁 設定實體獎勵</button></div>
+      <div id="rewardEditor"></div>
+      <div class="muted" style="margin-top:10px" id="subNote"></div>
+    </div>
+    <div class="card">
+      <h2>備份紀錄（換手機用）</h2>
+      <div class="row">
+        <button class="btn ghost" id="exportBtn">複製備份碼</button>
+        <button class="btn ghost" id="copyWrongBtn">複製錯題清單</button>
+      </div>
+      <textarea id="importBox" placeholder="把備份碼貼在這裡，再按「匯入」" style="margin-top:10px"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost" id="importBtn">匯入</button>
+        <button class="btn ghost" id="resetBtn">清除全部紀錄</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 練習 -->
+  <section id="v-practice" class="hide">
+    <div id="pSetup">
+      <div class="card">
+        <h2 id="pUnitHead">選課</h2>
+        <div class="chips" id="pLessons"></div>
+      </div>
+      <div class="card">
+        <h2>選題型</h2>
+        <div class="chips" id="pTypes"></div>
+      </div>
+      <div class="card">
+        <h2>出題順序</h2>
+        <div class="chips" id="pOrder"></div>
+        <div style="margin-top:14px"><button class="btn wide" id="pStart">開始練習 ▶</button></div>
+        <div class="muted" id="pCount" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div id="pRun" class="hide"></div>
+  </section>
+
+  <!-- 不熟 -->
+  <section id="v-weak" class="hide"><h2 id="wHead" style="font-size:19px;margin:6px 0 0"></h2><div id="wRun"></div></section>
+
+  <!-- 模擬考 -->
+  <section id="v-exam" class="hide">
+    <div id="eSetup">
+      <div class="card">
+        <h2 id="eHead">模擬考範圍</h2>
+        <div class="chips" id="eLessons"></div>
+      </div>
+      <div class="card">
+        <h2>考試方式</h2>
+        <div class="chips" id="eMode"></div>
+        <div class="muted" id="eModeNote" style="margin-top:6px"></div>
+      </div>
+      <div class="card" id="eNumCard">
+        <h2>題數</h2>
+        <div class="chips" id="eNum"></div>
+      </div>
+      <div class="card">
+        <button class="btn wide" id="eStart">開始考試 📝</button>
+        <div class="muted" style="margin-top:6px">全部寫完再交卷，交卷後一起對答案，錯的題目會放進「不熟」。每次都會優先抽之前沒考過的題目，選項順序也會重新洗牌。</div>
+      </div>
+    </div>
+    <div id="eRun" class="hide"></div>
+  </section>
+
+  <!-- 寵物 -->
+  <section id="v-pet" class="hide"><div id="petHost"></div></section>
+</div>
+
+<nav class="tabs">
+  <button data-v="home" class="on"><span class="i">🏠</span>首頁</button>
+  <button data-v="practice"><span class="i">✏️</span>練習</button>
+  <button data-v="weak"><span class="i">🔁</span>不熟<span id="weakBadge"></span></button>
+  <button data-v="exam"><span class="i">📝</span>模擬考</button>
+  <button data-v="pet"><span class="i" id="petTabIcon">🥚</span>寵物</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== 資料：國語（翰林二上，題庫準備中） ===================== */
+const LESSONS = [
+  {n:1,t:"（課名待確認）"},{n:2,t:"（課名待確認）"},{n:3,t:"（課名待確認）"},
+  {n:4,t:"（課名待確認）"},{n:5,t:"（課名待確認）"},{n:6,t:"（課名待確認）"}
+];
+const TYPES = {zy:"注音", gz:"國字", bs:"部首", bh:"筆畫", kw:"課文理解"};
+const CHARS = {};
+const RAD_SHOW = {水:"水（氵）",手:"手（扌）",心:"心（忄）",辵:"辵（辶）",艸:"艸（艹）",阜:"阜（阝）",肉:"肉（月）",刀:"刀（刂）",人:"人（亻）",玉:"玉（王）",犬:"犬（犭）",示:"示（礻）"};
+const RAD_POOL = ["水","心","言","口","手","木","人","女","車","日","雨","糸","肉","刀","竹","禾","山","宀","門","見","艸","辵","寸","貝","火","土","金","目","田","大"];
+const HAND = [];
+
+/* ===================== 共用小工具 ===================== */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const TONES=["","ˊ","ˇ","ˋ"];
+function toneVariants(zy){const base=zy.replace(/[ˊˇˋ˙]/g,"");return TONES.map(t=>base+t);}
+const radShow=r=>RAD_SHOW[r]||r;
+function pickN(arr,n,rnd,exclude){const pool=arr.filter(x=>!exclude.includes(x));const out=[];while(out.length<n&&pool.length){out.push(pool.splice(Math.floor(rnd()*pool.length),1)[0]);}return out;}
+function hlWord(word,ch){return word.replace(ch,'<span class="hl">'+ch+'</span>');}
+
+const Q=[];
+for(const L of LESSONS){
+  for(const [ch,zy,rad,st,word] of (CHARS[L.n]||[])){
+    Q.push({s:"zh",id:`L${L.n}-zy-${ch}`,l:L.n,ty:"zy",q:`「${hlWord(word,ch)}」的「${ch}」怎麼念？`,a:zy,o:toneVariants(zy).filter(x=>x!==zy),e:`${ch}：${zy}（${word}）`});
+    Q.push({s:"zh",id:`L${L.n}-bs-${ch}`,l:L.n,ty:"bs",q:`<span class="big">${ch}</span><br>部首是什麼？`,a:radShow(rad),
+      gen:()=>pickN(RAD_POOL,3,Math.random,[rad]).map(radShow),e:`「${ch}」是${radShow(rad)}部。`});
+    Q.push({s:"zh",id:`L${L.n}-bh-${ch}`,l:L.n,ty:"bh",q:`<span class="big">${ch}</span><br>一共有幾畫？`,a:st+" 畫",
+      gen:()=>pickN([-3,-2,-1,1,2,3].map(x=>st+x).filter(x=>x>0),3,Math.random,[]).map(x=>x+" 畫"),e:`「${ch}」共 ${st} 畫。`});
+  }
+}
+HAND.forEach((h,i)=>{const [l,ty,q,opts,e]=h;Q.push({s:"zh",id:`L${l}-${ty}-h${i}`,l,ty,q,a:opts[0],o:opts.slice(1),e});});
+
+/* ===================== 建題：數學（康軒二上 1～5 單元，程式自動出題） ===================== */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const CN_D="零一二三四五六七八九";
+function cnNum(n){const ds=String(n).padStart(4,"0").split("").map(Number),us=["千","百","十",""];let s="",z=false;
+  ds.forEach((d,i)=>{if(d===0){if(s)z=true;}else{if(z){s+="零";z=false;}s+=CN_D[d]+us[i];}});
+  if(n>=10&&n<20)s=s.replace(/^一十/,"十");return s||"零";}
+function uniqNums(a,cands,n=3){const out=[];for(const c of shuffle(cands))if(c!==a&&c>=0&&!out.includes(c)){out.push(c);if(out.length===n)break;}return out;}
+const NAMES=["小明","小美","哥哥","姊姊","阿志","小華","弟弟","妹妹"];
+const INK="#3b2a20";
+const svgOpen=(W,H)=>`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px;display:block;margin:6px auto" xmlns="http://www.w3.org/2000/svg">`;
+
+/* 直式（HTML 排版），hide 是要挖空的位置，例如 "a1" 代表第一個數的十位 */
+function vertHTML(a,b,op,c,hide){
+  const w=Math.max(String(a).length,String(b).length,String(c).length);
+  const row=(n,key)=>String(n).padStart(w," ").split("").map((d,i)=>{const pos=w-1-i;const k=key+pos;
+    if(hide===k)return `<td class="vq">□</td>`;return `<td>${d===" "?"":d}</td>`;}).join("");
+  return `<div class="vt"><table><tr><td></td>${row(a,"a")}</tr><tr><td>${op}</td>${row(b,"b")}</tr><tr class="vl"><td></td>${row(c===null?"":c,"c").replace(/<td><\/td>/g,"<td></td>")}</tr></table></div>`;}
+function vertBlank(a,b,op){const w=Math.max(String(a).length,String(b).length)+(op==="＋"&&a+b>99?1:0);
+  const row=n=>String(n).padStart(w," ").split("").map(d=>`<td>${d===" "?"":d}</td>`).join("");
+  return `<div class="vt"><table><tr><td></td>${row(a)}</tr><tr><td>${op}</td>${row(b)}</tr><tr class="vl"><td></td>${"<td>　</td>".repeat(w)}</tr></table></div>`;}
+
+/* 錢幣圖 */
+function coinsSVG(list){ // list: [[面額, 個數], ...]
+  const items=[];list.forEach(([v,n])=>{for(let i=0;i<n;i++)items.push(v);});
+  const per=6,rows=Math.ceil(items.length/per),W=330,H=rows*58+8;let t=svgOpen(W,H);
+  items.forEach((v,i)=>{const x=8+(i%per)*53,y=6+Math.floor(i/per)*58;
+    if(v===100){t+=`<rect x="${x}" y="${y+8}" width="48" height="34" rx="4" fill="#f4a3a3" stroke="${INK}" stroke-width="2"/><text x="${x+24}" y="${y+31}" font-size="15" font-weight="700" text-anchor="middle" fill="${INK}">100</text>`;}
+    else{const r=v===50?23:v===10?20:v===5?18:15,fill=v===50?"#f5d76e":v===1?"#d8b48a":"#d9d9d9";
+      t+=`<circle cx="${x+24}" cy="${y+25}" r="${r}" fill="${fill}" stroke="${INK}" stroke-width="2"/><text x="${x+24}" y="${y+30}" font-size="${v>=10?14:15}" font-weight="700" text-anchor="middle" fill="${INK}">${v}</text>`;}});
+  return t+"</svg>";}
+
+/* 公分尺 */
+function rulerCM(start,len){
+  const px=26,x0=14,max=Math.max(8,Math.ceil(start+len)+1),W=x0*2+max*px;
+  let t=svgOpen(W,92);
+  t+=`<rect x="${x0+start*px}" y="10" width="${len*px}" height="16" rx="4" fill="#7cc4e8" stroke="${INK}" stroke-width="2"/>`;
+  t+=`<rect x="2" y="34" width="${W-4}" height="54" rx="6" fill="#fff6d8" stroke="${INK}" stroke-width="2"/>`;
+  for(let c=0;c<=max;c++){const x=x0+c*px;t+=`<line x1="${x}" y1="34" x2="${x}" y2="52" stroke="${INK}" stroke-width="1.6"/><text x="${x}" y="70" font-size="13" text-anchor="middle" fill="${INK}">${c}</text>`;}
+  t+=`<text x="${W-10}" y="84" font-size="11" text-anchor="end" fill="${INK}">公分</text></svg>`;return t;}
+
+/* 個別單位：用迴紋針量 */
+function clipSVG(rows){ // rows: [[名稱, 幾個, 顏色], ...]
+  const u=24,x0=58,W=x0+12*u+10,H=rows.length*58+6;let t=svgOpen(W,H);
+  rows.forEach(([name,n,col],r)=>{const y=6+r*58;
+    t+=`<text x="4" y="${y+20}" font-size="15" fill="${INK}">${name}</text>`;
+    t+=`<rect x="${x0}" y="${y+6}" width="${n*u}" height="18" rx="6" fill="${col}" stroke="${INK}" stroke-width="2"/>`;
+    for(let i=0;i<n;i++){const x=x0+i*u;t+=`<rect x="${x+2}" y="${y+30}" width="${u-4}" height="12" rx="6" fill="none" stroke="#7a8a99" stroke-width="2.4"/><rect x="${x+6}" y="${y+33}" width="${u-12}" height="6" rx="3" fill="none" stroke="#7a8a99" stroke-width="1.6"/>`;}
+  });return t+"</svg>";}
+
+/* 面積：隨機拼出 k 個方格的圖形 */
+function polyo(k,cols=5,rows=4){
+  for(let tries=0;tries<50;tries++){const set=new Set([`${R(0,cols-1)},${R(0,rows-1)}`]);
+    while(set.size<k){const [x,y]=pick([...set]).split(",").map(Number);const [dx,dy]=pick([[1,0],[-1,0],[0,1],[0,-1]]);const nx=x+dx,ny=y+dy;
+      if(nx>=0&&ny>=0&&nx<cols&&ny<rows)set.add(`${nx},${ny}`);}
+    return [...set].map(s=>s.split(",").map(Number));}
+}
+function areaSVG(shapes,cell=24){ // shapes: [[名稱, cells, 顏色]]
+  const cols=5,rows=4,gw=cols*cell,W=shapes.length*(gw+24)+8,H=rows*cell+34;let t=svgOpen(W,H);
+  shapes.forEach(([name,cells,col],k)=>{const ox=12+k*(gw+24),oy=26;
+    t+=`<text x="${ox+gw/2}" y="18" font-size="16" font-weight="700" text-anchor="middle" fill="${INK}">${name}</text>`;
+    for(let x=0;x<cols;x++)for(let y=0;y<rows;y++)t+=`<rect x="${ox+x*cell}" y="${oy+y*cell}" width="${cell}" height="${cell}" fill="none" stroke="#c9c2b4" stroke-width="1"/>`;
+    cells.forEach(([x,y])=>{t+=`<rect x="${ox+x*cell}" y="${oy+y*cell}" width="${cell}" height="${cell}" fill="${col}" stroke="${INK}" stroke-width="1.6"/>`;});});
+  return t+"</svg>";}
+
+const MT=[];// [單元, 題型, 名稱, make]
+function mt(l,ty,name,make){MT.push({l,ty,name,make});}
+
+// ---- 第一單元 200 以內的數 ----
+mt(1,"sz","國字寫成數字",()=>{const n=pick([R(101,109),R(110,199),R(20,99),200]);return {q:`「${cnNum(n)}」寫成數字是多少？`,a:n,input:true,e:`${cnNum(n)}＝${n}`};});
+mt(1,"sz","數字怎麼讀",()=>{const n=pick([R(101,109),R(111,199),R(1,9)*10+100]);const w=String(n),a=cnNum(n);
+  const c=[cnNum(+(w[0]+w[2]+w[1])),w[1]==="0"?"一百"+CN_D[+w[2]]:"一百零"+cnNum(+(w[1]+w[2])),cnNum(+(w[1]+w[2])),cnNum(n+10>199?n-10:n+10),cnNum(n-1)];
+  const o=[...new Set(c.filter(x=>x&&x!==a))].slice(0,3);
+  return {q:`<span class="big">${n}</span><br>怎麼讀？`,a,o,e:`${n} 讀作「${a}」。${w[1]==="0"?"十位是 0，要讀「零」。":""}`};});
+mt(1,"sz","幾個百、幾個十、幾個一",()=>{const b=R(0,1),c=R(0,9),d=R(0,9);if(!b&&!c)return {q:`${d} 個一是多少？`,a:d,input:true,e:`${d}`};const n=b*100+c*10+d;
+  return {q:`${b?`${b} 個百、`:""}${c} 個十和 ${d} 個一，合起來是多少？`,a:n,input:true,e:`${b?"100＋":""}${c*10}＋${d}＝${n}`};});
+mt(1,"sz","拆成百、十、一",()=>{const n=R(101,199),i=pick([0,1,2]);const w=String(n),nm=["百","十","一"];
+  const show=[0,1,2].map(k=>k===i?"（　）":w[k]).map((v,k)=>`${v} 個${nm[k]}`).join("、");
+  return {q:`${n} 是 ${show}`,a:+w[i],input:true,e:`${n}＝${w[0]} 個百、${w[1]} 個十、${w[2]} 個一。`};});
+mt(1,"sz","某一位的數字",()=>{const n=R(100,199),i=R(0,2);const P=["百","十","個"];return {q:`${n} 的「${P[i]}位」數字是多少？`,a:+String(n)[i],input:true,e:`${n}：百位 ${String(n)[0]}、十位 ${String(n)[1]}、個位 ${String(n)[2]}。`};});
+mt(1,"sz","數字代表多少",()=>{let n,i;do{n=R(110,199);i=R(0,2);}while(String(n)[i]==="0");const P=["百","十","個"],V=[100,10,1];const d=+String(n)[i];
+  return {q:`${n} 的${P[i]}位數字 ${d}，代表多少？`,a:d*V[i],input:true,e:`${P[i]}位的 ${d} 代表 ${d} 個 ${V[i]}，就是 ${d*V[i]}。`};});
+mt(1,"sz","依規律填數",()=>{const st=pick([1,2,5,10]);const up=Math.random()<.7;let s=R(st===10?0:60,st===10?150:180);if(st>1)s=Math.floor(s/st)*st;
+  const seq=[0,1,2,3,4].map(k=>up?s+k*st:s+(4-k)*st).filter(x=>x<=200);if(seq.length<5)return {q:`100、110、120、（　）、140`,a:130,input:true,e:`一次多 10：130。`};
+  const k=R(1,4);const a=seq[k];return {q:seq.map((v,j)=>j===k?"（　）":v).join("、"),a,input:true,e:`一次${up?"多":"少"} ${st}，所以是 ${a}。`};});
+mt(1,"sz","多 1、多 10、少 1、少 10",()=>{const st=pick([1,10]);const n=R(20,189);const up=Math.random()<.6;const a=up?n+st:n-st;return {q:`比 ${n} ${up?"多":"少"} ${st} 的數是多少？`,a,input:true,e:`${n} ${up?"＋":"－"} ${st} ＝ ${a}`};});
+mt(1,"sz","數線上的數",()=>{const step=pick([1,10]);const s=step===1?R(100,185):R(0,10)*10;const W=340,x0=20,gap=30;let k;do{k=R(1,9);}while(k===5);
+  let t=svgOpen(W,80)+`<line x1="${x0-12}" y1="44" x2="${x0+10*gap+14}" y2="44" stroke="${INK}" stroke-width="2"/>`;
+  for(let i=0;i<=10;i++){const x=x0+i*gap;t+=`<line x1="${x}" y1="${i%5===0?34:38}" x2="${x}" y2="${i%5===0?54:50}" stroke="${INK}" stroke-width="${i%5===0?2:1.4}"/>`;if(i%5===0)t+=`<text x="${x}" y="72" font-size="13" text-anchor="middle" fill="${INK}">${s+i*step}</text>`;}
+  const ax=x0+k*gap;t+=`<path d="M${ax} 30 L${ax-7} 14 L${ax+7} 14 Z" fill="#e0533d"/></svg>`;
+  return {q:`箭頭指的數是多少？${t}`,a:s+k*step,input:true,e:`每一小格是 ${step}，從 ${s} 往右數 ${k} 格：${s+k*step}`};});
+mt(1,"bd","比大小",()=>{const x=R(100,200);let y;const r=Math.random();if(r<.12)y=x;else if(r<.3)y=R(20,99);else{do{y=x+pick([-1,1])*pick([R(1,9),R(1,9)*10]);}while(y<100||y>200||y===x);}
+  const [p,q]=Math.random()<.5?[x,y]:[y,x];const a=p>q?"＞":p<q?"＜":"＝";
+  return {q:`${p} ○ ${q}<br><span class="muted">○ 裡要填什麼？</span>`,a,o:["＞","＜","＝"].filter(v=>v!==a),fixed:["＞","＜","＝"],e:`先比百位，再比十位、個位：${p} ${a} ${q}。`};});
+mt(1,"bd","哪一個最大／最小",()=>{const base=R(110,180);const c=[...new Set([base,base+R(1,9),base+R(1,2)*10,base-R(1,9)*10+R(0,9),R(60,99)])].slice(0,4);const big=Math.random()<.5;const a=big?Math.max(...c):Math.min(...c);
+  return {q:`下面哪一個數${big?"最大":"最小"}？`,a:String(a),o:c.filter(v=>v!==a).map(String),e:`三位數比二位數大；都是三位數就先比百位，再比十位、個位。答案是 ${a}。`};});
+mt(1,"bd","排出最大或最小的數",()=>{const ds=[1,...pickN([0,2,3,4,5,6,7,8,9],2,Math.random,[])];const big=Math.random()<.5;
+  const cands=[];for(const x of ds)for(const y of ds)for(const z of ds)if(new Set([x,y,z]).size===3&&x!==0)cands.push(+(""+x+y+z));const ok=cands.filter(n=>n<=199);const a=big?Math.max(...ok):Math.min(...ok);
+  return {q:`用 ${shuffle(ds).join("、")} 三張數字卡（每張用一次），排出 200 以內${big?"最大":"最小"}的三位數是多少？`,a,input:true,e:`200 以內的三位數，百位要放 1；其他兩張${big?"大的放十位":"小的放十位"}：${a}。`};});
+mt(1,"bd","數的觀念",()=>pick([
+  {q:"10 個十是多少？",a:100,input:true,e:"10 個十是 100（一百）。"},
+  {q:"100 裡面有幾個十？",a:10,input:true,e:"10 個十是 100。"},
+  {q:"2 個百是多少？",a:200,input:true,e:"2 個百是 200。"},
+  {q:"199 再多 1 是多少？",a:200,input:true,e:"199＋1＝200。"},
+  {q:"最小的三位數是多少？",a:100,input:true,e:"百位是 1，其他都是 0：100。"},
+  {q:"最大的二位數是多少？",a:99,input:true,e:"十位和個位都是 9：99。"},
+  {q:"120 裡面有幾個十？",a:12,input:true,e:"100 是 10 個十，再加 2 個十，共 12 個十。"},
+  {q:"比 100 少 1 的數是多少？",a:99,input:true,e:"100－1＝99。"}]));
+mt(1,"qb","數一數有多少錢",()=>{const l=[[100,R(0,1)],[50,R(0,1)],[10,R(0,4)],[5,R(0,1)],[1,R(0,4)]].filter(x=>x[1]);if(!l.length)l.push([10,3]);const s=l.reduce((a,[v,n])=>a+v*n,0);
+  return {q:`一共有多少元？${coinsSVG(l)}`,a:s,input:true,e:l.map(([v,n])=>`${n} 個 ${v} 元`).join("、")+`，合起來是 ${s} 元。`};});
+mt(1,"qb","錢幣換算",()=>pick([
+  {q:"1 張 100 元可以換幾個 10 元？",a:10,input:true,e:"10 個 10 元是 100 元。"},
+  {q:"1 個 50 元可以換幾個 10 元？",a:5,input:true,e:"5 個 10 元是 50 元。"},
+  {q:"1 個 10 元可以換幾個 5 元？",a:2,input:true,e:"2 個 5 元是 10 元。"},
+  {q:"1 個 10 元可以換幾個 1 元？",a:10,input:true,e:"10 個 1 元是 10 元。"},
+  {q:"1 張 100 元可以換幾個 50 元？",a:2,input:true,e:"2 個 50 元是 100 元。"},
+  {q:"1 個 5 元可以換幾個 1 元？",a:5,input:true,e:"5 個 1 元是 5 元。"}]));
+mt(1,"qb","錢夠不夠",()=>{const has=R(60,190),price=has+pick([-1,1])*R(3,25);const ok=has>=price;
+  return {q:`${pick(NAMES)}有 ${has} 元，想買一個 ${price} 元的玩具，錢夠不夠？`,a:ok?"夠":"不夠",o:[ok?"不夠":"夠"],fixed:["夠","不夠"],e:`${has} ${ok?"＞":"＜"} ${price}，所以${ok?"夠":"不夠"}。`};});
+mt(1,"qb","用錢幣湊出多少元",()=>{const h=R(0,1),t=R(1,9),o=R(0,9);const n=h*100+t*10+o;
+  return {q:`要湊出 ${n} 元，${h?"用 1 張 100 元、":""}（　）個 10 元和 ${o} 個 1 元？`,a:t,input:true,e:`${n}＝${h?"100＋":""}${t*10}＋${o}，所以要 ${t} 個 10 元。`};});
+
+// ---- 第二單元 二位數的直式加減 ----
+mt(2,"js","加法直式（不進位）",()=>{let a,b;do{a=R(11,88);b=R(10,99-a);}while(a%10+b%10>9||b<10);return {q:`用直式算算看：${a} ＋ ${b} ＝ ？${vertBlank(a,b,"＋")}`,a:a+b,input:true,e:`個位 ${a%10}＋${b%10}＝${a%10+b%10}，十位 ${Math.floor(a/10)}＋${Math.floor(b/10)}＝${Math.floor(a/10)+Math.floor(b/10)}，答案 ${a+b}。`};});
+mt(2,"js","加法直式（要進位）",()=>{let a,b;do{a=R(15,89);b=R(12,99);}while(a%10+b%10<10||a+b>198);return {q:`用直式算算看：${a} ＋ ${b} ＝ ？${vertBlank(a,b,"＋")}`,a:a+b,input:true,e:`個位 ${a%10}＋${b%10}＝${a%10+b%10}，滿十要進 1 到十位。答案 ${a+b}。`};});
+mt(2,"js","減法直式（不退位）",()=>{let a,b;do{a=R(25,99);b=R(10,a-1);}while(a%10<b%10);return {q:`用直式算算看：${a} － ${b} ＝ ？${vertBlank(a,b,"－")}`,a:a-b,input:true,e:`個位 ${a%10}－${b%10}＝${a%10-b%10}，十位 ${Math.floor(a/10)}－${Math.floor(b/10)}＝${Math.floor(a/10)-Math.floor(b/10)}，答案 ${a-b}。`};});
+mt(2,"js","減法直式（要退位）",()=>{let a,b;do{a=R(30,99);b=R(11,a-1);}while(a%10>=b%10);return {q:`用直式算算看：${a} － ${b} ＝ ？${vertBlank(a,b,"－")}`,a:a-b,input:true,e:`個位 ${a%10} 不夠減 ${b%10}，向十位借 1 當 10：${a%10+10}－${b%10}＝${a%10+10-b%10}；十位剩 ${Math.floor(a/10)-1}－${Math.floor(b/10)}＝${Math.floor(a/10)-1-Math.floor(b/10)}。答案 ${a-b}。`};});
+mt(2,"js","整十的加減",()=>{const a=R(2,9)*10,b=R(1,9)*10;const add=Math.random()<.5||b>=a;return add?{q:`${a} ＋ ${b} ＝ ？`,a:a+b,input:true,e:`${a/10} 個十加 ${b/10} 個十是 ${(a+b)/10} 個十：${a+b}`}:{q:`${a} － ${b} ＝ ？`,a:a-b,input:true,e:`${a/10} 個十減 ${b/10} 個十是 ${(a-b)/10} 個十：${a-b}`};});
+mt(2,"zs","直式挖空（加法）",()=>{let a,b;do{a=R(12,88);b=R(11,98);}while(a+b>198);const c=a+b;const k=pick(["a0","a1","b0","b1"]);const ans=+String(k[0]==="a"?a:b).padStart(2,"0")[k[1]==="1"?0:1];
+  return {q:`□ 裡是多少？${vertHTML(a,b,"＋",c,k)}`,a:ans,input:true,e:`${a}＋${b}＝${c}，所以 □ 是 ${ans}。`};});
+mt(2,"zs","直式挖空（減法）",()=>{let a,b;do{a=R(30,99);b=R(11,a-5);}while(false);const c=a-b;const k=pick(["a0","b0","b1","c0"]);
+  const src=k[0]==="a"?a:k[0]==="b"?b:c;const ans=+String(src).padStart(2,"0")[k[1]==="1"?0:1];
+  return {q:`□ 裡是多少？${vertHTML(a,b,"－",c,k)}`,a:ans,input:true,e:`${a}－${b}＝${c}，所以 □ 是 ${ans}。`};});
+mt(2,"zs","找出算錯的地方",()=>{let a,b;do{a=R(30,99);b=R(11,a-1);}while(a%10>=b%10);const wrong=a-b+10;
+  return {q:`小華算 ${a} － ${b}，寫成 ${wrong}。他錯在哪裡？`,a:"向十位借了 1，十位忘記減 1",o:["個位算錯了","不用借位","答案是對的"],e:`個位不夠減要向十位借 1，十位要記得少 1。正確答案是 ${a-b}。`};});
+mt(2,"zs","直式要對齊哪一位",()=>pick([
+  {q:"用直式算 45 ＋ 8，8 要寫在哪一位的下面？",a:"個位（5 的下面）",o:["十位（4 的下面）","最左邊","哪裡都可以"],e:"直式要把個位對齊個位：8 寫在 5 的下面。"},
+  {q:"直式加法，要從哪一位開始算？",a:"個位",o:["十位","百位","哪一位都可以"],e:"從個位開始算，滿十才能進位到十位。"},
+  {q:"個位相加是 13，要怎麼寫？",a:"個位寫 3，進 1 到十位",o:["個位寫 13","個位寫 1，進 3","不用進位"],e:"13 是 1 個十和 3 個一：個位寫 3，十位進 1。"},
+  {q:"減法時個位不夠減，要怎麼辦？",a:"向十位借 1 當 10",o:["大的減小的","直接寫 0","換成加法"],e:"向十位借 1 當 10，十位就少 1。"}]));
+mt(2,"yy","加法應用題",()=>{const x=R(25,95),y=R(12,99);
+  const t=pick([`圖書角有故事書 ${x} 本，又放進 ${y} 本，現在一共有幾本？`,`${pick(NAMES)}有 ${x} 元，媽媽又給 ${y} 元，現在有多少元？`,`二年甲班摺了 ${x} 隻紙鶴，乙班摺了 ${y} 隻，兩班一共摺了幾隻？`]);return {q:t,a:x+y,input:true,e:`合起來用加法：${x}＋${y}＝${x+y}`};});
+mt(2,"yy","減法應用題",()=>{const a=R(40,99),b=R(12,a-5);
+  const t=pick([`果園有 ${a} 顆芭樂，賣掉 ${b} 顆，還剩幾顆？`,`一盒色紙有 ${a} 張，用掉 ${b} 張，還剩幾張？`,`哥哥有 ${a} 張貼紙，弟弟有 ${b} 張，哥哥比弟弟多幾張？`,`一本書有 ${a} 頁，${pick(NAMES)}看了 ${b} 頁，還有幾頁沒看？`]);return {q:t,a:a-b,input:true,e:`用減法：${a}－${b}＝${a-b}`};});
+
+// ---- 第三單元 量長度 ----
+mt(3,"cd","用迴紋針量",()=>{const n=R(3,11),obj=pick([["鉛筆","#f5c542"],["彩色筆","#e57373"],["橡皮擦","#90caf9"],["鉛筆盒","#a5d6a7"]]);
+  return {q:`${obj[0]}有幾個迴紋針長？${clipSVG([[obj[0],n,obj[1]]])}`,a:n,input:true,e:`數一數下面的迴紋針，有 ${n} 個，所以是 ${n} 個迴紋針長。`};});
+mt(3,"cd","比一比誰比較長（迴紋針）",()=>{let x,y;do{x=R(3,11);y=R(3,11);}while(x===y);
+  return {q:`甲和乙相差幾個迴紋針長？${clipSVG([["甲",x,"#f5c542"],["乙",y,"#90caf9"]])}`,a:Math.abs(x-y),input:true,e:`甲 ${x} 個、乙 ${y} 個，相差 ${Math.abs(x-y)} 個迴紋針。`};});
+mt(3,"cd","量長度的單位要一樣",()=>pick([
+  {q:"小明用迴紋針量桌子，小美用鉛筆量同一張桌子，量出來的數字不一樣，為什麼？",a:"用來量的東西長度不一樣",o:["桌子變長了","有人量錯了","數字一定要一樣"],e:"用來量的單位不一樣長，量出的數字就不同。要比較，就要用一樣的單位。"},
+  {q:"要比較兩支筆哪支比較長，下面哪個方法最好？",a:"一端對齊放在一起比",o:["看哪支比較重","看哪支顏色比較深","隨便放著看"],e:"把一端對齊，看另一端誰比較突出。"},
+  {q:"用同樣的迴紋針量，甲是 6 個長，乙是 8 個長，哪一個比較長？",a:"乙",o:["甲","一樣長"],e:"單位一樣，數字大的比較長：乙比較長。"},
+  {q:"全世界都通用、大家量起來都一樣的長度單位是什麼？",a:"公分",o:["迴紋針","鉛筆","手指"],e:"公分是大家都一樣的「普遍單位」。"}]));
+mt(3,"cd","用尺量幾公分",()=>{const len=R(2,11);return {q:`藍色的線有多長？<br><span class="muted">（填幾公分）</span>${rulerCM(0,len)}`,a:len,input:true,e:`從 0 量到 ${len}，就是 ${len} 公分。`};});
+mt(3,"cd","不是從 0 開始量",()=>{const st=R(1,4),len=R(2,8);return {q:`藍色的線有多長？<br><span class="muted">（填幾公分，注意不是從 0 開始）</span>${rulerCM(st,len)}`,a:len,input:true,e:`從 ${st} 量到 ${st+len}，${st+len}－${st}＝${len}，是 ${len} 公分。也可以數有幾大格。`};});
+mt(3,"cd","公分的加減",()=>{const a=R(5,40),b=R(2,30);const add=Math.random()<.5;const t=add?{q:`${a} 公分 ＋ ${b} 公分 ＝（　）公分`,a:a+b}:{q:`${Math.max(a,b)} 公分 － ${Math.min(a,b)} 公分 ＝（　）公分`,a:Math.abs(a-b)};
+  return Object.assign(t,{input:true,e:`單位一樣，直接${add?"相加":"相減"}：${t.a} 公分。`});});
+mt(3,"cd","長度應用題",()=>{const a=R(8,30),b=R(3,a-2);return pick([
+  {q:`紅緞帶長 ${a} 公分，藍緞帶長 ${b} 公分，紅緞帶比藍緞帶長幾公分？`,a:a-b,input:true,e:`${a}－${b}＝${a-b}（公分）`},
+  {q:`一條繩子長 ${a} 公分，剪掉 ${b} 公分，還剩幾公分？`,a:a-b,input:true,e:`${a}－${b}＝${a-b}（公分）`},
+  {q:`把 ${a} 公分和 ${b} 公分的兩根吸管接起來（不重疊），一共長幾公分？`,a:a+b,input:true,e:`${a}＋${b}＝${a+b}（公分）`}]);});
+mt(3,"cd","估一估",()=>pick([
+  {q:"一支新鉛筆大約長多少？",a:"18 公分",o:["2 公分","80 公分","180 公分"],e:"新鉛筆大約和一個手掌再長一點，約 18 公分。"},
+  {q:"一個橡皮擦大約長多少？",a:"4 公分",o:["40 公分","1 公分","100 公分"],e:"橡皮擦很小，大約 4 公分。"},
+  {q:"課本的長邊大約長多少？",a:"26 公分",o:["3 公分","260 公分","6 公分"],e:"課本大約 26 公分。"},
+  {q:"1 公分大約和什麼差不多長？",a:"小指甲的寬",o:["手掌","鉛筆","桌子"],e:"1 公分很短，大約是小指甲的寬度。"}]));
+
+// ---- 第四單元 加減關係與應用 ----
+mt(4,"gx","加法算式找缺的數",()=>{const b=R(12,60),c=R(b+10,99);const front=Math.random()<.5;return {q:front?`（　）＋ ${b} ＝ ${c}`:`${b} ＋（　）＝ ${c}`,a:c-b,input:true,e:`用減法找：${c}－${b}＝${c-b}`};});
+mt(4,"gx","減法算式找缺的數",()=>{const a=R(40,99),c=R(10,a-10);const front=Math.random()<.5;
+  return front?{q:`（　）－ ${a-c} ＝ ${c}`,a,input:true,e:`被減數用加法找：${c}＋${a-c}＝${a}`}:{q:`${a} －（　）＝ ${c}`,a:a-c,input:true,e:`用減法找：${a}－${c}＝${a-c}`};});
+mt(4,"gx","從加法知道減法",()=>{const a=R(15,60),b=R(12,39),c=a+b;const ask=Math.random()<.5;
+  return {q:`已經知道 ${a} ＋ ${b} ＝ ${c}，那麼 ${c} － ${ask?a:b} ＝ ？`,a:String(ask?b:a),o:uniqNums(ask?b:a,[c,a+b+10,Math.abs(a-b),ask?a:b,(ask?b:a)+10,(ask?b:a)-1]).map(String),e:`加法和減法是一家人：${c}－${ask?a:b}＝${ask?b:a}。`};});
+mt(4,"gx","用加法驗算",()=>{let a,b,c;do{a=R(40,99);b=R(11,a-10);c=a-b;}while(b===c);
+  return {q:`${a} － ${b} ＝ ${c}，要用哪一個算式驗算？`,a:`${c} ＋ ${b}`,o:[`${a} ＋ ${b}`,`${c} － ${b}`,`${a} ＋ ${c}`],e:`減法用加法驗算：差＋減數＝被減數，${c}＋${b}＝${a}，答案對了。`};});
+mt(4,"gx","驗算看對不對",()=>{const a=R(40,99),b=R(11,a-10);const right=Math.random()<.5;const c=right?a-b:a-b+pick([-10,10,1,-1]);
+  return {q:`${pick(NAMES)}算 ${a} － ${b} ＝ ${c}。用 ${c} ＋ ${b} 驗算，他算對了嗎？`,a:right?"算對了":"算錯了",o:[right?"算錯了":"算對了"],fixed:["算對了","算錯了"],e:`${c}＋${b}＝${c+b}，${right?"等於":"不等於"} ${a}，所以${right?"算對了":`算錯了，正確是 ${a-b}`}。`};});
+mt(4,"yy","原來有多少",()=>{const left=R(10,50),used=R(10,45);const t=pick([`${pick(NAMES)}有一些錢，買文具花了 ${used} 元，還剩 ${left} 元。原來有多少元？`,`公車上有一些人，到站下車 ${used} 人，車上還有 ${left} 人。原來車上有幾人？`,`盤子裡有一些餅乾，吃掉 ${used} 片，還剩 ${left} 片。原來有幾片？`]);
+  return {q:t,a:left+used,input:true,e:`把剩下的和用掉的合起來：${left}＋${used}＝${left+used}`};});
+mt(4,"yy","用掉多少",()=>{const a=R(40,99),left=R(8,a-12);const t=pick([`${pick(NAMES)}有 ${a} 元，買了一本筆記本後剩下 ${left} 元，筆記本多少元？`,`一包氣球有 ${a} 個，用了一些後還剩 ${left} 個，用了幾個？`]);
+  return {q:t,a:a-left,input:true,e:`${a}－${left}＝${a-left}`};});
+mt(4,"yy","又多了多少",()=>{const a=R(15,60),add=R(10,39);const t=pick([`花圃原有 ${a} 朵花，又開了一些後變成 ${a+add} 朵，又開了幾朵？`,`${pick(NAMES)}原有 ${a} 張卡片，朋友又送他一些，現在有 ${a+add} 張，朋友送了幾張？`]);
+  return {q:t,a:add,input:true,e:`${a+add}－${a}＝${add}`};});
+mt(4,"yy","比多比少",()=>{const a=R(30,80),d=R(5,25);const more=Math.random()<.5;
+  return more?{q:`哥哥有 ${a} 張郵票，妹妹比哥哥多 ${d} 張，妹妹有幾張？`,a:a+d,input:true,e:`比哥哥多，用加法：${a}＋${d}＝${a+d}`}
+    :{q:`哥哥有 ${a} 張郵票，妹妹比哥哥少 ${d} 張，妹妹有幾張？`,a:a-d,input:true,e:`比哥哥少，用減法：${a}－${d}＝${a-d}`};});
+
+// ---- 第五單元 面積大小的比較 ----
+mt(5,"mj","數一數有幾格",()=>{const k=R(4,12);const c=polyo(k);return {q:`著色的部分有幾格？${areaSVG([["",c,"#ffcc80"]])}`,a:k,input:true,e:`一格一格數，共 ${k} 格。`};});
+mt(5,"mj","哪一個面積比較大",()=>{const x=R(4,12);let y=Math.random()<.15?x:R(4,12);if(y===x&&Math.random()<.5)y=x+1;const A=polyo(x),B=polyo(y);const a=x>y?"甲":x<y?"乙":"一樣大";
+  return {q:`甲和乙，哪一個面積比較大？${areaSVG([["甲",A,"#ffcc80"],["乙",B,"#9fd3c7"]])}`,a,o:["甲","乙","一樣大"].filter(v=>v!==a),fixed:["甲","乙","一樣大"],e:`甲 ${x} 格、乙 ${y} 格，${a==="一樣大"?"一樣大":a+"比較大"}。`};});
+mt(5,"mj","大幾格",()=>{let x,y;do{x=R(4,12);y=R(4,12);}while(x===y);const A=polyo(x),B=polyo(y);
+  return {q:`面積比較大的比另一個多幾格？${areaSVG([["甲",A,"#ffcc80"],["乙",B,"#9fd3c7"]])}`,a:Math.abs(x-y),input:true,e:`甲 ${x} 格、乙 ${y} 格，相差 ${Math.abs(x-y)} 格。`};});
+mt(5,"mj","面積的觀念",()=>pick([
+  {q:"要比較兩張色紙哪一張比較大，可以怎麼做？",a:"把兩張疊在一起比",o:["比較哪一張比較重","比較顏色","摸摸看哪張比較滑"],e:"直接比較：疊在一起，看誰有多出來。"},
+  {q:"兩張桌子搬不動，要比較桌面誰比較大，可以怎麼做？",a:"用同樣大的紙去鋪，數一數幾張",o:["把桌子疊起來","看哪張桌子比較高","用眼睛隨便看"],e:"用一樣大的東西當單位去鋪，數一數就能比。"},
+  {q:"甲用大的方格數有 6 格，乙用小的方格數有 8 格。可以說乙比較大嗎？",a:"不可以，格子大小不一樣",o:["可以，8 比 6 大","可以，乙一定比較大","甲一定比較大"],e:"比較面積時，用來數的格子要一樣大。"},
+  {q:"用一樣大的格子數，甲是 9 格、乙是 7 格，哪一個面積比較大？",a:"甲",o:["乙","一樣大"],e:"格子一樣大，格數多的面積比較大：甲。"},
+  {q:"把一張紙剪開後重新拼成另一個形狀（沒有丟掉），面積會怎樣？",a:"一樣大",o:["變大","變小","不一定"],e:"紙沒有多也沒有少，面積就一樣大。"}]));
+mt(5,"mj","面積應用題",()=>{const a=R(8,20),b=R(3,a-2);return pick([
+  {q:`甲牆貼了 ${a} 塊一樣大的磁磚，乙牆貼了 ${b} 塊，甲牆比乙牆多幾塊？`,a:a-b,input:true,e:`${a}－${b}＝${a-b}（塊）`},
+  {q:`一張桌墊要用 ${a} 張一樣大的色紙鋪滿，已經鋪了 ${b} 張，還要幾張？`,a:a-b,input:true,e:`${a}－${b}＝${a-b}（張）`}]);});
+
+MT.forEach((t,i)=>Q.push({s:"math",id:`M${t.l}-${i}`,l:t.l,ty:t.ty,title:t.name,make:t.make}));
+const QMAP=Object.fromEntries(Q.map(q=>[q.id,q]));
+
+/* ===================== 注音（難字加注音，可在右上角關閉） ===================== */
+const ZYW={"應用":"ㄧㄥˋ ㄩㄥˋ","還剩":"ㄏㄞˊ ㄕㄥˋ","剩下":"ㄕㄥˋ ㄒㄧㄚˋ","剩":"ㄕㄥˋ","幾":"ㄐㄧˇ","驗算":"ㄧㄢˋ ㄙㄨㄢˋ","面積":"ㄇㄧㄢˋ ㄐㄧ","迴紋針":"ㄏㄨㄟˊ ㄨㄣˊ ㄓㄣ","公分":"ㄍㄨㄥ ㄈㄣ","直式":"ㄓˊ ㄕˋ","箭頭":"ㄐㄧㄢˋ ㄊㄡˊ","代表":"ㄉㄞˋ ㄅㄧㄠˇ","合起來":"ㄏㄜˊ ㄑㄧˇ ㄌㄞˊ","換":"ㄏㄨㄢˋ","湊":"ㄘㄡˋ","夠":"ㄍㄡˋ","玩具":"ㄨㄢˊ ㄐㄩˋ","故事書":"ㄍㄨˋ ㄕˋ ㄕㄨ","紙鶴":"ㄓˇ ㄏㄜˋ","摺":"ㄓㄜˊ","芭樂":"ㄅㄚ ㄌㄜˋ","貼紙":"ㄊㄧㄝ ㄓˇ","鉛筆盒":"ㄑㄧㄢ ㄅㄧˇ ㄏㄜˊ","鉛筆":"ㄑㄧㄢ ㄅㄧˇ","彩色筆":"ㄘㄞˇ ㄙㄜˋ ㄅㄧˇ","橡皮擦":"ㄒㄧㄤˋ ㄆㄧˊ ㄘㄚ","緞帶":"ㄉㄨㄢˋ ㄉㄞˋ","繩子":"ㄕㄥˊ ˙ㄗ","剪掉":"ㄐㄧㄢˇ ㄉㄧㄠˋ","剪開":"ㄐㄧㄢˇ ㄎㄞ","吸管":"ㄒㄧ ㄍㄨㄢˇ","重疊":"ㄔㄨㄥˊ ㄉㄧㄝˊ","疊":"ㄉㄧㄝˊ","大約":"ㄉㄚˋ ㄩㄝ","指甲":"ㄓˇ ㄐㄧㄚˇ","餅乾":"ㄅㄧㄥˇ ㄍㄢ","筆記本":"ㄅㄧˇ ㄐㄧˋ ㄅㄣˇ","氣球":"ㄑㄧˋ ㄑㄧㄡˊ","郵票":"ㄧㄡˊ ㄆㄧㄠˋ","著色":"ㄓㄨㄛˊ ㄙㄜˋ","磁磚":"ㄘˊ ㄓㄨㄢ","鋪":"ㄆㄨ","桌墊":"ㄓㄨㄛ ㄉㄧㄢˋ","通用":"ㄊㄨㄥ ㄩㄥˋ","對齊":"ㄉㄨㄟˋ ㄑㄧˊ","借":"ㄐㄧㄝˋ","進位":"ㄐㄧㄣˋ ㄨㄟˋ","進":"ㄐㄧㄣˋ","被減數":"ㄅㄟˋ ㄐㄧㄢˇ ㄕㄨˋ","算式":"ㄙㄨㄢˋ ㄕˋ","色紙":"ㄙㄜˋ ㄓˇ","搬":"ㄅㄢ","隨便":"ㄙㄨㄟˊ ㄅㄧㄢˋ","滑":"ㄏㄨㄚˊ","拼":"ㄆㄧㄣ","形狀":"ㄒㄧㄥˊ ㄓㄨㄤˋ","丟掉":"ㄉㄧㄡ ㄉㄧㄠˋ","文具":"ㄨㄣˊ ㄐㄩˋ","數字卡":"ㄕㄨˋ ㄗˋ ㄎㄚˇ","顏色":"ㄧㄢˊ ㄙㄜˋ","比較":"ㄅㄧˇ ㄐㄧㄠˋ","比較重":"ㄅㄧˇ ㄐㄧㄠˋ ㄓㄨㄥˋ","數一數":"ㄕㄨˇ ㄧ ㄕㄨˇ","數線":"ㄕㄨˋ ㄒㄧㄢˋ","個位":"ㄍㄜˋ ㄨㄟˋ","百位":"ㄅㄞˇ ㄨㄟˋ","十位":"ㄕˊ ㄨㄟˋ","最":"ㄗㄨㄟˋ","錢幣":"ㄑㄧㄢˊ ㄅㄧˋ","圖書角":"ㄊㄨˊ ㄕㄨ ㄐㄧㄠˇ","花圃":"ㄏㄨㄚ ㄆㄨˇ","果園":"ㄍㄨㄛˇ ㄩㄢˊ","磁":"ㄘˊ","估一估":"ㄍㄨ ㄧ ㄍㄨ","普遍":"ㄆㄨˇ ㄅㄧㄢˋ","單位":"ㄉㄢ ㄨㄟˋ","規律":"ㄍㄨㄟ ㄌㄩˋ","算錯":"ㄙㄨㄢˋ ㄘㄨㄛˋ","寬":"ㄎㄨㄢ","課本":"ㄎㄜˋ ㄅㄣˇ","突出":"ㄊㄨˊ ㄔㄨ","原來":"ㄩㄢˊ ㄌㄞˊ","一共":"ㄧ ㄍㄨㄥˋ","共":"ㄍㄨㄥˋ","貼":"ㄊㄧㄝ","牆":"ㄑㄧㄤˊ","塊":"ㄎㄨㄞˋ","隻":"ㄓ","顆":"ㄎㄜ","朵":"ㄉㄨㄛˇ","張":"ㄓㄤ","甲":"ㄐㄧㄚˇ","乙":"ㄧˇ"};
+const ZRE=new RegExp(Object.keys(ZYW).sort((a,b)=>b.length-a.length).join("|"),"g");
+function Z(h){if(h==null)return "";h=String(h);if(!S.zy)return h;let depth=0;
+  return h.split(/(<[^>]+>)/).map(p=>{if(p[0]==="<"){if(/^<svg/i.test(p))depth++;else if(/^<\/svg/i.test(p))depth--;return p;}
+    if(depth>0||!p)return p;return p.replace(ZRE,w=>{const z=ZYW[w].split(" ");return [...w].map((c,i)=>`<ruby>${c}<rt>${z[i]}</rt></ruby>`).join("");});}).join("");}
+
+
+/* ===================== 科目設定 ===================== */
+const SUBJ={
+  math:{name:"數學",icon:"🔢",title:"數學：康軒二上 第 1～5 單元",units:[{n:1,t:"200 以內的數"},{n:2,t:"二位數的直式加減"},{n:3,t:"量長度"},{n:4,t:"加減關係與應用"},{n:5,t:"面積大小的比較"}],label:n=>`第${n}單元`,
+      types:{sz:"數與位值",bd:"比大小",qb:"錢幣",js:"直式計算",zs:"直式觀念",cd:"量長度",gx:"加減關係",mj:"面積",yy:"應用題"},repeat:true,
+      sections:[["sz",5],["bd",3],["qb",3],["js",5],["zs",3],["cd",4],["gx",4],["mj",4],["yy",4]],
+      note:"數學題由程式依單元重點自動出題，每次數字都不一樣，可以一直練。單元名稱依網路上的康軒二上單元整理（待確認），細節請以課本為準。右上角「ㄅ」可以開關注音。"},
+  zh:{name:"國語",icon:"📗",title:"國語：翰林二上 第 1～6 課、統整活動一、二",units:LESSONS,label:n=>`第${n}課`,types:TYPES,soon:true,
+      sections:[["zy",6],["gz",6],["bs",3],["bh",3],["kw",4]],note:"國語題庫準備中。"}
+};
+let CUR="math";
+const SUB=()=>SUBJ[CUR];
+const subQ=()=>Q.filter(q=>q.s===CUR);
+const unitName=(q)=>{const U=SUBJ[q.s];const u=U.units.find(x=>x.n===q.l);return `${U.label(q.l)} ${u?u.t:""}`;};
+
+/* 題目實例：數學每次重新出數字，選擇題每次重新洗牌 */
+function inst(q){
+  let I=q.make?Object.assign({},q.make()):{q:q.q,a:q.a,o:q.gen?q.gen():q.o,e:q.e,input:q.input,fixed:q.fixed};
+  if(q.say&&!I.say)I.say=q.say;if(q.auto)I.auto=true;
+  if(!I.input)I.opts=I.fixed?I.fixed.slice():shuffle([String(I.a),...(I.o||[]).map(String)]);
+  I.a=String(I.a);return I;}
+const norm=v=>String(v==null?"":v).replace(/[,\s，]/g,"");
+const isRight=(I,v)=>I.input?norm(v)===norm(I.a)&&norm(v)!=="":v===I.a;
+function speak(t){try{if(!t||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.8;const v=speechSynthesis.getVoices().find(x=>/en[-_]US/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
+const plainText=h=>String(h).replace(/<svg[\s\S]*?<\/svg>/g,"［圖］").replace(/<br>/g," ").replace(/<[^>]+>/g,"");
+function keypadHTML(val,done){
+  return `<div class="ansbox ${done?"done":""}">${val?esc(val):'<span class="muted">在這裡輸入答案</span>'}</div>${done?"":`<div class="keypad">${[1,2,3,4,5,6,7,8,9,"⌫",0,"✓"].map(k=>`<button class="key ${k==="✓"?"go":""}" data-key="${k}">${k==="✓"?"確定":k}</button>`).join("")}</div>`}`;}
+
+/* ===================== 紀錄 ===================== */
+const KEY="g2a-duankao-v1";
+/* stars：累積得到的星星（家長獎勵看這個）；spent：花在寵物和遊戲的星星 */
+function plainState(){return {rec:{},stars:0,weak:[],spent:0,pets:[],active:0,rewards:[],redeemed:[],games:0,sub:"math",zy:true};}
+/* S.pet 永遠指向「目前陪伴的寵物」，不會另外存檔 */
+function setupState(st){
+  if(st.pet&&(!st.pets||!st.pets.length))st.pets=[st.pet];
+  delete st.pet;if(!Array.isArray(st.pets))st.pets=[];
+  st.active=Math.max(0,Math.min(st.active||0,st.pets.length-1));
+  Object.defineProperty(st,"pet",{configurable:true,enumerable:false,get(){return this.pets[this.active]||null;},set(x){}});
+  return st;}
+function freshState(){return setupState(plainState());}
+let S=freshState();
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);S=setupState(Object.assign(plainState(),p));}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}renderTop();}
+load();
+if(SUBJ[S.sub]&&!SUBJ[S.sub].soon)CUR=S.sub;
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();};
+const balance=()=>Math.max(0,S.stars-S.spent);
+function rec(id){return S.rec[id]||(S.rec[id]={r:0,w:0});}
+let lastStar=false;
+function markResult(id,ok){
+  const r=rec(id);lastStar=false;
+  if(ok){r.r++;
+    // 同一題一天只給一次星星（數學自動出題：同一種題型一天最多 3 顆）
+    const q=QMAP[id],cap=q&&q.make?3:1;
+    if(r.d!==today()){r.d=today();r.dn=0;}
+    if((r.dn||0)<cap){r.dn=(r.dn||0)+1;S.stars++;lastStar=true;}
+    S.weak=S.weak.filter(x=>x!==id);}
+  else{r.w++;if(!S.weak.includes(id))S.weak.push(id);}
+  save();checkRewards();
+}
+function addBonus(n,why){S.stars+=n;save();toast(`${why}，加 ${n} 顆星！`);checkRewards();}
+function toggleWeak(id){if(S.weak.includes(id)){S.weak=S.weak.filter(x=>x!==id);toast("已移出不熟");}else{S.weak.push(id);toast("已加入不熟");}save();}
+
+/* ===================== 共用 ===================== */
+const $=s=>document.querySelector(s);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),1400);}
+function chips(el,items,selected,multi,onChange){
+  el.innerHTML="";
+  items.forEach(([v,label])=>{
+    const b=document.createElement("button");b.className="chip"+(selected.has(v)?" on":"");b.textContent=label;
+    b.onclick=()=>{if(multi){selected.has(v)?selected.delete(v):selected.add(v);if(!selected.size)selected.add(v);}else{selected.clear();selected.add(v);}
+      [...el.children].forEach((c,i)=>c.classList.toggle("on",selected.has(items[i][0])));onChange&&onChange();};
+    el.appendChild(b);
+  });
+}
+const CHEER_OK=["答對了！好棒 🎉","太厲害了！⭐","完全正確！👍","你真用功！🌟","答對！繼續加油 💪"];
+const CHEER_BAD=["沒關係，記起來就好 😊","差一點點！看看說明 👀","再想想看，下次一定會 💪"];
+
+/* ===================== 刷題器（練習、不熟共用） ===================== */
+let active=null; // 目前接收鍵盤的刷題器
+function Runner(host,list,opts){
+  this.host=host;this.list=list;this.i=0;this.ans={};this.opts=opts||{};this.cache={};this.typed={};this.spoken={};
+  active=this;this.render();
+}
+Runner.prototype.get=function(i){if(!this.cache[i])this.cache[i]=inst(this.list[i]);return this.cache[i];};
+Runner.prototype.render=function(){
+  const h=this.host;
+  if(!this.list.length){h.innerHTML=`<div class="card result"><div style="font-size:48px">🌈</div><h2>${this.opts.empty||"沒有題目"}</h2></div>`;return;}
+  if(this.i>=this.list.length){
+    const n=this.list.length,ok=Object.values(this.ans).filter(x=>x.ok).length;
+    h.innerHTML=`<div class="card result"><div style="font-size:48px">🏆</div><h2>這一輪完成了！</h2><div class="score">${ok} / ${n}</div><div class="muted">答錯的題目已放進「不熟」</div><div class="nav2"><button class="btn" id="again">再練一次</button><button class="btn ghost" id="back">回設定</button></div></div>`;
+    h.querySelector("#again").onclick=()=>{this.i=0;this.ans={};this.cache={};this.typed={};this.spoken={};this.list=shuffle(this.list);this.render();};
+    h.querySelector("#back").onclick=()=>this.opts.onBack&&this.opts.onBack();
+    return;
+  }
+  const i=this.i,q=this.list[i],I=this.get(i),given=this.ans[i],isWeak=S.weak.includes(q.id),T=SUBJ[q.s].types;
+  const body=I.input?keypadHTML(given?given.pick:(this.typed[i]||""),!!given)
+    :`<div class="opts">${I.opts.map((o,k)=>{let c="opt";if(given){if(o===I.a)c+=" ok";else if(o===given.pick)c+=" bad";}
+      return `<button class="${c}" data-k="${k}" ${given?"disabled":""}><span class="k">${k+1}</span><span>${Z(o)}</span></button>`;}).join("")}</div>`;
+  h.innerHTML=`<div class="card">
+    <div class="qmeta"><span><span class="tag">${unitName(q)}</span><span class="tag">${T[q.ty]}</span><span class="tag">${q.make?"自動出題":"AI 模擬"}</span></span><span>${i+1} / ${this.list.length}</span></div>
+    <div class="qtext">${Z(I.q)}</div>
+    ${I.say?`<div style="margin:-6px 0 12px"><button class="btn ghost" id="sayBtn" style="padding:8px 14px;font-size:16px">🔊 ${I.auto?"再聽一次":"聽發音"}</button></div>`:""}
+    ${body}
+    ${given?`<div class="fb ${given.ok?"ok":"bad"} pop"><b>${given.ok?given.cheer:pick(CHEER_BAD)}</b>${given.ok?(given.star?" ⭐+1":"（今天這題的星星拿過了）"):""}<br>${given.ok?"":"正確答案："+Z(I.a)+"<br>"}${Z(I.e||"")}</div>`:""}
+    <div class="nav2">
+      <button class="btn ghost" id="prev" ${i===0?"disabled":""}>← 上一題</button>
+      <button class="btn ghost" id="flag">${isWeak?"移出不熟":"標不熟"}</button>
+      <button class="btn" id="next">${given?"下一題 →":"跳過 →"}</button>
+    </div>
+    <div class="kbd">鍵盤：${I.input?"直接打數字、Enter 確定":"1–4 作答、Enter 下一題"}、← 上一題、F 標不熟</div>
+  </div>`;
+  h.querySelectorAll(".opt").forEach(b=>b.onclick=()=>this.answer(+b.dataset.k));
+  h.querySelectorAll(".key").forEach(b=>b.onclick=()=>this.key(b.dataset.key));
+  const sb=h.querySelector("#sayBtn");if(sb)sb.onclick=()=>speak(I.say);
+  if(I.auto&&!given&&!this.spoken[i]){this.spoken[i]=1;setTimeout(()=>speak(I.say),250);}
+  h.querySelector("#prev").onclick=()=>this.prev();
+  h.querySelector("#next").onclick=()=>this.next();
+  h.querySelector("#flag").onclick=()=>{toggleWeak(q.id);this.render();};
+};
+Runner.prototype.cur=function(){return this.i<this.list.length?this.get(this.i):null;};
+Runner.prototype.key=function(k){
+  const I=this.cur();if(!I||!I.input||this.ans[this.i])return;let v=this.typed[this.i]||"";
+  if(k==="⌫"||k==="Backspace")v=v.slice(0,-1);else if(k==="✓"||k==="Enter"){if(v)this.submit(v);return;}else if(/^\d$/.test(String(k))&&v.length<6)v+=k;
+  this.typed[this.i]=v;this.render();};
+Runner.prototype.submit=function(v){
+  const q=this.list[this.i],I=this.cur();if(!q||this.ans[this.i])return;
+  const ok=isRight(I,v);markResult(q.id,ok);this.ans[this.i]={pick:v,ok,star:lastStar,cheer:pick(CHEER_OK)};this.render();};
+Runner.prototype.answer=function(k){const I=this.cur();if(!I||I.input)return;if(k>=I.opts.length)return;this.submit(I.opts[k]);};
+Runner.prototype.next=function(){if(this.i<this.list.length){this.i++;this.render();window.scrollTo(0,0);}};
+Runner.prototype.prev=function(){if(this.i>0){this.i--;this.render();}};
+Runner.prototype.flag=function(){const q=this.list[this.i];if(q){toggleWeak(q.id);this.render();}};
+
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA"||e.target.tagName==="INPUT")return;
+  if(examState&&examState.on){const I=examState.inst[examState.i];
+    if(I.input){if(/^\d$/.test(e.key)||e.key==="Backspace")examKey(e.key);}else if(/^[1-4]$/.test(e.key))examAnswer(+e.key-1);return;}
+  if(!active)return;const I=active.cur();
+  if(I&&I.input&&!active.ans[active.i]&&(/^\d$/.test(e.key)||e.key==="Backspace"||e.key==="Enter")){active.key(e.key);return;}
+  if(/^[1-4]$/.test(e.key))active.answer(+e.key-1);
+  else if(e.key==="Enter")active.next();
+  else if(e.key==="ArrowLeft")active.prev();
+  else if(e.key==="f"||e.key==="F")active.flag();
+});
+
+/* ===================== 科目切換 ===================== */
+function renderSubBar(){
+  $("#subBar").innerHTML=Object.entries(SUBJ).map(([k,v])=>`<button class="chip ${k===CUR?"on":""} ${v.soon?"soon":""}" data-s="${k}">${v.icon} ${v.name}${v.soon?"<small>（準備中）</small>":""}</button>`).join("");
+  $("#subBar").querySelectorAll("button").forEach(b=>b.onclick=()=>{const k=b.dataset.s;if(SUBJ[k].soon){toast(`${SUBJ[k].name}題庫準備中，敬請期待！`);return;}
+    if(examState&&examState.on){toast("模擬考進行中，交卷後再換科目");return;}
+    CUR=k;S.sub=k;save();resetSets();renderSubBar();show(curView==="pet"?"home":curView);});
+}
+let pL,pT,eL;const pO=new Set(["new"]),eN=new Set([20]),eM=new Set(["free"]);
+function resetSets(){const U=SUB();pL=new Set(U.units.map(u=>u.n));pT=new Set(Object.keys(U.types));eL=new Set(U.units.map(u=>u.n));}
+resetSets();
+
+/* ===================== 首頁 ===================== */
+function stat(list){let done=0,ok=0;list.forEach(q=>{const r=S.rec[q.id];if(r&&(r.r+r.w)){done++;if(r.r>0&&!S.weak.includes(q.id))ok++;}});return {n:list.length,done,ok};}
+function renderTop(){
+  $("#starCount").textContent="⭐ "+balance();
+  const pi=$("#petTabIcon");if(pi){if(S.pet&&KINDS[S.pet.k])pi.innerHTML=petLevel().lv>1?petSVG(S.pet.k,curV(),{size:26}):eggSVG(S.pet.k,curV(),26);else pi.textContent="🥚";}
+  const wn=S.weak.filter(id=>QMAP[id]&&QMAP[id].s===CUR).length;
+  const wb=$("#weakBadge");wb.textContent=wn?(wn>99?"99+":wn):"";wb.className=wn?"badge":"";
+}
+function accOf(list){let r=0,w=0;list.forEach(q=>{const x=S.rec[q.id];if(x){r+=x.r;w+=x.w;}});return {r,w,acc:r+w?Math.round(r/(r+w)*100):null};}
+function renderHome(){
+  const U=SUB(),SQ=subQ();
+  $("#subTitle").textContent=`${U.icon} ${U.title}`;
+  $("#unitHead").textContent=CUR==="zh"?"各課進度":(CUR==="sci"||CUR==="soc")?"各小節進度":"各單元進度";
+  $("#lessonList").innerHTML=U.units.map(L=>{const s=stat(SQ.filter(q=>q.l===L.n));const p=s.n?Math.round(s.ok/s.n*100):0;
+    return `<div class="lesson"><div style="flex:1;min-width:0"><b>${U.label(L.n)} ${L.t}</b><div class="bar"><i style="width:${p}%"></i></div><div class="muted">已會 ${s.ok} / ${s.n} ${CUR==="math"?"種題型":"題"}</div></div><button class="btn" style="padding:8px 12px;font-size:16px" data-l="${L.n}">練習</button></div>`;}).join("");
+  $("#lessonList").querySelectorAll("button").forEach(b=>b.onclick=()=>{pL.clear();pL.add(+b.dataset.l);pT.clear();Object.keys(U.types).forEach(t=>pT.add(t));show("practice");startPractice();});
+  $("#typeList").innerHTML=Object.entries(U.types).map(([t,name])=>{const s=stat(SQ.filter(q=>q.ty===t));const p=s.n?Math.round(s.ok/s.n*100):0;
+    return `<div class="lesson"><div style="flex:1"><b>${name}</b><div class="bar"><i style="width:${p}%"></i></div><div class="muted">已會 ${s.ok} / ${s.n} ${CUR==="math"?"種題型":"題"}</div></div></div>`;}).join("");
+  // 家長區：各科總覽＋目前科目各單元
+  const subs=Object.entries(SUBJ).filter(([k,v])=>!v.soon).map(([k,v])=>({v,...accOf(Q.filter(q=>q.s===k)),weak:S.weak.filter(id=>QMAP[id]&&QMAP[id].s===k).length}));
+  const total=subs.reduce((a,b)=>a+b.r+b.w,0);
+  $("#parentNote").textContent=total?`目前共作答 ${total} 次。各科答對率與不熟題數：`:"孩子還沒開始作答，作答後這裡會顯示哪一科、哪一課比較弱。";
+  const rows=U.units.map(L=>({L,...accOf(SQ.filter(q=>q.l===L.n)),weak:S.weak.filter(id=>QMAP[id]&&QMAP[id].s===CUR&&QMAP[id].l===L.n).length}));
+  $("#weakLessons").innerHTML=total?`<table><tr><th>科目</th><th>答對率</th><th>不熟</th></tr>${subs.map(x=>`<tr><td>${x.v.icon} ${x.v.name}</td><td>${x.acc===null?"—":x.acc+"%"}</td><td>${x.weak}</td></tr>`).join("")}</table>
+    <div class="muted" style="margin-top:10px">${U.name}各${CUR==="zh"?"課":"單元"}：</div><table><tr><th>範圍</th><th>答對率</th><th>不熟</th></tr>${rows.map(x=>`<tr><td>${U.label(x.L.n)} ${x.L.t}</td><td>${x.acc===null?"—":x.acc+"%"}</td><td>${x.weak}</td></tr>`).join("")}</table>`:"";
+  $("#subNote").textContent=U.note;
+}
+
+/* ===================== 練習 ===================== */
+function pPool(){return subQ().filter(q=>pL.has(q.l)&&pT.has(q.ty));}
+function renderPracticeSetup(){
+  const U=SUB();
+  const upd=()=>{const n=pPool().length;$("#pCount").textContent=U.repeat?`共 ${n} 種題型，每種出 3 題（數字每次都不同）`:`共 ${n} 題`;};
+  $("#pUnitHead").textContent=CUR==="zh"?"選課":(CUR==="sci"||CUR==="soc")?"選小節":"選單元";
+  chips($("#pLessons"),U.units.map(L=>[L.n,U.label(L.n)]),pL,true,upd);
+  chips($("#pTypes"),Object.entries(U.types),pT,true,upd);
+  chips($("#pOrder"),[["new","先做沒做過的"],["rand","隨機"],["wrong","常錯的優先"]],pO,false);
+  upd();
+}
+function startPractice(){
+  let list=shuffle(pPool());
+  const o=[...pO][0];
+  if(o==="new")list.sort((a,b)=>(S.rec[a.id]?1:0)-(S.rec[b.id]?1:0));
+  if(o==="wrong")list.sort((a,b)=>((S.rec[b.id]||{}).w||0)-((S.rec[a.id]||{}).w||0));
+  if(SUB().repeat){const l2=[];for(let k=0;k<3;k++)l2.push(...(k?shuffle(list):list));list=l2;}
+  $("#pSetup").classList.add("hide");$("#pRun").classList.remove("hide");
+  new Runner($("#pRun"),list,{onBack:()=>{$("#pRun").classList.add("hide");$("#pSetup").classList.remove("hide");renderPracticeSetup();active=null;}});
+}
+$("#pStart").onclick=startPractice;
+
+/* ===================== 不熟 ===================== */
+function renderWeak(){
+  const list=shuffle(S.weak.map(id=>QMAP[id]).filter(q=>q&&q.s===CUR));
+  $("#wHead").textContent=`${SUB().icon} ${SUB().name}的不熟題目`;
+  new Runner($("#wRun"),list,{empty:`${SUB().name}目前沒有不熟的題目，太棒了！`,onBack:()=>{show("home");}});
+}
+
+/* ===================== 模擬考 ===================== */
+let examState=null;
+const CN_NUM="一二三四五六七八九十";
+const secName=i=>i<10?CN_NUM[i]:"十"+CN_NUM[i-10];
+const duanN=()=>SUB().sections.reduce((a,b)=>a+b[1],0);
+function renderExamSetup(){
+  const U=SUB();
+  $("#eHead").textContent=`${U.icon} ${U.name}模擬考範圍`;
+  chips($("#eLessons"),U.units.map(L=>[L.n,U.label(L.n)]),eL,true);
+  const upd=()=>{const m=[...eM][0];$("#eNumCard").classList.toggle("hide",m==="duan");
+    $("#eModeNote").textContent=m==="duan"?`仿學校考卷：固定 ${duanN()} 題，分成${U.sections.map(s=>U.types[s[0]]).join("、")}等大題，每次重新抽題。`:"自己選題數，各種題型混在一起出。";};
+  chips($("#eMode"),[["free","自選題數"],["duan",`仿段考（${duanN()} 題）`]],eM,false,upd);
+  chips($("#eNum"),[[10,"10 題"],[20,"20 題"],[30,"30 題"],[40,"40 題"],[50,"50 題"]],eN,false);
+  upd();
+}
+// 依「考過幾次」排序：沒考過的優先，同次數隨機
+function freshFirst(list){S.ex=S.ex||{};return shuffle(list).sort((a,b)=>(S.ex[a.id]||0)-(S.ex[b.id]||0));}
+function takeN(list,n,repeat){const base=freshFirst(list);if(!repeat||!base.length)return base.slice(0,n);const out=[];while(out.length<n)out.push(...base.slice(0,n-out.length));return out;}
+$("#eStart").onclick=()=>{
+  const U=SUB(),pool=subQ().filter(q=>eL.has(q.l));const mode=[...eM][0];let list=[];
+  if(mode==="duan"){
+    const used=new Set();
+    U.sections.forEach(([ty,n],si)=>{takeN(pool.filter(q=>q.ty===ty),n,U.repeat).forEach(q=>{used.add(q.id);list.push(Object.assign({},q,{sec:si}));});});
+    const target=duanN();const rest=freshFirst(pool.filter(q=>!used.has(q.id)));
+    while(list.length<target&&rest.length){const q=rest.shift();const si=U.sections.findIndex(s=>s[0]===q.ty);list.push(Object.assign({},q,{sec:si<0?U.sections.length-1:si}));}
+    const grouped=[];U.sections.forEach((s,si)=>grouped.push(...shuffle(list.filter(q=>q.sec===si))));list=grouped;
+  }else{
+    const byType={};freshFirst(pool).forEach(q=>(byType[q.ty]=byType[q.ty]||[]).push(q));
+    const n=U.repeat?[...eN][0]:Math.min([...eN][0],pool.length);const keys=Object.keys(byType);
+    const cyc={};Object.keys(byType).forEach(k=>cyc[k]=byType[k].slice());
+    while(list.length<n){let added=false;for(const k of shuffle(keys)){if(list.length>=n)break;
+      if(!cyc[k].length&&U.repeat)cyc[k]=shuffle(byType[k]);if(cyc[k].length){list.push(cyc[k].shift());added=true;}}if(!added)break;}
+    list=shuffle(list);
+  }
+  S.ex=S.ex||{};list.forEach(q=>S.ex[q.id]=(S.ex[q.id]||0)+1);save();
+  examState={on:true,list,i:0,pick:{},inst:list.map(inst),duan:mode==="duan",sub:CUR};
+  active=null;$("#eSetup").classList.add("hide");$("#eRun").classList.remove("hide");renderExam();
+};
+function examAnswer(k){const st=examState,I=st.inst[st.i];if(I.input)return;if(k<I.opts.length){st.pick[st.i]=I.opts[k];renderExam();}}
+function examKey(k){const st=examState,I=st.inst[st.i];if(!I.input)return;let v=st.pick[st.i]||"";
+  if(k==="⌫"||k==="Backspace")v=v.slice(0,-1);else if(k==="✓"){if(st.i<st.list.length-1){st.i++;renderExam();window.scrollTo(0,0);}return;}else if(/^\d$/.test(String(k))&&v.length<6)v+=k;
+  if(v)st.pick[st.i]=v;else delete st.pick[st.i];renderExam();}
+function renderExam(){
+  const st=examState,h=$("#eRun");
+  if(!st.on){return;}
+  const q=st.list[st.i],I=st.inst[st.i],T=SUBJ[st.sub].types;
+  const doneN=Object.keys(st.pick).length;
+  const body=I.input?`<div class="ansbox">${st.pick[st.i]?esc(st.pick[st.i]):'<span class="muted">在這裡輸入答案</span>'}</div><div class="keypad">${[1,2,3,4,5,6,7,8,9,"⌫",0,"✓"].map(k=>`<button class="key ${k==="✓"?"go":""}" data-key="${k}">${k==="✓"?"下一題":k}</button>`).join("")}</div>`
+    :`<div class="opts">${I.opts.map((o,k)=>`<button class="opt${st.pick[st.i]===o?" pick":""}" data-k="${k}"><span class="k">${k+1}</span><span>${Z(o)}</span></button>`).join("")}</div>`;
+  h.innerHTML=`<div class="card">
+    <div class="qmeta"><span>${st.duan?`<span class="tag" style="background:var(--brand-soft);color:var(--brand)">${secName(q.sec)}、${T[q.ty]}</span>`:`<span class="tag">${T[q.ty]}</span>`}<span class="tag">${unitName(q)}</span></span><span>第 ${st.i+1} / ${st.list.length} 題・已作答 ${doneN}</span></div>
+    <div class="qtext">${Z(I.q)}</div>
+    ${I.say?`<div style="margin:-6px 0 12px"><button class="btn ghost" id="sayBtn" style="padding:8px 14px;font-size:16px">🔊 ${I.auto?"再聽一次":"聽發音"}</button></div>`:""}
+    ${body}
+    <div class="nav2"><button class="btn ghost" id="ep" ${st.i===0?"disabled":""}>← 上一題</button>
+    ${st.i<st.list.length-1?`<button class="btn" id="en">下一題 →</button>`:`<button class="btn" id="es">交卷 ✅</button>`}</div>
+    ${st.i<st.list.length-1?`<div style="margin-top:8px"><button class="btn ghost wide" id="es2">提前交卷</button></div>`:""}
+  </div>`;
+  h.querySelectorAll(".opt").forEach(b=>b.onclick=()=>examAnswer(+b.dataset.k));
+  h.querySelectorAll(".key").forEach(b=>b.onclick=()=>examKey(b.dataset.key));
+  const sb=h.querySelector("#sayBtn");if(sb)sb.onclick=()=>speak(I.say);
+  if(I.auto&&!I._spoken){I._spoken=1;setTimeout(()=>speak(I.say),250);}
+  h.querySelector("#ep").onclick=()=>{st.i--;renderExam();};
+  const en=h.querySelector("#en");if(en)en.onclick=()=>{st.i++;renderExam();window.scrollTo(0,0);};
+  const sub=()=>{const left=st.list.length-Object.keys(st.pick).length;if(left&&!confirmSoft(left))return;submitExam();};
+  const es=h.querySelector("#es");if(es)es.onclick=sub;
+  const es2=h.querySelector("#es2");if(es2)es2.onclick=sub;
+}
+let pendingSubmit=false;
+function confirmSoft(left){if(pendingSubmit){pendingSubmit=false;return true;}pendingSubmit=true;toast(`還有 ${left} 題沒寫，再按一次交卷`);setTimeout(()=>pendingSubmit=false,3000);return false;}
+function submitExam(){
+  const st=examState;st.on=false;const T=SUBJ[st.sub].types;
+  let ok=0;const wrong=[];
+  st.list.forEach((q,i)=>{const good=isRight(st.inst[i],st.pick[i]);if(good)ok++;else wrong.push(i);markResult(q.id,good);});
+  const score=Math.round(ok/st.list.length*100);
+  const bonus=st.list.length>=10?(score===100?10:score>=90?5:0):0;
+  if(bonus){addBonus(bonus,score===100?"模擬考滿分":"模擬考 90 分以上");confetti();}
+  $("#eRun").innerHTML=`<div class="card result pop"><div style="font-size:48px">${score>=90?"🏆":score>=70?"🎉":"💪"}</div><h2>${SUBJ[st.sub].name}模擬考成績</h2><div class="score">${score} 分</div><div class="muted">答對 ${ok} / ${st.list.length} 題${wrong.length?"，錯題已放進「不熟」":""}</div>${bonus?`<div class="bubble">🎁 獎勵星星 +${bonus}</div>`:`<div class="muted" style="margin-top:6px">考 10 題以上拿 90 分，可以多拿 5 顆星；滿分多拿 10 顆！</div>`}</div>
+  ${wrong.map(i=>{const q=st.list[i],I=st.inst[i];return `<div class="card"><div class="qmeta"><span><span class="tag">${SUBJ[q.s].label(q.l)}</span><span class="tag">${T[q.ty]}</span></span></div><div style="font-size:19px;margin:6px 0">${Z(I.q)}</div>${I.say?`<div class="muted">（唸的是：${esc(I.say)}）</div>`:""}<div class="fb bad">你的答案：${st.pick[i]?esc(st.pick[i]):"（沒寫）"}<br>正確答案：<b>${Z(I.a)}</b><br>${Z(I.e||"")}</div></div>`;}).join("")}
+  <div class="nav2"><button class="btn" id="eAgain">再考一次</button><button class="btn ghost" id="eWeak">去練不熟</button></div>`;
+  $("#eAgain").onclick=()=>{$("#eRun").classList.add("hide");$("#eSetup").classList.remove("hide");renderExamSetup();};
+  $("#eWeak").onclick=()=>show("weak");
+  window.scrollTo(0,0);
+}
+
+/* ===================== 切換頁面 ===================== */
+let curView="home";
+function show(v){
+  curView=v;
+  ["home","practice","weak","exam","pet"].forEach(x=>$("#v-"+x).classList.toggle("hide",x!==v));
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  $("#subBar").classList.toggle("hide",v==="pet");
+  active=null;try{speechSynthesis.cancel();}catch(e){}
+  if(v==="home")renderHome();
+  if(v==="practice"){$("#pRun").classList.add("hide");$("#pSetup").classList.remove("hide");renderPracticeSetup();}
+  if(v==="weak")renderWeak();
+  if(v==="pet")renderPet();
+  if(v==="exam"){if(!examState||!examState.on){$("#eRun").classList.add("hide");$("#eSetup").classList.remove("hide");renderExamSetup();}}
+  renderTop();window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+
+/* ===================== 備份 ===================== */
+function copyText(t,msg){
+  const done=()=>toast(msg);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>fallback());}else fallback();
+  function fallback(){const box=$("#importBox");box.value=t;box.select();try{document.execCommand("copy");done();}catch(e){toast("已放進下方框框，請手動複製");}}
+}
+$("#exportBtn").onclick=()=>copyText(btoa(unescape(encodeURIComponent(JSON.stringify(S)))),"備份碼已複製");
+$("#copyWrongBtn").onclick=()=>{
+  const ws=S.weak.map(id=>QMAP[id]).filter(Boolean);
+  if(!ws.length){toast("目前沒有錯題");return;}
+  const t=ws.map((q,i)=>{const U=SUBJ[q.s];return `${i+1}. ${U.name} ${U.label(q.l)}【${U.types[q.ty]}】${q.make?q.title+"（數字每次不同）":plainText(q.q)+"　答案："+q.a}`;}).join("\n");
+  copyText(t,"錯題清單已複製");
+};
+$("#importBtn").onclick=()=>{
+  try{const p=JSON.parse(decodeURIComponent(escape(atob($("#importBox").value.trim()))));if(!p||typeof p.rec!=="object")throw 0;S=setupState(Object.assign(plainState(),p));save();renderHome();$("#importBox").value="";toast("匯入成功！");}
+  catch(e){toast("備份碼不正確");}
+};
+let resetArm=false;
+$("#resetBtn").onclick=()=>{if(!resetArm){resetArm=true;toast("再按一次才會清除");setTimeout(()=>resetArm=false,3000);return;}const keep=S.rewards;S=freshState();S.rewards=keep;save();renderHome();toast("已清除（家長獎勵設定保留）");};
+
+/* ===================== 寵物養成 ===================== */
+/* ---- 原創寵物插畫（8 種 × 3 款） ---- */
+/* 原創 Q 版寵物插畫產生器：petSVG(kind, variant, opts) 回傳 SVG 字串 */
+const OL="#3b2a20"; // 外框色
+const SW=3.2;
+function E(cx,cy,rx,ry,fill,extra=""){return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" stroke="${OL}" stroke-width="${SW}" ${extra}/>`;}
+function En(cx,cy,rx,ry,fill,extra=""){return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" ${extra}/>`;}
+function P(d,fill,extra=""){return `<path d="${d}" fill="${fill}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round" stroke-linecap="round" ${extra}/>`;}
+function L(d,w=2.6,c=OL){return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;}
+
+function eyes(o={}){
+  const y=o.y||90,dx=o.dx||20,c=o.c||"#2a1d16";
+  if(o.happy) return L(`M${100-dx-7} ${y+2} Q${100-dx} ${y-7} ${100-dx+7} ${y+2}`,3.4)+L(`M${100+dx-7} ${y+2} Q${100+dx} ${y-7} ${100+dx+7} ${y+2}`,3.4);
+  return [100-dx,100+dx].map(x=>En(x,y,6.5,8.5,c)+En(x+2.2,y-3,2.6,2.8,"#fff")+En(x-2,y+3.5,1.2,1.2,"#fff")).join("");
+}
+function cheeks(c="#ff9aa8",y=104,dx=33){return En(100-dx,y,8.5,5.2,c,'opacity=".55"')+En(100+dx,y,8.5,5.2,c,'opacity=".55"');}
+function smile(y=106,w=6){return L(`M${100-w} ${y} Q${100-w/2} ${y+5} 100 ${y} Q${100+w/2} ${y+5} ${100+w} ${y}`,2.6);}
+function body(c,belly,o={}){
+  const y=o.y||152;
+  let s=E(100,y,40,33,c);
+  if(belly)s+=En(100,y+4,25,21,belly);
+  return s;
+}
+function feet(c,pad){return E(80,181,13,8,c)+E(120,181,13,8,c)+(pad?En(80,182,5,3.2,pad)+En(120,182,5,3.2,pad):"");}
+function arms(c,o={}){
+  if(o.up)return E(62,140,9,13,c,'transform="rotate(35 62 140)"')+E(138,140,9,13,c,'transform="rotate(-35 138 140)"');
+  return E(64,152,9,13,c,'transform="rotate(25 64 152)"')+E(136,152,9,13,c,'transform="rotate(-25 136 152)"');
+}
+function head(c,o={}){return E(100,88,o.rx||56,o.ry||50,c);}
+
+/* ===== 各種動物 ===== */
+const KINDS={
+cat:{name:"小貓",variants:[
+  {name:"橘子貓",c:"#f4a957",inner:"#ffd9b0",stripe:"#d9802f",belly:"#fff1df"},
+  {name:"灰虎斑",c:"#a9b0ba",inner:"#e7d6dc",stripe:"#6f7782",belly:"#eef0f3"},
+  {name:"黑白襪子貓",c:"#3d3a40",inner:"#f2b8c4",belly:"#ffffff",tux:true}
+],draw(v){
+  let s="";
+  // 尾巴
+  s+=P("M134 165 C170 160 172 120 160 108 C154 102 148 108 152 116 C160 132 152 150 130 152 Z",v.c);
+  if(v.stripe)s+=L("M158 118 L150 122 M163 132 L154 133",3,v.stripe);
+  s+=body(v.c,v.belly)+arms(v.c)+feet(v.tux?"#ffffff":v.c,"#f7b6c2");
+  // 耳朵
+  s+=P("M56 66 L52 22 L88 46 Z",v.c)+P("M144 66 L148 22 L112 46 Z",v.c);
+  s+=`<path d="M60 58 L58 32 L80 47 Z" fill="${v.inner}"/><path d="M140 58 L142 32 L120 47 Z" fill="${v.inner}"/>`;
+  s+=head(v.c);
+  if(v.tux)s+=`<path d="M100 74 C88 92 70 96 64 112 C72 132 128 132 136 112 C130 96 112 92 100 74 Z" fill="#fff"/>`;
+  if(v.stripe)s+=L("M100 42 L100 54 M88 44 L90 55 M112 44 L110 55",3.2,v.stripe)+L("M46 86 L58 88 M46 96 L58 96 M154 86 L142 88 M154 96 L142 96",3,v.stripe);
+  s+=eyes()+cheeks();
+  s+=P("M95 100 L105 100 L100 106 Z","#f28aa0");
+  s+=L("M100 106 Q96 112 91 110 M100 106 Q104 112 109 110",2.4);
+  s+=L("M60 102 L40 98 M60 108 L41 110 M140 102 L160 98 M140 108 L159 110",2,v.tux?"#bbb":"#8a6a55");
+  return s;}},
+
+dog:{name:"小狗",variants:[
+  {name:"柴柴",c:"#e9a15a",muzzle:"#fff6ea",ear:"up",tail:"curl"},
+  {name:"垂耳小白",c:"#fbf7f1",ear:"flop",earC:"#c98d5a",tail:"wag"},
+  {name:"斑點狗",c:"#ffffff",ear:"flop",earC:"#3d3a40",spots:true,tail:"wag"}
+],draw(v){
+  let s="";
+  if(v.tail==="curl")s+=P("M132 150 C160 150 166 124 150 120 C138 117 134 132 146 134",v.c)+En(148,126,6,5,v.muzzle||"#fff");
+  else s+=P("M134 156 C152 150 160 132 156 124 C152 120 146 126 146 132 C144 142 138 148 132 148 Z",v.c);
+  s+=body(v.c,v.muzzle||"#fff7ee")+arms(v.c)+feet(v.c,"#f2b8a0");
+  if(v.spots)s+=En(78,148,6,5,"#3d3a40")+En(118,162,7,5,"#3d3a40")+En(134,140,4,4,"#3d3a40");
+  if(v.ear==="up")s+=P("M54 62 L58 26 L86 48 Z",v.c)+P("M146 62 L142 26 L114 48 Z",v.c)+`<path d="M62 54 L63 36 L78 48 Z" fill="#ffd1b0"/><path d="M138 54 L137 36 L122 48 Z" fill="#ffd1b0"/>`;
+  s+=head(v.c);
+  if(v.muzzle)s+=`<path d="M100 84 C84 84 62 96 62 110 C70 130 130 130 138 110 C138 96 116 84 100 84 Z" fill="${v.muzzle}"/>`+`<path d="M78 66 Q84 60 90 66 M110 66 Q116 60 122 66" fill="none" stroke="${v.muzzle}" stroke-width="5" stroke-linecap="round"/>`;
+  if(v.spots)s+=En(124,62,9,7,"#3d3a40")+En(74,112,5,4,"#3d3a40");
+  if(v.ear==="flop")s+=P("M52 58 C34 62 30 100 44 108 C54 112 60 96 62 76 Z",v.earC)+P("M148 58 C166 62 170 100 156 108 C146 112 140 96 138 76 Z",v.earC);
+  s+=eyes({y:88})+cheeks("#ff9aa8",106,34);
+  s+=E(100,101,8,6,"#2a1d16")+En(97,99,2.5,1.6,"#fff");
+  s+=L("M100 107 L100 111 M92 112 Q100 120 108 112",2.4);
+  s+=`<path d="M96 114 Q100 124 104 114 Z" fill="#ff7f90"/>`;
+  return s;}},
+
+rabbit:{name:"小兔",variants:[
+  {name:"雪白兔",c:"#ffffff",inner:"#ffc4d0",ear:"up"},
+  {name:"垂耳兔",c:"#e8d3b9",inner:"#ffcfd6",ear:"lop",patch:"#c4a07a"},
+  {name:"灰灰兔",c:"#b9b4bd",inner:"#f6c6d2",ear:"up",belly:"#f4f2f5"}
+],draw(v){
+  let s="";
+  s+=E(138,166,11,10,"#fff");
+  s+=body(v.c,v.belly||null)+arms(v.c)+feet(v.c,v.inner);
+  if(v.ear==="up")s+=E(78,32,12,34,v.c,'transform="rotate(-10 78 32)"')+En(78,34,6,24,v.inner,'transform="rotate(-10 78 34)"')+E(122,32,12,34,v.c,'transform="rotate(10 122 32)"')+En(122,34,6,24,v.inner,'transform="rotate(10 122 34)"');
+  s+=head(v.c);
+  if(v.patch)s+=`<path d="M120 50 C140 52 152 70 150 86 C138 86 124 74 120 50 Z" fill="${v.patch}"/>`;
+  if(v.ear==="lop")s+=E(50,82,13,32,v.c,'transform="rotate(18 50 82)"')+En(51,84,6,22,v.inner,'transform="rotate(18 51 84)"')+E(150,82,13,32,v.c,'transform="rotate(-18 150 82)"')+En(149,84,6,22,v.inner,'transform="rotate(-18 149 84)"');
+  s+=eyes()+cheeks();
+  s+=P("M96 100 Q100 97 104 100 Q100 106 96 100 Z","#f28aa0");
+  s+=L("M100 104 L100 108 M94 110 Q100 114 106 110",2.4);
+  s+=`<rect x="96" y="109" width="8" height="6" rx="1.5" fill="#fff" stroke="${OL}" stroke-width="2"/>`;
+  return s;}},
+
+dragon:{name:"小龍",variants:[
+  {name:"綠葉龍",c:"#7cc96b",belly:"#f4f0b8",horn:"#fff3c4",spike:"#4f9e4a",wing:"#a7e08f"},
+  {name:"紫晶龍",c:"#a98be0",belly:"#f8e7ff",horn:"#fff3c4",spike:"#7a5cc0",wing:"#cdb8f3"},
+  {name:"火焰龍",c:"#f27d5c",belly:"#ffe6a8",horn:"#fff3c4",spike:"#c9503a",wing:"#ffb38f",fire:true}
+],draw(v){
+  let s="";
+  // 翅膀
+  s+=P("M66 132 C40 112 30 124 36 140 C44 136 46 146 54 142 C56 150 64 146 66 142 Z",v.wing)+P("M134 132 C160 112 170 124 164 140 C156 136 154 146 146 142 C144 150 136 146 134 142 Z",v.wing);
+  // 尾巴
+  s+=P("M130 168 C156 172 172 160 176 146 L186 150 L180 138 L170 142 C164 152 150 158 132 156 Z",v.c);
+  s+=body(v.c,null)+`<path d="M86 132 C80 150 84 172 100 176 C116 172 120 150 114 132 Z" fill="${v.belly}"/>`+L("M88 146 L112 146 M86 158 L114 158",2,"#d8cf8a");
+  s+=arms(v.c)+feet(v.c,v.belly);
+  // 角與背刺
+  s+=P("M70 48 L62 18 L84 40 Z",v.horn)+P("M130 48 L138 18 L116 40 Z",v.horn);
+  s+=P("M88 40 L94 26 L100 38 L106 26 L112 40 Z",v.spike);
+  s+=head(v.c);
+  s+=E(100,104,22,14,v.belly);
+  s+=eyes({y:84})+cheeks("#ff8f9e",98,36);
+  s+=En(93,101,2.4,2,"#3b2a20")+En(107,101,2.4,2,"#3b2a20");
+  s+=L("M90 110 Q100 118 110 110",2.6);
+  if(v.fire)s+=`<path d="M100 120 C94 128 98 134 100 132 C102 134 106 128 100 120 Z" fill="#ffcf5a" stroke="#f08a3a" stroke-width="1.6"/>`;
+  return s;}},
+
+panda:{name:"熊貓",variants:[
+  {name:"圓滾滾熊貓",acc:""},
+  {name:"抱竹子熊貓",acc:"bamboo"},
+  {name:"小葉子熊貓",acc:"leaf"}
+],draw(v){
+  const W="#ffffff",B="#2f2b30";
+  let s="";
+  s+=body(W,null)+feet(B,"#6a6070");
+  if(v.acc==="bamboo")s+=`<rect x="104" y="112" width="9" height="66" rx="3" fill="#8fcf6a" stroke="${OL}" stroke-width="2.6" transform="rotate(14 108 145)"/>`+L("M106 130 L116 132 M103 150 L113 152",2.2,"#4f9e4a")+P("M117 120 C130 110 140 114 142 118 C134 122 124 124 117 120 Z","#8fcf6a");
+  s+=v.acc==="bamboo"?(E(80,146,9,13,B,'transform="rotate(-40 80 146)"')+E(120,144,9,13,B,'transform="rotate(40 120 144)"')):arms(B);
+  s+=E(56,46,15,14,B)+E(144,46,15,14,B);
+  s+=head(W);
+  s+=En(78,90,13,16,B,'transform="rotate(25 78 90)"')+En(122,90,13,16,B,'transform="rotate(-25 122 90)"');
+  s+=[78,122].map(x=>En(x+1,90,5,6.5,"#fff")+En(x+1.5,90.5,3.4,4.6,"#1c1a1d")+En(x+2.6,88.6,1.3,1.4,"#fff")).join("");
+  s+=cheeks("#ff9aa8",108,36);
+  s+=E(100,104,7,5,B);
+  s+=L("M100 109 L100 112 M93 113 Q100 119 107 113",2.4);
+  if(v.acc==="leaf")s+=P("M100 40 C88 24 104 14 118 22 C116 34 108 40 100 40 Z","#7cc96b")+L("M100 40 Q108 30 116 24",2,"#3f8a3a");
+  return s;}},
+
+chick:{name:"小雞",variants:[
+  {name:"黃色小雞",shell:""},
+  {name:"剛破殼小雞",shell:"bottom"},
+  {name:"蛋殼帽小雞",shell:"hat"}
+],draw(v){
+  const C="#ffd84a";
+  let s="";
+  s+=L("M84 172 L80 186 L72 188 M80 186 L82 192 M80 186 L88 190",3.4,"#f08a2a")+L("M116 172 L120 186 L128 188 M120 186 L118 192 M120 186 L112 190",3.4,"#f08a2a");
+  if(v.shell!=="hat")s+=P("M98 36 C94 22 104 18 104 30 C110 20 118 28 108 38 Z",C);
+  s+=E(100,112,58,64,C);
+  s+=E(46,124,10,18,C,'transform="rotate(25 46 124)"')+E(154,124,10,18,C,'transform="rotate(-25 154 124)"');
+  s+=eyes({y:100,dx:21})+cheeks("#ff9aa8",116,36);
+  s+=P("M90 108 L110 108 L100 120 Z","#ff9f3a")+L("M91 109 L109 109",1.6,"#d9741e");
+  if(v.shell==="bottom")s+=P("M38 140 L52 128 L64 142 L78 128 L92 142 L106 128 L120 142 L134 128 L148 142 L162 130 C166 168 140 190 100 190 C60 190 34 168 38 140 Z","#fffaf0")+En(70,170,5,3,"#f0e4cc")+En(130,160,4,3,"#f0e4cc");
+  if(v.shell==="hat")s+=P("M56 66 C56 28 144 28 144 66 L132 56 L120 68 L108 56 L96 68 L84 56 L72 68 Z","#fffaf0")+En(86,42,5,3,"#f0e4cc")+En(116,38,4,3,"#f0e4cc");
+  return s;}},
+
+beaver:{name:"河狸",variants:[
+  {name:"木頭河狸",c:"#a8724a",muzzle:"#e9cfae",log:false},
+  {name:"抱木頭河狸",c:"#9a6440",muzzle:"#e9cfae",log:true},
+  {name:"奶茶河狸",c:"#c99b6d",muzzle:"#f6e6cf",leaf:true},
+  {name:"色鉛筆河狸",c:"#a8724a",img:"BEAVER4"}
+],draw(v){
+  let s="";
+  // 扁扁的尾巴
+  s+=`<g transform="rotate(-20 150 160)">${E(152,160,16,28,"#6b4a36")}${L("M142 146 L162 150 M140 158 L164 162 M142 170 L162 174",1.8,"#4a3326")}</g>`;
+  s+=body(v.c,v.muzzle)+feet("#6b4a36","#8d6650");
+  if(v.log)s+=`<g transform="rotate(-6 100 150)">${P("M66 140 L134 140 L134 160 L66 160 Z","#c98b5a")}${E(134,150,7,10,"#e9c08f")}${L("M131 147 Q134 150 137 147",1.6,"#a06a40")}${L("M76 146 L96 146 M104 154 L122 154",1.8,"#9a6440")}</g>`+E(72,148,9,10,v.c)+E(128,146,9,10,v.c);
+  else s+=arms(v.c);
+  s+=E(60,52,11,10,v.c)+En(60,53,5,4.5,"#e2b48f")+E(140,52,11,10,v.c)+En(140,53,5,4.5,"#e2b48f");
+  s+=head(v.c);
+  s+=E(100,104,26,17,v.muzzle);
+  s+=eyes({y:84,dx:22})+cheeks("#ff9aa8",100,38);
+  s+=E(100,96,9,6,"#3b2a20")+En(97,94.5,2.6,1.6,"#fff");
+  s+=L("M100 102 L100 106 M92 104 Q96 108 100 106 Q104 108 108 104",2.4);
+  s+=`<rect x="93" y="106" width="14" height="13" rx="2.5" fill="#fff" stroke="${OL}" stroke-width="2.4"/>`+L("M100 107 L100 118",1.8);
+  if(v.leaf)s+=P("M118 40 C114 24 130 18 140 26 C138 38 128 42 118 40 Z","#7cc96b")+L("M118 40 Q128 32 138 27",2,"#3f8a3a");
+  return s;}},
+
+bear:{name:"小熊",variants:[
+  {name:"森林棕熊",c:"#9b6a45",muzzle:"#e8cfae",inner:"#e2b48f"},
+  {name:"北極熊",c:"#f7f8fb",muzzle:"#ffffff",inner:"#d9e4ef",shade:true},
+  {name:"圍巾小熊",c:"#c48d5f",muzzle:"#f4e2c8",inner:"#f0c9a0",scarf:"#5aa3d8"}
+],draw(v){
+  let s="";
+  s+=E(136,168,9,8,v.c);
+  s+=body(v.c,v.muzzle)+arms(v.c)+feet(v.c,v.inner);
+  s+=E(56,46,15,14,v.c)+En(56,47,8,7,v.inner)+E(144,46,15,14,v.c)+En(144,47,8,7,v.inner);
+  s+=head(v.c);
+  if(v.shade)s+=`<path d="M56 100 C60 124 84 136 100 136 C80 132 64 120 56 100 Z" fill="#dfe8f2"/>`;
+  s+=E(100,106,22,16,v.muzzle);
+  s+=eyes({y:86})+cheeks("#ff9aa8",104,36);
+  s+=E(100,100,8,6,"#3b2a20")+En(97,98,2.4,1.5,"#fff");
+  s+=L("M100 106 L100 110 M92 111 Q100 118 108 111",2.4);
+  if(v.scarf)s+=P("M58 124 C80 134 120 134 142 124 L144 136 C120 146 80 146 56 136 Z",v.scarf)+P("M118 136 L124 162 L136 158 L130 134 Z",v.scarf)+L("M64 130 L66 138 M78 134 L79 142 M122 134 L121 142 M136 130 L134 138",2,"#ffffff");
+  return s;}}
+};
+
+const PET_IMG={BEAVER4:"data:image/webp;base64,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"};
+function petSVG(kind,vi,o={}){
+  const k=KINDS[kind],v=k.variants[vi];
+  if(v.img)return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${o.size||160}" height="${o.size||160}" role="img" aria-label="${v.name}"><image href="${PET_IMG[v.img]}" x="0" y="0" width="200" height="200"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${o.size||160}" height="${o.size||160}" role="img" aria-label="${v.name}">${k.draw(v)}</svg>`;
+}
+
+function eggSVG(kind,vi,size){const v=KINDS[kind].variants[vi];const c=v.c||(kind==="chick"?"#ffd84a":kind==="panda"?"#2f2b30":"#ccc");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="${size}" height="${size}"><path d="M100 22 C140 22 168 92 166 128 C164 166 136 186 100 186 C64 186 36 166 34 128 C32 92 60 22 100 22 Z" fill="#fffaf0" stroke="${OL}" stroke-width="3.2"/><ellipse cx="78" cy="96" rx="12" ry="9" fill="${c}" opacity=".8"/><ellipse cx="124" cy="128" rx="15" ry="11" fill="${c}" opacity=".8"/><ellipse cx="90" cy="152" rx="8" ry="6" fill="${c}" opacity=".8"/><ellipse cx="122" cy="74" rx="7" ry="5" fill="${c}" opacity=".8"/><path d="M70 60 Q76 46 88 40" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".9"/></svg>`;}
+function petPickerHTML(selK,selV){return Object.keys(KINDS).map(k=>`<div class="pickKind">${KINDS[k].name}</div><div class="petPick">${KINDS[k].variants.map((v,i)=>`<button data-k="${k}" data-v="${i}" class="${k===selK&&i===selV?"on":""}">${petSVG(k,i,{size:96})}<small>${v.name}</small></button>`).join("")}</div>`).join("");}
+const curV=()=>S.pet&&KINDS[S.pet.k]?(S.pet.v||0):0;
+const MAX_LV=50;
+const needXP=l=>15+14*l; // 從 l 級升到 l+1 級需要的成長值
+const LV_TITLE=["剛出生的寶寶","小不點","活潑寶寶","學習小幫手","數字小達人","計算高手","複習博士","用功大師","學習王子","學習之王"];
+const lvTitle=l=>l===1?"神秘的蛋":LV_TITLE[Math.min(9,Math.floor((l-1)/5))];
+const LV_DECO=["","🌱","🌱🌼","🌼🎀🌼","🌈🎀🌈","🌟🎀🌟","🏅🎀🏅","🎓🌟🎓","💎🎓💎","👑✨👑"];
+const lvDeco=l=>l===1?"":LV_DECO[Math.min(9,Math.floor((l-1)/5))];
+const FOODS=[{e:"🍪",n:"小餅乾",c:1,x:5},{e:"🍙",n:"飯糰",c:3,x:18},{e:"🍰",n:"蛋糕",c:5,x:32},{e:"🍱",n:"豪華便當",c:10,x:70}];
+const GAME_COST=5;
+const TALK=["今天也要一起練習喔！","摸摸我～好舒服 😊","你答對的時候我最開心了！","我想吃蛋糕 🍰","多練幾題，我就會長大喔！","不熟的題目，我們一起打敗它！","你是我最好的朋友 💛"];
+function petLevel(pt){pt=pt||S.pet;const xp=pt?pt.xp:0;let lv=1,cur=0;while(lv<MAX_LV&&xp>=cur+needXP(lv)){cur+=needXP(lv);lv++;}return {lv,xp,cur,next:lv<MAX_LV?cur+needXP(lv):null};}
+/* 寵物欄位：最高等級到 10／20／30／40 各多開一格，最多 5 隻 */
+const UNLOCK=[10,20,30,40];
+function petSlots(){const m=Math.max(0,...S.pets.map(x=>petLevel(x).lv));return Math.min(5,1+UNLOCK.filter(t=>m>=t).length);}
+let adding=false;
+function petBarHTML(){
+  if(!S.pets.length)return "";
+  const slots=petSlots();let html="";
+  for(let i=0;i<5;i++){
+    const pt=S.pets[i];
+    if(pt){const l=petLevel(pt).lv;html+=`<button class="slot ${i===S.active&&!adding?"on":""}" data-i="${i}">${l===1?eggSVG(pt.k,pt.v||0,52):petSVG(pt.k,pt.v||0,{size:52})}<small>${esc(pt.name)}</small><small>Lv.${l}</small></button>`;}
+    else if(i<slots)html+=`<button class="slot add ${adding?"on":""}" data-add="1"><span style="font-size:30px">＋</span><small>新寵物</small></button>`;
+    else html+=`<div class="slot lock"><span style="font-size:24px">🔒</span><small>Lv.${UNLOCK[i-1]}</small><small>解鎖</small></div>`;
+  }
+  return `<div class="card"><h2>🏡 我的寵物</h2><div class="slots">${html}</div><div class="muted" style="margin-top:6px">點寵物可以切換誰陪你練習。任一隻寵物到 Lv.10、20、30、40，就能多養一隻（最多 5 隻）。</div></div>`;
+}
+function bindPetBar(h){
+  h.querySelectorAll(".slot[data-i]").forEach(b=>b.onclick=()=>{S.active=+b.dataset.i;adding=false;save();renderPet();window.scrollTo(0,0);});
+  h.querySelectorAll(".slot[data-add]").forEach(b=>b.onclick=()=>{adding=true;renderPet();});
+}
+function daysSince(d){if(!d)return 99;const [y,m,dd]=d.split("-").map(Number);return Math.floor((new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())-new Date(y,m-1,dd))/864e5);}
+let petPickTmp={k:"cat",v:0};
+function renderPet(){
+  const h=$("#petHost");
+  if(!S.pet||adding){
+    h.innerHTML=petBarHTML()+`<div class="card"><h2>🥚 領養${S.pets.length?"新的":"一隻"}寵物</h2><div class="muted">答對題目拿到的星星，可以餵寵物、讓牠長大！先選一隻吧（共 24 款）：</div>
+      <div style="margin-top:4px">${petPickerHTML(petPickTmp.k,petPickTmp.v)}</div>
+      <div style="margin-top:12px"><input class="txt" id="petName" maxlength="8" placeholder="幫牠取名字（例如：小黃）"></div>
+      <div style="margin-top:12px"><button class="btn wide" id="adopt">領養 💛</button></div>
+      ${S.pets.length?`<div style="margin-top:8px"><button class="btn ghost wide" id="cancelAdopt">先不要</button></div>`:""}</div>`;
+    bindPetBar(h);
+    const ca=h.querySelector("#cancelAdopt");if(ca)ca.onclick=()=>{adding=false;renderPet();};
+    h.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{petPickTmp={k:b.dataset.k,v:+b.dataset.v};h.querySelectorAll(".petPick button").forEach(x=>x.classList.toggle("on",x===b));});
+    h.querySelector("#adopt").onclick=()=>{const nm=(h.querySelector("#petName").value||"").trim()||KINDS[petPickTmp.k].variants[petPickTmp.v].name;
+      S.pets.push({k:petPickTmp.k,v:petPickTmp.v,name:nm,xp:0,fed:null});S.active=S.pets.length-1;adding=false;save();renderPet();window.scrollTo(0,0);toast("領養成功！快餵牠讓蛋孵化 🥚");};
+    renderRewardsInto(h,true);
+    return;
+  }
+  if(!KINDS[S.pet.k]){S.pet.k="cat";S.pet.v=0;}
+  const L=petLevel();
+  const size=L.lv===1?120:Math.round(120+L.lv*2.2);
+  const art=L.lv===1?eggSVG(S.pet.k,curV(),size):petSVG(S.pet.k,curV(),{size});
+  const pct=L.next?Math.round((L.xp-L.cur)/(L.next-L.cur)*100):100;
+  const ds=daysSince(S.pet.fed);
+  const say=L.lv===1?"蛋裡好像有東西在動……餵我就會孵化！":ds>=3?`${S.pet.name}好想你 🥺 快來練習、餵我吃東西！`:pick(TALK);
+  const bal=balance();
+  h.innerHTML=petBarHTML()+`<div class="card">
+    <div class="petStage" id="stage">
+      <div class="petDeco">${lvDeco(L.lv)}</div>
+      <div class="petEmoji" id="petE" style="width:${size}px">${art}</div>
+      <div><b style="font-size:20px">${S.pet.name}</b>　<span class="tag">Lv.${L.lv} ${lvTitle(L.lv)}</span></div>
+      <div class="bubble" id="say">${say}</div>
+    </div>
+    <div class="bar" style="height:14px;margin-top:10px"><i style="width:${pct}%"></i></div>
+    <div class="muted" style="text-align:center">${L.next?`成長值 ${L.xp} / ${L.next}，再 ${L.next-L.xp} 點升到 Lv.${L.lv+1}`:"已經是最高等級 Lv.50，太厲害了！👑"}</div>
+  </div>
+  <div class="card"><div class="wallet"><div><b>${bal}</b>可以用的星星</div><div><b>${S.stars}</b>累積拿到的星星</div></div>
+    <div class="muted" style="text-align:center;margin-top:6px">答對題目拿星星（同一題一天拿一次）</div></div>
+  <div class="card"><h2>🍽️ 餵 ${S.pet.name}</h2>
+    <div class="foods">${FOODS.map((f,i)=>`<button class="food" data-i="${i}" ${bal<f.c?"disabled":""}><span class="fe">${f.e}</span>${f.n}<br><span class="muted">⭐${f.c}・成長 +${f.x}</span></button>`).join("")}</div>
+    ${bal<1?`<div class="muted" style="margin-top:8px">星星不夠了，去「練習」答題賺星星吧！</div>`:""}
+  </div>
+  <div class="card"><h2>🃏 翻牌配對小遊戲</h2>
+    <div class="muted">花 ⭐${GAME_COST} 玩一局，把兩張對應的牌配成一對。過關可以讓 ${S.pet.name} 成長 +15！</div>
+    <div class="row" id="gameBtns" style="margin-top:10px">${[["ma","加減配對"],["mn","數字配對"]].concat(HAS_ZH()?[["zy","注音配對"],["bs","部首配對"]]:[]).map(([m,n])=>`<button class="btn" data-g="${m}" ${bal<GAME_COST?"disabled":""}>${n}</button>`).join("")}</div>
+    <div id="gameHost"></div>
+  </div>
+  <div class="card"><div class="row"><button class="btn ghost" id="rename">改名字</button><button class="btn ghost" id="repick">換寵物／換造型</button></div>
+    <div class="muted" style="margin-top:6px">換寵物或換造型都會保留等級。</div></div>`;
+  bindPetBar(h);
+  h.querySelector("#petE").onclick=()=>{bounce();hearts(3);h.querySelector("#say").textContent=pick(TALK);};
+  h.querySelectorAll(".food").forEach(b=>b.onclick=()=>feed(FOODS[+b.dataset.i]));
+  h.querySelectorAll("#gameBtns button").forEach(b=>b.onclick=()=>startGame(b.dataset.g));
+  h.querySelector("#rename").onclick=()=>{const box=h.querySelector("#rename").parentNode;box.innerHTML=`<input class="txt" id="nn" maxlength="8" value="${S.pet.name}"><button class="btn" id="nok">確定</button>`;
+    box.querySelector("#nok").onclick=()=>{const v=box.querySelector("#nn").value.trim();if(v){S.pet.name=v;save();}renderPet();};};
+  h.querySelector("#repick").onclick=()=>{const box=h.querySelector("#repick").parentNode;box.innerHTML=`<div style="width:100%">${petPickerHTML(S.pet.k,curV())}</div>`;
+    box.querySelectorAll(".petPick button").forEach(b=>b.onclick=()=>{S.pet.k=b.dataset.k;S.pet.v=+b.dataset.v;save();renderPet();toast("換好了！");});};
+  renderRewardsInto(h,false);
+}
+function bounce(){const e=$("#petE");if(!e)return;e.classList.remove("bounce");void e.offsetWidth;e.classList.add("bounce");}
+function hearts(n,ch){const st=$("#stage");if(!st)return;for(let i=0;i<n;i++){const s=document.createElement("span");s.className="heart";s.textContent=ch||pick(["💛","💕","✨","💖"]);s.style.setProperty("--dx",(Math.random()*120-60)+"px");s.style.animationDelay=(i*0.12)+"s";st.appendChild(s);setTimeout(()=>s.remove(),1600);}}
+function confetti(){for(let i=0;i<24;i++){const s=document.createElement("span");s.className="confetti";s.textContent=pick(["🎉","⭐","🎊","✨","💛"]);s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*0.6+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),2600);}}
+function growPet(x){
+  const before=petLevel().lv,slotsBefore=petSlots();S.pet.xp+=x;S.pet.fed=today();save();
+  const after=petLevel().lv;
+  if(after>before){renderPet();confetti();hearts(6,"⭐");toast(after===2?`蛋孵化了！${S.pet.name}出生了 🎉`:`${S.pet.name}升到 Lv.${after}「${lvTitle(after)}」！`);
+    if(petSlots()>slotsBefore)setTimeout(()=>{toast("🎉 解鎖新的寵物欄位！可以再領養一隻");confetti();},1600);}
+  return after>before;
+}
+function feed(f){
+  if(balance()<f.c){toast("星星不夠喔");return;}
+  S.spent+=f.c;
+  const up=growPet(f.x);
+  if(!up){renderPet();bounce();hearts(4,f.e);const s=$("#say");if(s)s.textContent=pick([`好好吃！謝謝你 ${f.e}`,"吃飽飽，好開心！","嗯～還想再吃！","我覺得自己變大了一點！"]);}
+}
+
+/* ===================== 翻牌配對 ===================== */
+let G=null;
+const HAS_ZH=()=>Object.values(CHARS).some(a=>a.length);
+function gamePairs(mode){const out=[],used=new Set();
+  if(mode==="zy"||mode==="bs"){for(const c of shuffle(Object.values(CHARS).flat())){const key=mode==="zy"?c[1]:c[2];if(used.has(key))continue;used.add(key);out.push([c[0],mode==="zy"?c[1]:radShow(c[2])+"部"]);if(out.length===6)break;}return out;}
+  let guard=0;while(out.length<6&&guard++<500){let t,v;
+    if(mode==="ma"){if(Math.random()<.5){const a=R(11,69),b=R(10,99-a);t=`${a}＋${b}`;v=a+b;}else{const a=R(30,99),b=R(10,a-5);t=`${a}－${b}`;v=a-b;}}
+    else{v=R(100,200);t=cnNum(v);}
+    if(used.has(v))continue;used.add(v);out.push([t,String(v)]);}
+  return out;}
+const GAME_TIP={zy:"把「字」和它的「注音」配成一對",bs:"把「字」和它的「部首」配成一對",ma:"把「算式」和它的「答案」配成一對",mn:"把「國字」和它的「數字」配成一對"};
+function startGame(mode){
+  if(balance()<GAME_COST){toast("星星不夠喔");return;}
+  const pairs=gamePairs(mode);if(pairs.length<6){toast("題庫還不夠玩這個遊戲");return;}
+  S.spent+=GAME_COST;S.games=(S.games||0)+1;save();
+  const cards=[];pairs.forEach((c,i)=>{cards.push({p:i,t:c[0],z:mode!=="zy"&&mode!=="bs"});cards.push({p:i,t:c[1],z:true});});
+  G={mode,cards:shuffle(cards),open:[],done:new Set(),moves:0,lock:false,pairs};
+  renderPetTopOnly();renderGame();
+  const gh=$("#gameHost");if(gh)gh.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function renderPetTopOnly(){const w=document.querySelector("#v-pet .wallet b");if(w)w.textContent=balance();document.querySelectorAll("#gameBtns button").forEach(b=>b.disabled=true);}
+function renderGame(){
+  const h=$("#gameHost");if(!h||!G)return;
+  h.innerHTML=`<div class="muted" style="margin:10px 0 6px">${GAME_TIP[G.mode]}・翻了 ${G.moves} 次</div>
+  <div class="board">${G.cards.map((c,i)=>{const up=G.open.includes(i)||G.done.has(c.p);const cls="cardf"+(up?" up":"")+(G.done.has(c.p)?" done":"")+(c.z?" zy":"")+(c.miss?" miss":"");return `<button class="${cls}" data-i="${i}">${up?c.t:"？"}</button>`;}).join("")}</div>`;
+  h.querySelectorAll(".cardf").forEach(b=>b.onclick=()=>flip(+b.dataset.i));
+}
+function flip(i){
+  if(!G||G.lock)return;const c=G.cards[i];
+  if(G.done.has(c.p)||G.open.includes(i))return;
+  G.open.push(i);
+  if(G.open.length===2){
+    G.moves++;const [a,b]=G.open.map(k=>G.cards[k]);
+    if(a.p===b.p){G.done.add(a.p);G.open=[];
+      if(G.done.size===G.pairs.length){renderGame();winGame();return;}
+    }else{G.lock=true;a.miss=b.miss=true;renderGame();setTimeout(()=>{a.miss=b.miss=false;G.open=[];G.lock=false;renderGame();},900);return;}
+  }
+  renderGame();
+}
+function winGame(){
+  const moves=G.moves,mode=G.mode,pairs=G.pairs;G=null;
+  const great=moves<=10;
+  const up=growPet(great?25:15);
+  confetti();
+  if(!up)renderPet();
+  const h=$("#gameHost");
+  if(h)h.innerHTML=`<div class="fb ok pop" style="text-align:center"><div style="font-size:40px">🏆</div><b>過關了！只翻了 ${moves} 次</b><br>${great?"翻得超準！成長 +25":"成長 +15"}<br><span class="muted">${pairs.map(c=>`${c[0]}＝${c[1]}`).join("、")}</span></div>`;
+  if(h)h.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+/* ===================== 家長獎勵 ===================== */
+function renderRewardsInto(h,beforePet){
+  const div=document.createElement("div");div.className="card";
+  const list=S.rewards||[];
+  div.innerHTML=`<h2>🎁 爸媽的獎勵</h2>${list.length?list.map(r=>{const got=S.redeemed.includes(r.id),ready=S.stars>=r.need&&!got,p=Math.min(100,Math.round(S.stars/r.need*100));
+    return `<div class="reward ${ready?"ready":""}"><b>${got?"✅ ":ready?"🎉 ":""}${esc(r.name)}</b>　<span class="muted">累積 ⭐${r.need}</span>
+      ${got?`<div class="muted">已經兌換過了</div>`:ready?`<div>達成了！拿給爸媽看，請他們按確認 👇</div><button class="btn" style="margin-top:6px;font-size:16px;padding:8px 14px" data-r="${r.id}">家長確認兌換</button><div class="gateBox"></div>`:`<div class="bar"><i style="width:${p}%"></i></div><div class="muted">還差 ${r.need-S.stars} 顆星</div>`}</div>`;}).join(""):`<div class="muted">爸媽還沒設定獎勵。請爸媽到「首頁 → 給家長 → 設定實體獎勵」新增。</div>`}
+    <div class="muted" style="margin-top:6px">獎勵看「累積拿到的星星」，餵寵物花掉的星星不會扣。</div>`;
+  h.appendChild(div);
+  div.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{
+    const box=b.nextElementSibling;parentGate(box,()=>{S.redeemed.push(b.dataset.r);save();confetti();toast("兌換成功！");renderPet();});});
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function parentGate(box,ok){
+  const a=12+Math.floor(Math.random()*8),b=13+Math.floor(Math.random()*7);
+  box.innerHTML=`<div class="gate"><div>家長驗證：${a} × ${b} = ？</div><div class="row" style="margin-top:6px"><input class="txt" style="flex:1;min-width:0" inputmode="numeric" id="gateIn"><button class="btn" id="gateOk">確定</button></div></div>`;
+  box.querySelector("#gateOk").onclick=()=>{if(+box.querySelector("#gateIn").value===a*b){box.innerHTML="";ok();}else toast("答案不對喔");};
+}
+let rewardOpen=false;
+function renderRewardEditor(){
+  const ed=$("#rewardEditor");
+  ed.innerHTML=`<div class="gate"><b>實體獎勵設定</b><div class="muted">孩子「累積拿到的星星」達到門檻就能兌換。參考：每天認真練大約可拿 20～40 顆星。</div>
+    ${(S.rewards||[]).map(r=>`<div class="row" style="justify-content:space-between;margin-top:8px"><span>${esc(r.name)}（⭐${r.need}）${S.redeemed.includes(r.id)?"✅":""}</span><button class="chip" data-del="${r.id}">刪除</button></div>`).join("")}
+    <div style="margin-top:10px"><input class="txt" id="rwName" placeholder="獎勵內容，例如：看卡通 20 分鐘"></div>
+    <div class="row" style="margin-top:8px"><input class="txt" id="rwNeed" inputmode="numeric" placeholder="需要幾顆星，例如 50" style="flex:1;min-width:0"><button class="btn" id="rwAdd">新增</button></div>
+    <div style="margin-top:8px"><button class="btn ghost" id="rwClose">完成</button></div></div>`;
+  ed.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{S.rewards=S.rewards.filter(r=>r.id!==b.dataset.del);save();renderRewardEditor();});
+  ed.querySelector("#rwAdd").onclick=()=>{const n=ed.querySelector("#rwName").value.trim(),k=parseInt(ed.querySelector("#rwNeed").value,10);
+    if(!n||!(k>0)){toast("請填獎勵內容和星星數");return;}S.rewards.push({id:"r"+Date.now(),name:n,need:k});save();renderRewardEditor();toast("已新增獎勵");};
+  ed.querySelector("#rwClose").onclick=()=>{ed.innerHTML="";rewardOpen=false;};
+}
+$("#rewardSetBtn").onclick=()=>parentGate($("#rewardEditor"),renderRewardEditor);
+let notified=new Set();
+function checkRewards(){(S.rewards||[]).forEach(r=>{if(S.stars>=r.need&&!S.redeemed.includes(r.id)&&!notified.has(r.id)){notified.add(r.id);setTimeout(()=>{toast(`🎁 達成獎勵「${r.name}」！到寵物頁找爸媽兌換`);confetti();},600);}});}
+(S.rewards||[]).forEach(r=>{if(S.stars>=r.need)notified.add(r.id);});
+
+/* ===================== 深淺色 ===================== */
+(function(){
+  let t=null;try{t=localStorage.getItem(KEY+"-theme");}catch(e){}
+  if(t)document.documentElement.dataset.theme=t;
+  $("#themeBtn").onclick=()=>{
+    const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+    const nx=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nx;try{localStorage.setItem(KEY+"-theme",nx);}catch(e){}
+  };
+})();
+
+function zyBtn(){$("#zyBtn").classList.toggle("on",!!S.zy);}
+$("#zyBtn").onclick=()=>{S.zy=!S.zy;save();zyBtn();toast(S.zy?"注音：開":"注音：關");if(active)active.render();if(examState&&examState.on)renderExam();};
+zyBtn();renderSubBar();renderTop();renderHome();
+</script>
+</body>
+</html>
