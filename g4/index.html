@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>四上段考複習</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="四上複習">
+<meta name="theme-color" content="#2f7d6d">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%232f7d6d'/%3E%3Ctext x='90' y='118' font-size='88' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3E4上%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#23302c;--muted:#66746f;--line:#e2ddd0;--pri:#2f7d6d;--pri2:#e3f1ec;--ok:#2e9a55;--okbg:#e5f6ea;--bad:#d1493f;--badbg:#fde9e6;--star:#f2a516;
+--c國語:#d1603d;--c數學:#3a6fc4;--c自然:#2e9a55;--c社會:#a0662a;--c英語:#8a4fc2}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#171c1b;--card:#222a28;--ink:#eef2f0;--muted:#a3b0ab;--line:#34403c;--pri:#5cc0a8;--pri2:#21413a;--ok:#5fcf87;--okbg:#1c3a27;--bad:#ff8378;--badbg:#45231f;--c國語:#ff9a78;--c數學:#7ea9ff;--c自然:#6fd894;--c社會:#e0a565;--c英語:#c69bf2}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:18px;line-height:1.55;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px 90px}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px}
+header h1{font-size:22px;margin:0}
+.stars{font-weight:700;color:var(--star);font-size:20px;white-space:nowrap}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:9}
+nav button{background:none;border:0;padding:6px 4px;border-radius:12px;font-size:14px;flex:1;max-width:120px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted)}
+nav button b{font-size:22px;line-height:1}
+nav button.on{color:var(--pri);background:var(--pri2);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
+.note{font-size:14px;color:var(--muted)}
+.subj{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.sbtn{border:2px solid var(--line);background:var(--card);border-radius:18px;padding:14px 12px;text-align:left}
+.sbtn .nm{font-size:22px;font-weight:800}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--pri);border-radius:6px}
+.unit{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.unit:last-child{border-bottom:0}
+.unit .t{flex:1;min-width:0}
+.unit .t div{font-weight:700}
+.btn{border:0;background:var(--pri);color:#fff;border-radius:14px;padding:12px 18px;font-weight:700;font-size:18px}
+.btn.sm{padding:8px 14px;font-size:16px}
+.btn.ghost{background:var(--pri2);color:var(--pri)}
+.btn.warn{background:var(--badbg);color:var(--bad)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-size:16px}
+.chip.on{border-color:var(--pri);background:var(--pri2);color:var(--pri);font-weight:700}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px;color:var(--muted)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-size:14px;font-weight:700}
+.qtext{font-size:23px;font-weight:700;margin:14px 0 16px;line-height:1.5}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:14px;font-size:20px;min-height:60px}
+.opt .k{flex:none;width:32px;height:32px;border-radius:50%;background:var(--pri2);color:var(--pri);display:grid;place-items:center;font-weight:800;font-size:16px}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.opt.pick{border-color:var(--pri);background:var(--pri2)}
+.opt:disabled{cursor:default;opacity:1}
+.fb{border-radius:16px;padding:12px 14px;margin-top:14px;font-size:18px}
+.fb.ok{background:var(--okbg)}.fb.bad{background:var(--badbg)}
+.fb b{font-size:20px}
+.qnav{display:flex;justify-content:space-between;gap:8px;margin-top:16px}
+.big{font-size:44px;font-weight:800;text-align:center;margin:6px 0}
+.pop{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(.6);font-size:64px;pointer-events:none;opacity:0;z-index:20}
+.pop.go{animation:pop .9s ease-out}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}30%{opacity:1;transform:translate(-50%,-60%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-120%) scale(1)}}
+table{width:100%;border-collapse:collapse;font-size:16px}
+td,th{padding:8px 4px;border-bottom:1px solid var(--line);text-align:left}
+td.n,th.n{text-align:right;white-space:nowrap}
+.weak{color:var(--bad);font-weight:700}
+textarea{width:100%;min-height:90px;font:inherit;font-size:14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px}
+.hide{display:none!important}
+.rv{padding:10px 0;border-bottom:1px solid var(--line);font-size:17px}
+.rv:last-child{border-bottom:0}
+h2{font-size:20px;margin:4px 0 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>📚 四上段考複習</h1><div class="stars" id="stars">⭐ 0</div></header>
+<main id="app"></main>
+</div>
+<nav id="nav">
+<button data-v="home" class="on"><b>🏠</b>首頁</button>
+<button data-v="weak"><b>🔁</b>不熟</button>
+<button data-v="exam"><b>📝</b>模擬考</button>
+<button data-v="parent"><b>👪</b>家長</button>
+</nav>
+<div class="pop" id="pop">⭐</div>
+<script>
+// 題目格式：[題目, 正確答案, [錯誤選項...], 說明]；是非題：[題目, true/false, "TF", 說明]
+const BANK = [
+{s:"國語",u:"第1課 水陸小高手",q:[
+["〈游泳〉這首詩中，小朋友把自己想像成哪些動物？","魚、蛙、蝶",["鳥、魚、龍","鷹、陀螺、魚","蛙、龜、蛇"],"「游成自由的魚、游成巨大的蛙、游成飛舞的蝶」。"],
+["〈溜直排輪〉中，加速滑行時把自己想像成什麼？","飛鷹",["陀螺","海豚","小鳥龜"],"加速滑行時，像飛鷹在天空遨遊。"],
+["〈溜直排輪〉中，跳躍轉身時把自己想像成什麼？","陀螺",["飛鷹","風車","蝴蝶"],"轉身的樣子像陀螺一樣轉呀轉。"],
+["〈溜直排輪〉最後，煩惱被什麼帶走了？","風",["水","雨","陽光"],"煩惱被風帶走，快樂緊緊跟隨。"],
+["課名「水陸小高手」中的「陸」，指的是哪一項運動？","溜直排輪",["游泳","划船","潛水"],"水＝游泳，陸＝在陸地上溜直排輪。"],
+["這一課的兩篇課文是什麼文體？","童詩",["日記","書信","說明文"],"〈游泳〉和〈溜直排輪〉都是童詩。"],
+["〈游泳〉的作者是誰？","謝安通",["呂嘉紋","徐國能","海倫・凱勒"],"〈游泳〉謝安通；〈溜直排輪〉呂嘉紋。"],
+["「遨遊」的「遨」怎麼念？","ㄠˊ",["ㄠˋ","ㄧㄠˊ","ㄠ"],"遨遊：ㄠˊ ㄧㄡˊ。"],
+["「陀螺」的「螺」怎麼念？","ㄌㄨㄛˊ",["ㄌㄨㄛˋ","ㄌㄛˊ","ㄌㄨㄛ"],"陀螺：ㄊㄨㄛˊ ㄌㄨㄛˊ。"],
+["「緩緩」的意思是什麼？","慢慢的",["快快的","輕輕的","高高的"],"緩＝慢。"],
+["「多采多姿」的意思是什麼？","豐富多變、很精采",["顏色很少","非常安靜","很難過"],"形容生活或事物豐富又精采。"],
+["「遨遊」的意思最接近哪一個？","自由自在的到處遊玩",["很害怕的躲起來","在水裡憋氣","慢慢的走路"],"遨遊：自在的遊玩、漫遊。"],
+["「（ㄈㄢˊ）惱」的正確國字是哪一個？","煩",["繁","凡","帆"],"煩惱的「煩」，火字旁。"],
+["溜直排輪「（ㄏㄨㄚˊ）行」的正確國字是哪一個？","滑",["划","猾","華"],"滑行：滑，水字旁。"],
+["「笑聲一陣陣，水珠一（　）（　）」，括號應填什麼？","串串",["顆顆","條條","片片"],"課文：笑聲一陣陣，水珠一串串。"],
+["「游成自由的魚、游成巨大的蛙、游成飛舞的蝶」，用了什麼寫法？","用相同句型連續排列（排比）",["把東西當成人來寫（擬人）","誇大的說法（誇飾）","提出問題（設問）"],"三句句型相同、連續排列，就是排比。"],
+["〈游泳〉最後寫出游出自信，也游出多采多姿的人生。",true,"TF","詩的最後一段寫游出自信與多采多姿的人生。"],
+]},
+{s:"國語",u:"第2課 放學後",q:[
+["放學時，作者怎麼回家？","飛也似的趕回家",["慢慢散步回家","坐在教室不想走","先去公園玩"],"第一段：每到放學，作者飛也似的趕回家。"],
+["回到家後，作者會先做什麼？","品嘗美味的點心",["先寫功課","先睡覺","先看電視"],"先品嘗點心，再寫功課。"],
+["對作者來說，放學以後最快樂的事是什麼？","讀國語日報",["打電動","吃晚餐","跳繩"],"第三段：最快樂的是讀國語日報。"],
+["寫完作業後，作者會做什麼？","和同學玩遊戲",["再去補習","幫忙煮飯","去買東西"],"第四段：寫完作業和同學玩遊戲。"],
+["文章最後，作者希望什麼？","時間能停留",["快點長大","明天不用上學","天天下雨"],"放學後是美好時光，希望時間停留。"],
+["這一課改寫自哪一位作家的文章？","徐國能",["謝安通","呂嘉紋","江秀真"],"改寫自徐國能〈颱風假的日子〉。"],
+["「點心對著我們招招手」用了什麼寫法？","擬人",["譬喻","排比","誇飾"],"點心不會招手，把它當成人來寫＝擬人。"],
+["「依依不捨」的意思是什麼？","捨不得分開",["很快就忘記","不想見面","非常生氣"],"依依不捨：留戀、捨不得離開。"],
+["「暫停」的「暫」怎麼念？","ㄓㄢˋ",["ㄗㄢˋ","ㄓㄢˇ","ㄔㄢˋ"],"暫：ㄓㄢˋ。"],
+["「拋」怎麼念？","ㄆㄠ",["ㄅㄠ","ㄆㄠˊ","ㄆㄛ"],"拋：ㄆㄠ。"],
+["「依依不捨」的「捨」怎麼念？","ㄕㄜˇ",["ㄕㄜˋ","ㄙㄜˇ","ㄕㄜ"],"捨：ㄕㄜˇ。"],
+["「食糧」的意思最接近哪一個？","食物、糧食",["衣服","零用錢","玩具"],"糧＝吃的東西。"],
+["「（ㄐㄧㄥˇ）察」的正確國字是哪一個？","警",["景","井","竟"],"警察的「警」，下面是「言」。"],
+["「跳（ㄕㄥˊ）」的正確國字是哪一個？","繩",["神","乘","成"],"跳繩的「繩」，糸字旁。"],
+["「爭吵」的意思相反的語詞是哪一個？","和好",["吵架","打架","生氣"],"爭吵 ↔ 和好。"],
+["「結束」的意思相反的語詞是哪一個？","開始",["完成","停止","暫停"],"結束 ↔ 開始。"],
+["作者回到家後，先寫功課才吃點心。",false,"TF","是先品嘗點心，再寫功課。"],
+]},
+{s:"國語",u:"第3課 我的籃球夢",q:[
+["主角為了夢想，加入了什麼社團？","籃球社",["足球社","游泳社","合唱團"],"他想成為球場上的風雲人物，加入籃球社。"],
+["主角一開始看到籃球架時，心情怎麼樣？","害怕",["興奮","生氣","無聊"],"一開始看到籃球架就害怕。"],
+["主角害怕時，誰為他打氣？","學長",["爸爸","老師","弟弟"],"學長為他打氣。"],
+["為了夢想，主角怎麼練習？","最早到球場練習",["只在家裡看比賽","都不練習","等別人教他"],"他總是最早到球場練習，慢慢進步。"],
+["比賽結束前幾秒，雙方打成平手？","五秒",["一分鐘","三十秒","十秒"],"比賽結束前五秒，雙方平手。"],
+["課文第一段寫什麼？","主角投進最後一球，全場為他喝采",["主角輸了比賽","主角生病了","主角在寫功課"],"第一段：投進最後一球，全場喝采。"],
+["「熟能生巧」的意思是什麼？","練習多了就能熟練，產生技巧",["天生就很厲害","東西煮熟了很好吃","不用練習也會"],"多練習就會熟練、變厲害。"],
+["「此起彼落」可以用來形容什麼？","加油聲這裡停那裡又響，接連不斷",["只有一個人在說話","大家都很安靜","球掉到地上"],"此起彼落：這裡起來那裡落下，接連不斷。"],
+["「喧鬧」的意思是什麼？","聲音大又吵雜",["很安靜","很漂亮","很傷心"],"喧鬧：吵鬧、熱鬧。"],
+["「球終於接受我雙手的指揮，跳出迷人的舞姿」用了什麼寫法？","擬人",["譬喻","排比","設問"],"球不會跳舞，把球當成人來寫＝擬人。"],
+["「弧線」的「弧」怎麼念？","ㄏㄨˊ",["ㄍㄨ","ㄏㄨ","ㄏㄨˋ"],"弧：ㄏㄨˊ。"],
+["「反彈」的「彈」怎麼念？","ㄊㄢˊ",["ㄉㄢˋ","ㄊㄢˋ","ㄉㄢ"],"反彈：ㄊㄢˊ；子彈才念ㄉㄢˋ。"],
+["「喧鬧」的「喧」怎麼念？","ㄒㄩㄢ",["ㄒㄩㄢˊ","ㄒㄧㄢ","ㄐㄩㄢ"],"喧：ㄒㄩㄢ。"],
+["「（ㄧㄠ）約」的正確國字是哪一個？","邀",["腰","要","搖"],"邀約：邀，辵（辶）部。"],
+["「（ㄌㄧㄢˋ）習」的正確國字是哪一個？","練",["鍊","煉","連"],"練習：練，糸字旁。"],
+["這一課想告訴我們什麼？","努力練習，才能一步步實現夢想",["夢想不重要","比賽輸贏最重要","不要參加社團"],"主角從害怕到投進關鍵球，靠的是努力練習。"],
+["主角一開始就很會打籃球。",false,"TF","他一開始很害怕，是努力練習才慢慢進步的。"],
+]},
+{s:"國語",u:"第4課 永遠的馬偕",q:[
+["馬偕是哪一國人？","加拿大",["美國","英國","日本"],"馬偕是蘇格蘭裔的加拿大人。"],
+["馬偕來到臺灣，主要是為了什麼？","傳教，同時幫人看病",["做生意","觀光旅遊","當軍人"],"他來臺傳教，也行醫、義診。"],
+["馬偕在哪裡興建了西式醫院？","淡水",["高雄","花蓮","臺東"],"馬偕在淡水興建西式醫院。"],
+["馬偕除了醫院，還創辦了什麼？","新式學校和女學堂",["遊樂園","百貨公司","火車站"],"他創辦新式學校，也讓女孩子能讀書。"],
+["作者認為馬偕是怎樣的人？","大愛無私",["自私小氣","膽小怕事","愛發脾氣"],"他一生奉獻給臺灣人民。"],
+["課名用「永遠」，最可能的原因是什麼？","馬偕的愛心和故事永遠流傳",["馬偕活得很久","馬偕永遠住在醫院","馬偕不會變老"],"他的精神一直被大家記得。"],
+["家鄉的人願意捐錢給馬偕，最可能的原因是什麼？","被他在臺灣的付出感動",["他很有錢","他要做生意","他贏了比賽"],"大家感動於他的奉獻，願意支持他。"],
+["從課文推測，當時臺灣社會很需要什麼？","醫療和教育",["電腦和手機","高鐵和捷運","遊樂園"],"所以馬偕蓋醫院、辦學校。"],
+["「翻山越嶺」的意思是什麼？","越過許多座山，形容路途辛苦",["在山上翻跟斗","住在山頂","爬一座小山丘"],"翻山越嶺：形容走很遠、很辛苦的路。"],
+["「奉獻」的意思最接近哪一個？","把自己的力量貢獻出來",["把東西搶走","偷偷藏起來","不想幫忙"],"奉獻：恭敬的付出。"],
+["「馬偕」的「偕」怎麼念？","ㄐㄧㄝ",["ㄐㄧㄝˊ","ㄒㄧㄝˊ","ㄐㄧㄝˋ"],"偕：ㄐㄧㄝ。"],
+["「翻山越嶺」的「嶺」怎麼念？","ㄌㄧㄥˇ",["ㄌㄧㄥˊ","ㄌㄧㄣˇ","ㄌㄧㄥˋ"],"嶺：ㄌㄧㄥˇ。"],
+["「食宿」的「宿」怎麼念？","ㄙㄨˋ",["ㄒㄧㄡˇ","ㄙㄨˊ","ㄕㄨˋ"],"食宿：ㄕˊ ㄙㄨˋ。"],
+["「（ㄧ）療」的正確國字是哪一個？","醫",["衣","依","一"],"醫療：醫。"],
+["「藥品」的「藥」是什麼部首？","艸（艹）",["木","糸","白"],"藥：艸部。"],
+["這一課主要在介紹什麼？","一個人物的故事",["一種動物","一座城市","一場比賽"],"介紹馬偕的生平事蹟。"],
+["馬偕只傳教，從來沒有幫人看病。",false,"TF","他也行醫、義診，還蓋了醫院。"],
+]},
+{s:"國語",u:"第5課 假如給我三天光明",q:[
+["這一課改寫自哪一位作者的文章？","海倫・凱勒",["馬偕","江秀真","徐國能"],"改寫自海倫・凱勒〈假如給我三天光明〉。"],
+["海倫・凱勒是哪一國人？","美國",["加拿大","英國","法國"],"她是美國作家與教育家。"],
+["海倫・凱勒小時候因病變成什麼樣子？","看不見也聽不見",["只是近視","不能走路","不會說中文"],"她小時候因病失明、失聰。"],
+["海倫・凱勒主要靠什麼來感受世界？","觸覺（用手摸）",["眼睛","耳朵","鼻子"],"她用手觸摸事物來感受世界。"],
+["朋友散步回來，說了什麼讓作者很驚訝？","沒看到什麼特別的東西",["看到一隻大象","迷路了","撿到錢"],"作者單憑觸覺就能發現很多有趣的事。"],
+["作者認為，如果失明、失聰幾天，有什麼好處？","會更珍惜光明，更能感受聲音的美好",["可以不用上學","可以一直睡覺","沒有任何好處"],"第一段的想法。"],
+["作者希望有三天光明，是為了什麼？","盡情享受看得見的幸福",["去打電動","去考試","去賺錢"],"最後一段：盡情享受看得見的幸福。"],
+["「視而不見」的意思是什麼？","看到了卻沒有放在心上",["眼睛看不到","看得很清楚","用手摸"],"作者覺得視力好的人常對美景視而不見。"],
+["「五彩繽紛」用來形容什麼？","顏色多又美麗",["聲音很大","味道很香","很安靜"],"五彩繽紛：色彩豐富美麗。"],
+["「蓓蕾」是什麼意思？","還沒開的花苞",["樹葉","果實","樹根"],"蓓蕾＝花苞。"],
+["「蓓蕾」的「蕾」怎麼念？","ㄌㄟˇ",["ㄌㄟˊ","ㄌㄟˋ","ㄌㄧˇ"],"蕾：ㄌㄟˇ。"],
+["「撫摸」的「撫」怎麼念？","ㄈㄨˇ",["ㄨˇ","ㄈㄨˊ","ㄈㄨˋ"],"撫：ㄈㄨˇ。"],
+["「單憑」的意思是什麼？","只靠",["一個人","很簡單","不相信"],"單憑觸覺＝只靠觸覺。"],
+["和「寧靜」意思相近的語詞是哪一個？","安靜",["熱鬧","吵雜","喧鬧"],"寧靜≒安靜。"],
+["「流水興奮的模樣」用了什麼寫法？","擬人",["譬喻","排比","設問"],"流水不會興奮，把它當成人來寫。"],
+["這一課想提醒我們什麼？","珍惜自己擁有的能力和身邊的美好",["眼睛不重要","不要出去散步","只要用耳朵聽"],"擁有視力的人更要好好觀察、珍惜。"],
+["海倫・凱勒是美國的作家與教育家。",true,"TF","正確。"],
+]},
+{s:"國語",u:"第6課 攀登生命的高峰",q:[
+["江秀真是臺灣第一位登上哪座山的女性？","珠穆朗瑪峰（聖母峰）",["玉山","富士山","阿里山"],"她是臺灣第一位登上世界最高峰的女性。"],
+["「每個人都擁有夢想，但千萬別讓它變成空想！」是誰說的？","江秀真",["海倫・凱勒","馬偕","課文中的學長"],"課文開頭引用江秀真的話。"],
+["這句話「千萬別讓它變成空想」，是在提醒我們什麼？","有夢想要真的去行動",["不要有夢想","夢想要藏起來","只要想就好"],"空想＝只想不做。"],
+["江秀真被稱為什麼？","離天空最近的女性",["最會游泳的女性","最會打籃球的女性","最會畫畫的女性"],"因為她登上了世界最高峰。"],
+["江秀真在挑戰珠峰前，攀登過臺灣多少座高山？","八十多座",["三座","十座","一百五十座"],"她攀登過臺灣八十多座高山。"],
+["江秀真是在哪一年出發攀登珠穆朗瑪峰？","1995年",["2005年","1985年","2015年"],"經過嚴格訓練，於1995年5月出發。"],
+["為了登頂，她每天跑步多少公里？","十公里",["一公里","五十公里","一百公里"],"每天跑步十公里。"],
+["她每星期還要做三天什麼訓練？","低氧訓練",["游泳訓練","唱歌訓練","寫字訓練"],"高山空氣稀薄，所以要做低氧訓練。"],
+["江秀真也是臺灣第一位完成什麼挑戰的女性登山家？","登上七大洲的七座最高峰",["游過臺灣海峽","跑完環島","騎腳踏車到日本"],"七大洲七頂峰。"],
+["登頂前最後一段路，她遇到什麼難關？","體力用盡，不知道要前進還是折回",["忘記帶午餐","迷路走到海邊","下大雨淹水"],"最後是靠成功經驗的鼓舞完成登頂。"],
+["「高山就像母親一樣」用了什麼寫法？","譬喻",["擬人","排比","設問"],"「就像」把高山比喻成母親。"],
+["「攀登」的「攀」怎麼念？","ㄆㄢ",["ㄆㄢˊ","ㄅㄢ","ㄆㄢˋ"],"攀：ㄆㄢ。"],
+["「珠穆朗瑪峰」的「穆」怎麼念？","ㄇㄨˋ",["ㄇㄨˇ","ㄇㄛˋ","ㄇㄨˊ"],"穆：ㄇㄨˋ。"],
+["「低氧」的「氧」怎麼念？","ㄧㄤˇ",["ㄧㄤˊ","ㄧㄤˋ","ㄧㄤ"],"氧：ㄧㄤˇ。"],
+["「（ㄉㄥ）山」的正確國字是哪一個？","登",["燈","等","凳"],"登山：登。"],
+["「心情掉到谷底」的「谷底」比喻什麼？","心情最低落的時候",["山谷很漂亮","肚子很餓","很開心"],"谷底＝最低處，比喻最低潮。"],
+["江秀真是臺灣第一位登上珠穆朗瑪峰的男性。",false,"TF","她是女性喔！"],
+]},
+{s:"數學",u:"第1單元 一億以內的數",q:[
+["10個一萬是多少？","十萬",["一千","一百萬","一億"],"10×10000＝100000（十萬）。"],
+["10個十萬是多少？","一百萬",["一千萬","一萬","一億"],"10×100000＝1000000。"],
+["10個一千萬是多少？","一億",["一百萬","十億","一千萬"],"10×10000000＝100000000（一億）。"],
+["36,052,800 怎麼讀？","三千六百零五萬二千八百",["三千六百五萬二千八百","三百六十萬五千二百八十","三千零六百五萬二千八百"],"3605萬2800 → 三千六百零五萬二千八百。"],
+["「四千零八萬三千零五十」寫成數字是多少？","40,083,050",["4,083,050","40,830,050","48,003,050"],"4008萬3050 → 40,083,050。"],
+["58,326,417 中的「8」在哪一位？","百萬位",["千萬位","十萬位","萬位"],"5千萬、8百萬、3十萬、2萬……"],
+["27,450,000 中的「2」代表多少？","20,000,000",["2,000,000","200,000","20"],"2在千萬位，代表2個一千萬。"],
+["4,350,000 是幾個一萬？","435個",["43個","4350個","43500個"],"4350000 ÷ 10000＝435。"],
+["比 6,999,999 多 1 的數是多少？","7,000,000",["6,999,998","7,000,001","6,000,000"],"6999999＋1＝7000000。"],
+["一億少 1 是多少？","99,999,999",["9,999,999","999,999,999","100,000,001"],"100000000－1＝99999999。"],
+["3000萬＋2500萬＝？","5500萬",["5000萬","3250萬","6500萬"],"萬為單位直接相加：3000＋2500＝5500。"],
+["8000萬－3600萬＝？","4400萬",["5600萬","4600萬","3400萬"],"8000－3600＝4400。"],
+["2600萬＋900萬＝？","3500萬",["3400萬","2690萬","11600萬"],"2600＋900＝3500。"],
+["用 3、0、7、5、1 各一次排成五位數，最大的是多少？","75,310",["75,301","73,510","57,310"],"由大到小排：7、5、3、1、0。"],
+["用 3、0、7、5、1 各一次排成五位數，最小的是多少？","10,357",["01,357","13,057","10,375"],"最高位不能是0，所以1在最前面，再排0、3、5、7。"],
+["下面哪一個數最大？","10,000,000",["9,999,999","9,876,543","999,999"],"10,000,000是八位數，其他都是七位數以下。"],
+["比較 45,678,901 和 45,687,901，哪個比較大？","45,687,901",["45,678,901","一樣大","無法比較"],"從最高位比，到十萬位都相同，萬位8＞7。"],
+]},
+{s:"數學",u:"第2單元 乘法",q:[
+["324 × 6 ＝？","1944",["1844","1924","1964"],"324×6＝1944。"],
+["25 × 40 ＝？","1000",["100","10000","1040"],"25×4＝100，再補一個0 → 1000。"],
+["138 × 27 ＝？","3726",["3626","3716","2766"],"138×20＝2760，138×7＝966，合起來3726。"],
+["406 × 35 ＝？","14210",["14110","12180","14250"],"406×30＝12180，406×5＝2030，合起來14210。"],
+["215 × 123 ＝？","26445",["26345","25445","26545"],"215×100＝21500，215×23＝4945，合起來26445。"],
+["132 × 305 ＝？","40260",["39600","40360","4026"],"132×300＝39600，132×5＝660，合起來40260。"],
+["609 × 405 ＝？","246645",["243600","246045","24645"],"609×400＝243600，609×5＝3045，合起來246645。"],
+["500 × 800 ＝？","400000",["40000","4000000","4000"],"5×8＝40，後面補4個0。"],
+["2400 × 30 ＝？","72000",["7200","720000","6200"],"24×3＝72，後面補3個0。"],
+["360 × 200 ＝？","72000",["7200","720000","56000"],"36×2＝72，後面補3個0。"],
+["一盒鉛筆有12枝，125盒共有幾枝？","1500枝",["1250枝","137枝","1200枝"],"12×125＝1500。"],
+["一張門票350元，買48張要多少元？","16800元",["16400元","1680元","17800元"],"350×48＝16800。"],
+["學校有24班，每班28人，全校共幾人？","672人",["652人","572人","682人"],"24×28＝672。"],
+["25×4＝100，25×8＝200，那 25×16＝？","400",["300","800","250"],"乘數變2倍，積也變2倍。"],
+["125 × 8 ＝？","1000",["800","1250","900"],"125×8＝1000，要記起來喔！"],
+["被乘數不變，乘數變成10倍，積會怎樣？","也變成10倍",["不變","變成一半","多10"],"例如 3×4＝12，3×40＝120。"],
+["298 × 41 的估算，最接近哪一個？","12000",["1200","120000","9000"],"298≈300，41≈40，300×40＝12000。"],
+]},
+{s:"數學",u:"第3單元 角度",q:[
+["測量角度要用什麼工具？","量角器",["直尺","圓規","三角板"],"量角器可以量出角有幾度。"],
+["角度的單位是什麼？","度（°）",["公分","公尺","公克"],"例如 90°讀作90度。"],
+["一個直角是幾度？","90度",["45度","180度","360度"],"直角＝90°。"],
+["一個平角是幾度？","180度",["90度","360度","100度"],"平角：兩邊成一直線，180°。"],
+["一個周角是幾度？","360度",["180度","90度","300度"],"轉一整圈＝360°。"],
+["用量角器量角時，量角器的中心點要對準哪裡？","角的頂點",["角的一條邊的尾端","紙的邊緣","隨便哪裡"],"中心點對頂點，0度線對齊一條邊。"],
+["量角時，量角器的 0° 線要對齊什麼？","角的一條邊",["角的頂點","桌子邊緣","另一個角"],"另一條邊指到的刻度就是角度。"],
+["比直角小的角叫什麼角？","銳角",["鈍角","平角","周角"],"0°～90°之間是銳角。"],
+["比直角大、比平角小的角叫什麼角？","鈍角",["銳角","直角","周角"],"90°～180°之間是鈍角。"],
+["120° 是什麼角？","鈍角",["銳角","直角","平角"],"120°比90°大、比180°小。"],
+["35° 是什麼角？","銳角",["鈍角","直角","平角"],"35°比90°小。"],
+["兩個直角合起來是幾度？","180度",["90度","360度","270度"],"90＋90＝180。"],
+["一個周角比一個直角多幾度？","270度",["180度","90度","300度"],"360－90＝270。"],
+["分針從12走到3，轉了幾度？","90度",["30度","180度","45度"],"轉了四分之一圈＝90°。"],
+["分針轉一整圈是幾度？","360度",["180度","60度","90度"],"一圈＝360°。"],
+["時鐘1點整，時針和分針的夾角是幾度？","30度",["60度","15度","90度"],"鐘面12大格，每格360÷12＝30°。"],
+["向右轉半圈，轉了幾度？","180度",["90度","360度","45度"],"半圈＝180°。"],
+["角的大小和邊畫得長或短有關係。",false,"TF","角的大小只看兩邊張開的程度，和邊長無關。"],
+]},
+{s:"數學",u:"第4單元 假分數與帶分數",q:[
+["分子比分母小的分數叫做什麼？","真分數",["假分數","帶分數","整數"],"例如 3/5。"],
+["分子大於或等於分母的分數叫做什麼？","假分數",["真分數","帶分數","小數"],"例如 7/4、5/5。"],
+["「整數＋真分數」合起來寫的叫做什麼？","帶分數",["真分數","假分數","小數"],"例如 1又3/4。"],
+["7/4 是哪一種分數？","假分數",["真分數","帶分數","整數"],"分子7比分母4大。"],
+["5/5 是哪一種分數？","假分數",["真分數","帶分數","不是分數"],"分子等於分母也是假分數，5/5＝1。"],
+["下面哪一個是真分數？","4/9",["9/4","9/9","2又1/3"],"分子4比分母9小。"],
+["下面哪一個是帶分數？","2又1/3",["7/3","1/3","3/3"],"有整數部分又帶著真分數。"],
+["7/4 寫成帶分數是多少？","1又3/4",["1又4/7","3又1/4","2又1/4"],"7÷4＝1餘3 → 1又3/4。"],
+["11/3 寫成帶分數是多少？","3又2/3",["3又1/3","2又2/3","1又8/3"],"11÷3＝3餘2 → 3又2/3。"],
+["2又1/3 寫成假分數是多少？","7/3",["6/3","5/3","3/7"],"2×3＋1＝7 → 7/3。"],
+["3又2/5 寫成假分數是多少？","17/5",["15/5","11/5","32/5"],"3×5＋2＝17 → 17/5。"],
+["3 ＝ （　）/4，括號裡是多少？","12",["3","7","4"],"3個1等於12個1/4。"],
+["13/6 是幾個 1/6？","13個",["6個","2個","19個"],"分子13表示有13個1/6。"],
+["5/8 和 3/8，哪個比較大？","5/8",["3/8","一樣大","無法比較"],"分母相同，分子大的比較大。"],
+["1/5 和 1/3，哪個比較大？","1/3",["1/5","一樣大","無法比較"],"分子相同，分母小的（分得份數少）每份比較大。"],
+["9/4 和 2又1/4 比較，結果是？","一樣大",["9/4比較大","2又1/4比較大","無法比較"],"2又1/4＝9/4。"],
+["1又2/7 和 10/7，哪個比較大？","10/7",["1又2/7","一樣大","無法比較"],"1又2/7＝9/7，10/7＞9/7。"],
+["數線上把1到2之間平分成4格，從1往右數第3格是多少？","1又3/4",["1又1/4","3/4","1又3/5"],"每格是1/4，第3格是1又3/4。"],
+]},
+{s:"自然",u:"第1單元 閃亮的天空",q:[
+["一天當中，太陽和月亮在天空中怎麼移動？","由東向西",["由西向東","由南向北","都不會移動"],"天體有東升西落的現象。"],
+["面向南方時，左手邊是哪個方位？","東方",["西方","北方","南方"],"面南：左東右西。"],
+["描述月亮的位置，需要說明哪兩件事？","方位和高度角",["顏色和形狀","大小和亮度","日期和天氣"],"例如「東南方，高度角30度」。"],
+["找方位可以用什麼工具？","指北針",["溫度計","放大鏡","量筒"],"指北針的指針會指向北方。"],
+["月亮的「高度角」是指什麼？","月亮和地平面之間的夾角",["月亮的大小","月亮離地球多遠","月亮的亮度"],"高度角從0°（地平線）到90°（頭頂正上方）。"],
+["伸直手臂用拳頭測量高度角，一個拳頭大約是幾度？","10度",["1度","30度","90度"],"一個拳頭約10°，不足一拳要估算。"],
+["自製高度角觀測器，棉線下面綁迴紋針是為什麼？","讓棉線被拉直往下垂",["比較好看","讓吸管變長","可以發光"],"迴紋針的重量讓棉線垂直，才能讀角度。"],
+["拳頭法和高度角觀測器比較，哪一個測得比較準確？","高度角觀測器",["拳頭法","兩個一樣","都不準"],"觀測器有明顯刻度；拳頭疊加時手臂移動會有誤差。"],
+["描述月亮位置時，可以用什麼當參考？","不會移動的景物，例如大樓",["天上的雲","飛過的鳥","路上的汽車"],"參考物不能移動，例如「101大樓旁邊」。"],
+["同一天觀察月亮，月亮的高度角會怎麼變化？","由低到高，再由高到低",["一直不變","一直變低","一直變高"],"月亮東升、到最高後西落。"],
+["要比較不同日期的月亮位置，應該怎麼做？","在相同地點、相同時間觀察",["每天換不同地點","每天不同時間看","只看一天"],"控制地點和時間相同，才能比較。"],
+["連續幾週在同一時間觀察月亮，會發現什麼？","月亮的位置和形狀都會改變",["月亮每天都一模一樣","月亮永遠在同一個位置","每天都看得到月亮"],"不同日期月亮位置和月相會改變，有時還看不到月亮。"],
+["月亮會發光，是因為什麼？","反射太陽光",["月亮自己會發光","地球的燈照它","月亮上有火"],"月亮本身不會發光。"],
+["為什麼我們會看到不同形狀的月亮（月相）？","太陽、地球、月亮的位置改變，看到的亮面大小不同",["月亮被雲咬掉","月亮真的變大變小","天氣影響月亮的形狀"],"月球繞地球轉，受光亮面我們看到的部分不同。"],
+["農曆是依照什麼制定的？","月亮（月相）的變化",["太陽的溫度","星星的顏色","下雨的次數"],"月相變化有週期，農曆一個月大月30天、小月29天。"],
+["下面哪一個節日是依照農曆？","中秋節",["國慶日（10月10日）","元旦（1月1日）","兒童節（4月4日）"],"春節、端午、中秋都看農曆。"],
+["農曆的大月有幾天？","30天",["31天","28天","29天"],"農曆大月30天，小月29天。"],
+["天空中的星星，每一顆的亮度都一樣。",false,"TF","星星有些亮、有些暗。"],
+]},
+{s:"自然",u:"第2單元 水域環境",q:[
+["下面哪一個是「天然水域」？","河流",["魚池","水田","溝渠"],"河流、湖泊、溪流、溼地是天然的。"],
+["下面哪一個是「人工水域」？","埤塘",["湖泊","溪流","溼地"],"溝渠、圳、埤塘、魚池、水田是人造的。"],
+["水生植物常有哪些特徵？","外表防水、有些構造中空、能漂浮",["長滿尖刺","葉子很硬又很重","一定要種在沙漠"],"這些構造幫助它們生活在水中。"],
+["布袋蓮能浮在水面，主要是因為什麼？","葉柄膨大，裡面有氣室裝空氣",["根很長很重","葉子上有油","它會游泳"],"把布袋蓮壓進水中放手，它會自己浮起來。"],
+["氣囊、氣室、中空的管道，統稱為什麼？","通氣組織",["消化組織","光合組織","保護殼"],"通氣組織能儲存或運送空氣。"],
+["把蓮藕切開，可以看到什麼？","許多空洞",["一顆種子","紅色果汁","很硬的石頭"],"蓮藕的空洞是通氣組織，可以運送空氣。"],
+["葉或莖長出水面、根在土裡，通常長在淺水處，是哪一類水生植物？","挺水性",["浮葉性","沉水性","漂浮性"],"例如荷花（蓮）、香蒲。"],
+["葉片平貼水面、根在土裡、葉柄會隨水深變化，是哪一類？","浮葉性",["挺水性","沉水性","漂浮性"],"例如睡蓮、臺灣萍蓬草。"],
+["全株生長在水中、根在土裡的是哪一類？","沉水性",["挺水性","浮葉性","漂浮性"],"例如水蘊草，身體柔軟會隨水流擺動。"],
+["整株漂在水面、隨水位高低升降的是哪一類？","漂浮性",["挺水性","浮葉性","沉水性"],"例如布袋蓮、大萍、浮萍。"],
+["水蘊草的身體柔軟，有什麼好處？","能隨水流擺動，不容易被沖斷",["比較好吃","可以長出水面","能自己發光"],"柔軟的身體能適應水流。"],
+["魚的身體形狀頭尾較細，有什麼好處？","游泳時可以減少水的阻力",["比較好看","可以飛","可以爬樹"],"流線型身體在水中游得比較順。"],
+["魚用什麼構造呼吸？","鰓",["肺","皮膚上的毛","鼻子"],"魚的口和鰓蓋一開一合，就是在呼吸。"],
+["青蛙長大後，主要用什麼呼吸？","肺和皮膚",["鰓","只用嘴巴","尾巴"],"蝌蚪用鰓；長成青蛙後用肺和皮膚。"],
+["水黽能在水面上做什麼？","在水面上行走",["在水裡噴墨","在水底挖洞","在空中游泳"],"水黽的腳能讓牠站在水面上。"],
+["臺灣櫻花鉤吻鮭只能生活在什麼樣的水域？","乾淨又低溫的溪水",["溫暖的海水","髒髒的水溝","很熱的溫泉"],"水溫高於18度就不容易生存。"],
+["保護水生生物的家，下面哪一個做法是對的？","不亂丟垃圾到河裡",["在河邊烤肉留下垃圾","隨意放生外來魚","工廠廢水直接排進河裡"],"廢水要處理後才能排放，也不隨意放生。"],
+["隨意把動物放生到河裡，是保護水域的好方法。",false,"TF","隨意放生可能破壞原本的生態，不應該這樣做。"],
+]},
+{s:"社會",u:"第1單元 家鄉的地圖與應用",q:[
+["地圖上通常有哪四個基本要素？","圖名、方向標、比例尺、圖例",["圖名、顏色、價錢、作者","方向標、溫度、時間、地址","圖例、電話、網址、日期"],"看懂這四個要素，就能讀懂地圖。"],
+["地圖上的「圖例」有什麼作用？","說明地圖上的符號代表什麼",["告訴我們方向","告訴我們縮小多少","告訴我們地圖的名字"],"例如一個小十字可能代表醫院。"],
+["地圖上的「方向標」有什麼作用？","指出地圖上的方位",["說明符號意思","表示縮小比例","表示地圖名稱"],"通常箭頭指向北方。"],
+["地圖上的「比例尺」表示什麼？","地圖上的距離和實際距離的比例（縮小多少）",["地圖上有幾種顏色","地圖畫了幾天","地圖的價錢"],"可以用比例尺算出實際距離。"],
+["一般地圖「上北下南」，那地圖的右邊是哪個方位？","東",["西","南","北"],"上北、下南、左西、右東。"],
+["方向標指向上方是北，那地圖的右上方是哪個方位？","東北",["西北","東南","西南"],"右＝東，上＝北 → 東北。"],
+["想知道觀光景點和交通路線，最適合看哪一種地圖？","交通觀光導覽圖",["衛星影像圖","行政區域圖","天氣圖"],"會標示景點和交通路線。"],
+["想知道家鄉的位置與各地的地名，最適合看哪一種地圖？","行政區域圖",["衛星影像圖","交通觀光導覽圖","星座圖"],"行政區域圖會標示縣市、鄉鎮市區和地名。"],
+["想看建築物和土地利用的樣子，最適合看哪一種地圖？","衛星影像圖",["行政區域圖","捷運路線圖","氣溫圖"],"衛星影像圖像從天空拍下來的照片。"],
+["可以放大、縮小，還能定位和導航的是哪一種地圖？","電子地圖",["紙本行政區域圖","牆上的世界地圖","課本裡的圖例"],"手機或電腦就能使用。"],
+["下面哪一個不是電子地圖的功能？","自動幫你付車錢",["放大和縮小","定位","規畫路線"],"電子地圖可以放大縮小、定位、導航規畫路線。"],
+["想知道搭捷運要在哪一站轉車，應該看什麼？","捷運路線圖",["衛星影像圖","農民曆","氣象報告"],"交通路線圖會標示經過的車站和轉乘站。"],
+["縣市行政區域圖上，可以看到什麼？","縣市涵蓋的鄉鎮市區和相鄰的縣市",["每家餐廳的菜單","每個人的家","今天的天氣"],"可以用來探索家鄉。"],
+["地圖是根據什麼畫出來的？","實際景物和各種資料",["畫家的想像","夢裡看到的","隨便亂畫"],"所以地圖可以幫我們認識真實的地方。"],
+["臺北市四周被哪一個縣市包圍？","新北市",["桃園市","基隆市","宜蘭縣"],"臺北市完全被新北市圍繞。"],
+["比例尺 1：10000 的地圖上 1 公分，實際距離是多少？","100公尺",["10公尺","1公里","10000公里"],"10000公分＝100公尺。"],
+["想知道地圖上的符號代表什麼，要看圖例。",true,"TF","正確，圖例就是符號的說明。"],
+]},
+{s:"社會",u:"第2單元 家鄉的地形與氣候",q:[
+["「地形」是指什麼？","地表的高低起伏和形狀",["一天的天氣","一個地方的人口","土地的價錢"],"臺灣常見地形：山地、丘陵、台地、盆地、平原。"],
+["高度超過1,000公尺、起伏大的地形是什麼？","山地",["丘陵","台地","平原"],"山地占臺灣大部分面積。"],
+["臺灣面積最多的是哪一種地形？","山地",["平原","盆地","台地"],"臺灣多山。"],
+["四周地勢較高、中間平坦，像一個盆子的地形是什麼？","盆地",["台地","平原","丘陵"],"例如臺北盆地。"],
+["臺北市主要位在哪一種地形上？","盆地",["平原","台地","山地"],"臺北盆地。"],
+["通常位在河流出口或沿海、寬闊平坦的地形是什麼？","平原",["山地","丘陵","盆地"],"例如嘉南平原。"],
+["位於山地邊緣、高度不超過1,000公尺、坡度和緩的地形是什麼？","丘陵",["台地","平原","盆地"],"丘陵有起伏，但比山地和緩。"],
+["位於山地邊緣、高度不超過1,000公尺、上面平坦的高地是什麼？","台地",["丘陵","盆地","平原"],"像一張桌子的高地。"],
+["丘陵地常被開墾種植什麼？","茶樹、果樹",["海帶、紫菜","珊瑚","仙人掌"],"丘陵坡度和緩，常種茶樹與果樹。"],
+["山地居民可以發展什麼？","觀光旅遊、種高山蔬菜",["大型工廠","晒鹽","捕魚港口"],"山地保留較完整的自然生態。"],
+["哪些地形因為平坦、交通方便，人口容易聚集成都市？","平原、盆地、台地",["高山","深海","懸崖"],"適合居住、農耕和工商業發展。"],
+["「氣候」是指什麼？","長時間的天氣狀況",["今天會不會下雨","此刻的溫度","明天的風向"],"天氣是短時間，氣候是長時間的特色。"],
+["臺灣的「梅雨」通常發生在幾月？","五、六月",["十二、一月","八、九月","十、十一月"],"梅雨季常有長達數週的陰雨。"],
+["「秋老虎」是在形容什麼？","秋天了還是很炎熱",["秋天出現老虎","秋天很冷","秋天一直下雪"],"用老虎比喻秋天仍然很熱。"],
+["以前的人把氣候、農耕經驗記錄在哪裡？","農民曆",["電子地圖","手機","天氣APP"],"農民曆是先民的生活智慧。"],
+["現在我們透過什麼了解每天的天氣？","氣象觀測站的天氣資料（中央氣象署）",["看雲猜測","問鄰居","看農民曆就好"],"各地氣象觀測站收集天氣數據。"],
+["冬天時，臺灣北部和南部比起來？","北部多雨、氣溫較低",["北部少雨、氣溫較高","南部下雪","南北完全一樣"],"冬季北部較濕冷，南部較乾暖。"],
+["山上和平地比起來，山上通常？","雨量較多、氣溫較低",["雨量較少、氣溫較高","一定比較熱","不會下雨"],"所以夏天有人到山上避暑。"],
+["新竹盛產米粉，和什麼氣候有關？","秋冬有乾冷的強風，適合晒米粉",["整年下大雨","氣候非常炎熱","常常下雪"],"每年十月到隔年二月吹乾冷的風。"],
+["臺南氣候溫暖，盛產哪一種水果？","芒果",["蘋果","水蜜桃","草莓"],"溫暖的氣候適合種芒果。"],
+["墾丁四季陽光普照，因此成為度假勝地。",true,"TF","正確。"],
+]},
+{s:"英語",u:"Starter Unit 職業與複習",q:[
+["driver 的意思是什麼？","司機",["醫生","老師","廚師"],"driver＝開車的人。"],
+["teacher 的意思是什麼？","老師",["學生","農夫","護理師"],"teacher＝老師。"],
+["doctor 的意思是什麼？","醫生",["司機","廚師","警察"],"doctor＝醫生。"],
+["nurse 的意思是什麼？","護理師",["醫生","老師","學生"],"nurse＝護理師。"],
+["cook 的意思是什麼？","廚師",["農夫","司機","警察"],"cook＝廚師（也有煮飯的意思）。"],
+["farmer 的意思是什麼？","農夫",["廚師","老師","醫生"],"farmer＝農夫。"],
+["student 的意思是什麼？","學生",["老師","醫生","司機"],"student＝學生。"],
+["he 和 she 的意思分別是？","he 他（男生）、she 她（女生）",["he 她、she 他","he 我、she 你","he 我們、she 他們"],"男生用 he，女生用 she。"],
+["「他是司機嗎？」英文怎麼說？","Is he a driver?",["Are he a driver?","He is a driver?","Is she a driver?"],"問「他是…嗎？」用 Is he a …?"],
+["Is he a driver?（是的）要怎麼回答？","Yes, he is.",["Yes, I am.","Yes, she is.","No, he's not."],"肯定回答：Yes, he is."],
+["Is he a driver?（不是）要怎麼回答？","No, he's not.",["No, I'm not.","No, she's not.","Yes, he is."],"否定回答：No, he's not.（也可說 No, he isn't.）"],
+["Is she a teacher?（是的）要怎麼回答？","Yes, she is.",["Yes, he is.","Yes, I am.","No, she's not."],"問 she 就用 she 回答。"],
+["圖片中的女生是醫生。Is she a nurse? 要怎麼回答？","No, she's not.",["Yes, she is.","No, he's not.","No, I'm not."],"她不是護理師，所以用否定回答。"],
+["I have an idea. 的意思是什麼？","我有一個主意。",["我很想睡覺。","我不知道。","我有一支筆。"],"idea＝主意、想法。"],
+["Let's have fun. 的意思是什麼？","我們一起玩得開心吧！",["我們回家吧！","我們去上課吧！","我們吃飯吧！"],"have fun＝玩得開心。"],
+]},
+{s:"英語",u:"Unit 1 How's the Weather?",q:[
+["sunny 的意思是什麼？","晴朗的",["下雨的","多雲的","颳風的"],"sun 太陽 → sunny 晴朗的。"],
+["rainy 的意思是什麼？","下雨的",["晴朗的","冷的","颳風的"],"rain 雨 → rainy 下雨的。"],
+["cloudy 的意思是什麼？","多雲的",["晴朗的","熱的","下雨的"],"cloud 雲 → cloudy 多雲的。"],
+["windy 的意思是什麼？","颳風的",["多雲的","溫暖的","下雨的"],"wind 風 → windy 颳風的。"],
+["hot 的意思是什麼？","熱的",["冷的","涼爽的","溫暖的"],"hot＝熱的。"],
+["warm 的意思是什麼？","溫暖的",["熱的","冷的","涼爽的"],"warm＝溫暖的。"],
+["cool 的意思是什麼？","涼爽的",["溫暖的","熱的","冷的"],"cool＝涼爽的。"],
+["cold 的意思是什麼？","冷的",["熱的","溫暖的","晴朗的"],"cold＝冷的。"],
+["想問「天氣如何？」英文要怎麼說？","How's the weather?",["What's your name?","How old are you?","Where's the weather?"],"How's the weather? 天氣如何？"],
+["How's the weather?（外面在下雨）要怎麼回答？","It's rainy.",["It's sunny.","It's windy.","I'm rainy."],"下雨的 → It's rainy."],
+["How's the weather?（出大太陽）要怎麼回答？","It's sunny.",["It's cloudy.","It's cold.","It's rainy."],"晴朗的 → It's sunny."],
+["和 hot 意思相反的是哪一個字？","cold",["warm","sunny","windy"],"hot 熱 ↔ cold 冷。"],
+["How's 是哪兩個字的縮寫？","How is",["How was","How are","How has"],"How's＝How is。"],
+["s _ nny 空格要填哪個字母？","u",["a","o","i"],"sunny。"],
+["cl _ _ dy 空格要填哪兩個字母？","ou",["oo","ow","au"],"cloudy。"],
+["哪一個字的開頭是 /b/ 的音？","bag",["pig","dog","ten"],"b 發 /b/：bag。"],
+["哪一個字的開頭是 /p/ 的音？","pen",["bed","duck","top"],"p 發 /p/：pen。"],
+["哪一個字的開頭是 /d/ 的音？","duck",["ten","bus","pig"],"d 發 /d/：duck。"],
+["哪一個字的開頭是 /t/ 的音？","ten",["den","pen","bed"],"t 發 /t/：ten。"],
+]},
+{s:"英語",u:"Unit 2 Are You Thirsty?",q:[
+["thirsty 的意思是什麼？","口渴的",["飢餓的","累的","生氣的"],"thirsty＝口渴的。"],
+["hungry 的意思是什麼？","飢餓的",["口渴的","飽的","快樂的"],"hungry＝肚子餓的。"],
+["tired 的意思是什麼？","累的",["生氣的","難過的","飽的"],"tired＝累的。"],
+["happy 的意思是什麼？","快樂的",["難過的","生氣的","累的"],"happy＝快樂的。"],
+["sad 的意思是什麼？","難過的",["快樂的","飢餓的","口渴的"],"sad＝難過的。"],
+["angry 的意思是什麼？","生氣的",["快樂的","累的","飽的"],"angry＝生氣的。"],
+["full 的意思是什麼？","飽的",["餓的","渴的","累的"],"吃飽了：I'm full."],
+["和 hungry 意思相反的是哪一個字？","full",["thirsty","tired","sad"],"hungry 餓 ↔ full 飽。"],
+["和 happy 意思相反的是哪一個字？","sad",["angry","full","hungry"],"happy 快樂 ↔ sad 難過。"],
+["Are you hungry?（是的）要怎麼回答？","Yes, I am.",["Yes, you are.","Yes, he is.","No, I'm not."],"問 you，回答用 I。"],
+["Are you hungry?（不會）要怎麼回答？","No, I'm not.",["No, you're not.","No, he isn't.","Yes, I am."],"否定：No, I'm not."],
+["Is she tired?（是的）要怎麼回答？","Yes, she is.",["Yes, he is.","Yes, I am.","No, she isn't."],"問 she 就用 she 回答。"],
+["Is he angry?（沒有）要怎麼回答？","No, he isn't.",["No, she isn't.","No, I'm not.","Yes, he is."],"否定：No, he isn't."],
+["你剛跑完步很想喝水，朋友問 Are you thirsty? 你會說？","Yes, I am.",["No, I'm not.","Yes, he is.","I'm full."],"想喝水＝口渴 → Yes, I am."],
+["「你餓嗎？」英文怎麼說？","Are you hungry?",["Is you hungry?","You are hungry?","Are you thirsty?"],"Are you + 感覺？"],
+["Watch out! 的意思是什麼？","小心！",["看這裡！","出去！","快一點！"],"提醒別人注意危險。"],
+["Are you OK? 的意思是什麼？","你還好嗎？",["你幾歲？","你要去哪裡？","你餓嗎？"],"關心別人時說 Are you OK?"],
+["h _ ppy 空格要填哪個字母？","a",["e","o","u"],"happy。"],
+["哪一個字的開頭是 /g/ 的音？","goat",["cat","kite","dog"],"g 發 /g/：goat。"],
+["哪一個字的開頭和 cat 的 c 一樣，發 /k/ 的音？","cup",["gum","bag","duck"],"c 發 /k/：cup。"],
+]},
+];
+
+const SUBJ=["國語","數學","自然","社會","英語"];
+const RANGE={"國語":"康軒 第1–6課","數學":"翰林 第1–4單元","自然":"翰林 第1–2單元","社會":"翰林 第1–2單元","英語":"翰林 Here We Go 3 Starter、U1–U2"};
+const CHEER=["太棒了！","答對了！","好厲害！","繼續保持！","你真行！","完全正確！"];
+const ENC=["沒關係，再想想看！","差一點點！","記下來，下次就會了！","加油，錯了才會進步！"];
+// 建立題庫
+const Q=[];
+function hash(s){let h=5381;for(const c of s)h=((h<<5)+h+c.codePointAt(0))|0;return (h>>>0).toString(36)}
+BANK.forEach((u,ui)=>u.q.forEach(r=>{const tf=r[2]==="TF";Q.push({id:hash(u.s+r[0]),s:u.s,u:u.u,ui,q:r[0],tf,ans:tf?(r[1]?"⭕ 對":"❌ 錯"):r[1],opts:tf?["⭕ 對","❌ 錯"]:[r[1],...r[2]],e:r[3]})}));
+const UNITS=BANK.map((u,i)=>({s:u.s,u:u.u,i}));
+// 紀錄
+const KEY="g4-review-115-1";
+let S={st:{},weak:[],stars:0};
+function load(){try{const t=localStorage.getItem(KEY);if(t)S=Object.assign(S,JSON.parse(t))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+load();
+function rec(id,ok){const r=S.st[id]||(S.st[id]={c:0,w:0});ok?r.c++:r.w++;r.l=ok?1:0;
+ if(ok){S.stars++;const i=S.weak.indexOf(id);if(i>=0)S.weak.splice(i,1)}else if(!S.weak.includes(id))S.weak.push(id);save();drawStars()}
+function drawStars(){document.getElementById("stars").textContent="⭐ "+S.stars}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const col=s=>`var(--c${s})`;
+const done=list=>list.filter(q=>S.st[q.id]&&S.st[q.id].l===1).length;
+const app=document.getElementById("app");
+let view="home",sess=null,keyH=null;
+function setNav(v){view=v;document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))}
+document.getElementById("nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;go(b.dataset.v)};
+function go(v,arg){setNav(v);keyH=null;window.scrollTo(0,0);({home,subject,weak,exam,parent})[v](arg)}
+
+// 首頁
+function home(){
+ const tot=Q.length,d=done(Q);
+ app.innerHTML=`<div class="card"><div style="font-size:20px;font-weight:700">今天也來刷幾題吧！💪</div>
+ <div class="note">已經會了 ${d} / ${tot} 題・不熟 ${S.weak.length} 題</div><div class="bar"><i style="width:${d/tot*100}%"></i></div></div>
+ <h2>選一科開始</h2><div class="subj">${SUBJ.map(s=>{const l=Q.filter(q=>q.s===s),dd=done(l);
+ return `<button class="sbtn" data-s="${s}" style="border-color:${col(s)}"><div class="nm" style="color:${col(s)}">${s}</div><div class="note">${RANGE[s]}</div><div class="note">${dd}/${l.length} 題</div><div class="bar"><i style="width:${dd/l.length*100}%;background:${col(s)}"></i></div></button>`}).join("")}</div>
+ <div class="card"><h2>🎲 綜合挑戰</h2><div class="note">五科隨機出 20 題，答錯會自動加入「不熟」。</div><div class="row" style="margin-top:10px"><button class="btn" id="mix">開始挑戰</button></div></div>
+ <p class="note">※ 題目為 AI 依各版本課程內容整理的模擬題，用字可能和課本略有不同；請以課本和老師上課內容為準。</p>`;
+ app.querySelectorAll(".sbtn").forEach(b=>b.onclick=()=>{window.scrollTo(0,0);subject(b.dataset.s)});
+ app.querySelector("#mix").onclick=()=>startPractice(shuffle(Q).slice(0,20),"綜合挑戰",()=>go("home"));
+}
+// 科目頁
+let order="new";
+function subject(s){
+ const us=UNITS.filter(u=>u.s===s);
+ app.innerHTML=`<div class="row" style="justify-content:space-between"><button class="btn sm ghost" id="back">← 回首頁</button><span class="tag" style="background:${col(s)}">${s}</span></div>
+ <div class="card"><div class="note">出題順序</div><div class="chips" id="ord">${[["new","先做沒做過的"],["rand","隨機"],["seq","照順序"]].map(([k,t])=>`<button class="chip ${order===k?"on":""}" data-k="${k}">${t}</button>`).join("")}</div>
+ <div class="row" style="margin-top:12px"><button class="btn" id="all" style="background:${col(s)}">整科一起練（${Q.filter(q=>q.s===s).length} 題）</button></div></div>
+ <div class="card">${us.map(u=>{const l=Q.filter(q=>q.ui===u.i),dd=done(l),wk=l.filter(q=>S.weak.includes(q.id)).length;
+ return `<div class="unit"><div class="t"><div>${esc(u.u)}</div><div class="note">會了 ${dd}/${l.length}${wk?` ・<span class="weak">不熟 ${wk}</span>`:""}</div><div class="bar"><i style="width:${dd/l.length*100}%;background:${col(s)}"></i></div></div><button class="btn sm" data-u="${u.i}" style="background:${col(s)}">練習</button></div>`}).join("")}</div>`;
+ app.querySelector("#back").onclick=()=>go("home");
+ app.querySelector("#ord").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;order=b.dataset.k;subject(s)};
+ const pick=l=>order==="seq"?l:order==="rand"?shuffle(l):[...shuffle(l.filter(q=>!S.st[q.id])),...shuffle(l.filter(q=>S.st[q.id]&&S.st[q.id].l!==1)),...shuffle(l.filter(q=>S.st[q.id]&&S.st[q.id].l===1))];
+ app.querySelector("#all").onclick=()=>startPractice(pick(Q.filter(q=>q.s===s)),s,()=>subject(s));
+ app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{const u=+b.dataset.u;startPractice(pick(Q.filter(q=>q.ui===u)),UNITS[u].u,()=>subject(s))});
+}
+// 練習
+function startPractice(list,title,back,isWeak){sess={list,title,back,i:0,ans:{},opt:{},right:0,isWeak};list.forEach(q=>sess.opt[q.id]=q.tf?q.opts:shuffle(q.opts));drawQ()}
+function drawQ(){
+ const s=sess;if(s.i>=s.list.length)return endPractice();
+ const q=s.list[s.i],a=s.ans[q.id],opts=s.opt[q.id],isW=S.weak.includes(q.id);
+ app.innerHTML=`<div class="qtop"><button class="btn sm ghost" id="quit">✕ 離開</button><span>${esc(s.title)}・第 ${s.i+1} / ${s.list.length} 題</span></div>
+ <div class="bar"><i style="width:${s.i/s.list.length*100}%"></i></div>
+ <div class="card"><div class="row"><span class="tag" style="background:${col(q.s)}">${q.s}</span><span class="note">${esc(q.u)}</span>${isW?'<span class="note weak">🔁 不熟</span>':""}</div>
+ <div class="qtext">${esc(q.q)}</div>
+ <div class="opts">${opts.map((o,k)=>{let c="";if(a!==undefined){if(o===q.ans)c="ok";else if(k===a)c="bad"}return `<button class="opt ${c}" data-k="${k}" ${a!==undefined?"disabled":""}><span class="k">${k+1}</span><span>${esc(o)}</span></button>`}).join("")}</div>
+ ${a!==undefined?(opts[a]===q.ans?`<div class="fb ok"><b>🎉 ${CHEER[Math.random()*CHEER.length|0]}</b><div>${esc(q.e)}</div></div>`:`<div class="fb bad"><b>💡 ${ENC[Math.random()*ENC.length|0]}</b><div>正確答案：<b>${esc(q.ans)}</b></div><div>${esc(q.e)}</div><div class="note">已加入「不熟」，之後可以再練。</div></div>`):""}
+ <div class="qnav"><button class="btn sm ghost" id="prev" ${s.i===0?"disabled style='opacity:.4'":""}>← 上一題</button>
+ <button class="btn sm ${isW?"warn":"ghost"}" id="flag">${isW?"取消不熟":"🔁 標不熟"}</button>
+ <button class="btn sm" id="next" ${a===undefined?"style='opacity:.5'":""}>${s.i===s.list.length-1?"看結果":"下一題 →"}</button></div></div>
+ <p class="note">鍵盤：1–4 作答・Enter 下一題・← 上一題・F 標不熟</p>`;
+ app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
+ app.querySelector("#quit").onclick=()=>s.back();
+ app.querySelector("#prev").onclick=()=>{if(s.i>0){s.i--;drawQ()}};
+ app.querySelector("#next").onclick=next;
+ app.querySelector("#flag").onclick=()=>{const i=S.weak.indexOf(q.id);i>=0?S.weak.splice(i,1):S.weak.push(q.id);save();drawQ()};
+ keyH=e=>{if(e.key>="1"&&e.key<=String(opts.length))answer(+e.key-1);else if(e.key==="Enter")next();else if(e.key==="ArrowLeft"&&s.i>0){s.i--;drawQ()}else if(e.key==="f"||e.key==="F")app.querySelector("#flag").click()};
+}
+function answer(k){const s=sess,q=s.list[s.i];if(s.ans[q.id]!==undefined)return;s.ans[q.id]=k;const ok=s.opt[q.id][k]===q.ans;if(ok){s.right++;const p=document.getElementById("pop");p.classList.remove("go");void p.offsetWidth;p.classList.add("go")}rec(q.id,ok);drawQ()}
+function next(){const s=sess,q=s.list[s.i];if(s.ans[q.id]===undefined)return;s.i++;drawQ()}
+function endPractice(){
+ const s=sess,n=s.list.length,r=s.right,p=Math.round(r/n*100);
+ app.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:56px">${p>=90?"🏆":p>=70?"🎉":"💪"}</div><div class="big">${r} / ${n}</div>
+ <div style="font-size:20px">${p>=90?"太厲害了，全部都快會了！":p>=70?"做得很好，再把錯的練一練！":"多練幾次一定會進步！"}</div>
+ <div class="row" style="justify-content:center;margin-top:16px"><button class="btn" id="b1">回上一頁</button>${S.weak.length?'<button class="btn ghost" id="b2">練不熟的題目</button>':""}</div></div>`;
+ app.querySelector("#b1").onclick=()=>s.back();const b2=app.querySelector("#b2");if(b2)b2.onclick=()=>go("weak");
+}
+// 不熟
+let wkS="全部";
+function weak(){
+ const all=Q.filter(q=>S.weak.includes(q.id)),l=wkS==="全部"?all:all.filter(q=>q.s===wkS);
+ app.innerHTML=`<h2>🔁 不熟的題目（${all.length} 題）</h2><div class="note">答錯的題目會自動放到這裡；重練答對就會移出。</div>
+ <div class="chips" id="wf" style="margin:10px 0">${["全部",...SUBJ].map(s=>`<button class="chip ${wkS===s?"on":""}" data-s="${s}">${s}${s==="全部"?"":"（"+all.filter(q=>q.s===s).length+"）"}</button>`).join("")}</div>
+ ${l.length?`<div class="row"><button class="btn" id="go">重練這 ${l.length} 題</button></div><div class="card">${l.map(q=>`<div class="rv"><span class="tag" style="background:${col(q.s)}">${q.s}</span> ${esc(q.q)}<div class="note">答案：${esc(q.ans)}</div></div>`).join("")}</div>`:`<div class="card" style="text-align:center"><div style="font-size:48px">🌈</div>目前沒有不熟的題目，太棒了！</div>`}`;
+ app.querySelector("#wf").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;wkS=b.dataset.s;weak()};
+ const g=app.querySelector("#go");if(g)g.onclick=()=>startPractice(shuffle(l),"不熟重練",()=>go("weak"),true);
+}
+// 模擬考
+let exS="國語",exN=20;
+function exam(){
+ app.innerHTML=`<h2>📝 模擬考</h2><div class="note">像真的考試一樣：全部寫完再交卷，交卷後才看分數和答案。</div>
+ <div class="card"><div class="note">科目</div><div class="chips" id="es">${[...SUBJ,"五科綜合"].map(s=>`<button class="chip ${exS===s?"on":""}" data-s="${s}">${s}</button>`).join("")}</div>
+ <div class="note" style="margin-top:12px">題數</div><div class="chips" id="en">${[10,20,30].map(n=>`<button class="chip ${exN===n?"on":""}" data-n="${n}">${n} 題</button>`).join("")}</div>
+ <div class="row" style="margin-top:16px"><button class="btn" id="st">開始考試</button></div></div>`;
+ app.querySelector("#es").onclick=e=>{const b=e.target.closest(".chip");if(b){exS=b.dataset.s;exam()}};
+ app.querySelector("#en").onclick=e=>{const b=e.target.closest(".chip");if(b){exN=+b.dataset.n;exam()}};
+ app.querySelector("#st").onclick=()=>{const pool=exS==="五科綜合"?Q:Q.filter(q=>q.s===exS);const list=shuffle(pool).slice(0,exN);sess={list,ans:{},opt:{}};list.forEach(q=>sess.opt[q.id]=q.tf?q.opts:shuffle(q.opts));drawExam()};
+}
+function drawExam(){
+ const s=sess,left=s.list.filter(q=>s.ans[q.id]===undefined).length;
+ app.innerHTML=`<div class="qtop"><button class="btn sm ghost" id="quit">✕ 放棄</button><span>${exS}・還有 ${left} 題沒寫</span></div>
+ ${s.list.map((q,n)=>`<div class="card"><div class="row"><b>${n+1}.</b><span class="tag" style="background:${col(q.s)}">${q.s}</span></div><div class="qtext" style="font-size:20px;margin:8px 0 10px">${esc(q.q)}</div>
+ <div class="opts">${s.opt[q.id].map((o,k)=>`<button class="opt ${s.ans[q.id]===k?"pick":""}" data-q="${n}" data-k="${k}"><span class="k">${k+1}</span><span>${esc(o)}</span></button>`).join("")}</div></div>`).join("")}
+ <div class="row" style="justify-content:center"><button class="btn" id="sub">交卷 ✋</button></div>`;
+ app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const q=s.list[+b.dataset.q];s.ans[q.id]=+b.dataset.k;b.parentNode.querySelectorAll(".opt").forEach(x=>x.classList.toggle("pick",x===b));app.querySelector(".qtop span").textContent=`${exS}・還有 ${s.list.filter(q=>s.ans[q.id]===undefined).length} 題沒寫`});
+ app.querySelector("#quit").onclick=()=>go("exam");
+ app.querySelector("#sub").onclick=()=>{const l=s.list.filter(q=>s.ans[q.id]===undefined).length;if(l&&!s.warned){s.warned=1;app.querySelector("#sub").textContent=`還有 ${l} 題沒寫，確定交卷？`;return}gradeExam()};
+}
+function gradeExam(){
+ const s=sess;let r=0;const wrong=[];
+ s.list.forEach(q=>{const a=s.ans[q.id],ok=a!==undefined&&s.opt[q.id][a]===q.ans;if(ok)r++;else wrong.push(q);rec(q.id,ok)});
+ const sc=Math.round(r/s.list.length*100);
+ app.innerHTML=`<div class="card" style="text-align:center"><div class="note">${exS} 模擬考</div><div class="big">${sc} 分</div><div>答對 ${r} / ${s.list.length} 題</div>
+ <div style="font-size:20px;margin-top:6px">${sc>=90?"🏆 超級棒！":sc>=70?"🎉 很不錯！":"💪 把錯的題目弄懂，下次會更好！"}</div></div>
+ ${wrong.length?`<h2>錯的題目（已加入不熟）</h2><div class="card">${wrong.map(q=>`<div class="rv">${esc(q.q)}<div class="note">你的答案：${s.ans[q.id]===undefined?"沒寫":esc(s.opt[q.id][s.ans[q.id]])}</div><div><b style="color:var(--ok)">正確：${esc(q.ans)}</b></div><div class="note">${esc(q.e)}</div></div>`).join("")}</div>`:""}
+ <div class="row" style="justify-content:center"><button class="btn" id="again">再考一次</button></div>`;
+ app.querySelector("#again").onclick=()=>go("exam");window.scrollTo(0,0);
+}
+// 家長區
+function parent(){
+ const rows=UNITS.map(u=>{const l=Q.filter(q=>q.ui===u.i);let c=0,w=0;l.forEach(q=>{const r=S.st[q.id];if(r){c+=r.c;w+=r.w}});const t=c+w,acc=t?Math.round(c/t*100):null,wk=l.filter(q=>S.weak.includes(q.id)).length;return {u,t,acc,wk,n:l.length,d:done(l)}});
+ const weakest=rows.filter(r=>r.t>=3&&r.acc<70).sort((a,b)=>a.acc-b.acc);
+ app.innerHTML=`<h2>👪 家長區</h2>
+ <div class="card"><b>需要加強的單元</b><div class="note">作答 3 次以上、正確率低於 70% 的單元</div>
+ ${weakest.length?weakest.map(r=>`<div class="weak">・${r.u.s}｜${esc(r.u.u)}（${r.acc}%）</div>`).join(""):'<div class="note" style="margin-top:6px">目前沒有明顯弱點，或作答次數還不夠。</div>'}</div>
+ <div class="card" style="overflow-x:auto"><table><tr><th>單元</th><th class="n">會了</th><th class="n">正確率</th><th class="n">不熟</th></tr>
+ ${rows.map(r=>`<tr><td><span style="color:${col(r.u.s)};font-weight:700">${r.u.s}</span> ${esc(r.u.u)}</td><td class="n">${r.d}/${r.n}</td><td class="n ${r.acc!==null&&r.acc<70?"weak":""}">${r.acc===null?"—":r.acc+"%"}</td><td class="n">${r.wk||""}</td></tr>`).join("")}</table></div>
+ <div class="card"><b>📋 匯出錯題清單</b><div class="note">可貼到 LINE 或記事本，印出來複習。</div><div class="row" style="margin-top:8px"><button class="btn sm" id="cp">複製不熟題目</button></div></div>
+ <div class="card"><b>💾 備份／換裝置</b><div class="note">紀錄只存在這台裝置的瀏覽器。要換手機或平板時，先在這裡「產生備份碼」，到新裝置貼上後按「匯入」。</div>
+ <div class="row" style="margin:8px 0"><button class="btn sm" id="ex">產生備份碼</button><button class="btn sm ghost" id="im">匯入</button><button class="btn sm warn" id="rs">清除全部紀錄</button></div>
+ <textarea id="bk" placeholder="備份碼會出現在這裡，或把備份碼貼在這裡再按匯入"></textarea><div class="note" id="msg"></div></div>
+ <p class="note">範圍：${SUBJ.map(s=>s+" "+RANGE[s]).join("；")}。共 ${Q.length} 題，皆為 AI 模擬題。</p>`;
+ const msg=t=>app.querySelector("#msg").textContent=t;
+ const copy=t=>{const ta=app.querySelector("#bk");ta.value=t;ta.select();try{navigator.clipboard.writeText(t).then(()=>msg("已複製 ✅"),()=>msg("請手動全選複製"))}catch(e){msg("請手動全選複製")}};
+ app.querySelector("#cp").onclick=()=>{const l=Q.filter(q=>S.weak.includes(q.id));copy(l.length?"【四上不熟題目】\n"+l.map((q,i)=>`${i+1}. [${q.s}] ${q.q}\n   答案：${q.ans}`).join("\n"):"目前沒有不熟的題目");};
+ app.querySelector("#ex").onclick=()=>copy("G4BK:"+btoa(unescape(encodeURIComponent(JSON.stringify(S)))));
+ app.querySelector("#im").onclick=()=>{try{const t=app.querySelector("#bk").value.trim().replace(/^G4BK:/,"");const o=JSON.parse(decodeURIComponent(escape(atob(t))));if(!o.st)throw 0;S=Object.assign({st:{},weak:[],stars:0},o);save();drawStars();parent();msg("匯入成功 ✅")}catch(e){msg("備份碼不正確，請確認有完整貼上")}};
+ let rsN=0;app.querySelector("#rs").onclick=e=>{if(!rsN++){e.target.textContent="再按一次確認清除";return}S={st:{},weak:[],stars:0};save();drawStars();parent()};
+}
+document.addEventListener("keydown",e=>{if(keyH&&!e.metaKey&&!e.ctrlKey&&e.target.tagName!=="TEXTAREA")keyH(e)});
+drawStars();home();
+</script>
+</body>
+</html>
